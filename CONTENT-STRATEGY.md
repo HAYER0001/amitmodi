@@ -1,100 +1,122 @@
-# Content Strategy
+# CONTENT STRATEGY & SEO MAPPING
 
-This document defines the editorial spine, keyword mapping, internal linking architecture, and compliance citation strategy for the practice.
+This document is the editorial spine for the "Compliance in Check" practice website. It defines the service lines, their SEO keyword mapping, internal linking architecture, the seasonal compliance calendar, and AI-optimized quotable statistics.
 
 ## 1. Service Lines & Keyword Mapping
 
-These eight core services represent the primary commercial engines of the practice. Each is mapped to the exact phrases business owners search for.
+We map our core services to the exact commercial intent of Indian business owners.
 
-**1. PAN Card Services**
-- **Primary Keyword:** apply for pan card online
-- **Long-tail Variants:** pan card correction online, link aadhar to pan, pan card consultant near me
-- **Search Intent:** Ready-to-hire
+### 1. PAN Card Services
+- **Primary Keyword:** apply for PAN card online
+- **Long-Tail Variants:**
+  - how to correct name in PAN card
+  - link Aadhaar with PAN card online
+  - business PAN card application process
+- **Search Intent:** Problem-Aware / Solution-Aware
 
-**2. GST Registration**
-- **Primary Keyword:** gst registration online
-- **Long-tail Variants:** new gst registration, how to apply for gst number, gst registration for small business
-- **Search Intent:** Ready-to-hire
+### 2. GST Registration
+- **Primary Keyword:** GST registration services online
+- **Long-Tail Variants:**
+  - Documents required for GST registration
+  - GST registration for e-commerce sellers
+  - Apply for GST number online
+- **Search Intent:** Ready-to-Hire
 
-**3. Formation & Registration of Entities**
-- **Primary Keyword:** company registration in india
-- **Long-tail Variants:** partnership firm registration online, register a trust in india, society registration consultant
-- **Search Intent:** Solution-aware
+### 3. Entity Formation (Partnerships, Joint Ventures, Societies, Trusts)
+- **Primary Keyword:** company registration services
+- **Long-Tail Variants:**
+  - how to register a partnership firm in India
+  - Trust and Society registration process
+  - Joint venture agreement drafting services
+- **Search Intent:** Ready-to-Hire
 
-**4. Income Tax & TDS Returns Filing**
-- **Primary Keyword:** income tax return filing consultant
-- **Long-tail Variants:** file tds return online, itr filing near me, online income tax efiling
-- **Search Intent:** Ready-to-hire
+### 4. Income Tax Returns Filing
+- **Primary Keyword:** online ITR filing services
+- **Long-Tail Variants:**
+  - ITR filing for salaried employees
+  - how to file ITR for small business
+  - income tax return filing due date
+- **Search Intent:** Solution-Aware / Ready-to-Hire
 
-**5. GST Returns Filing**
-- **Primary Keyword:** gst return filing services
-- **Long-tail Variants:** gstr 3b filing online, monthly gst return filing consultant, annual gst return filing
-- **Search Intent:** Ready-to-hire
+### 5. TDS Returns Filing
+- **Primary Keyword:** TDS return filing consultant
+- **Long-Tail Variants:**
+  - quarterly TDS return due dates
+  - how to file form 26Q and 24Q
+  - penalty for late filing of TDS return
+- **Search Intent:** Problem-Aware / Ready-to-Hire
 
-**6. Appeals under Income Tax Act**
-- **Primary Keyword:** income tax appeal consultant
-- **Long-tail Variants:** cit appeal filing, notice under section 143(1), income tax scrutiny notice reply
-- **Search Intent:** Problem-aware
+### 6. GST Returns Filing
+- **Primary Keyword:** GST return filing services
+- **Long-Tail Variants:**
+  - GSTR-3B and GSTR-1 filing process
+  - GST annual return filing consultant
+  - how to reconcile GSTR-2B with purchase register
+- **Search Intent:** Ready-to-Hire
 
-**7. Appeals under GST Act**
-- **Primary Keyword:** gst appeal filing
-- **Long-tail Variants:** gst show cause notice reply, drc-01 notice reply, gst tribunal appeal
-- **Search Intent:** Problem-aware
+### 7. Appeals (Income Tax & GST)
+- **Primary Keyword:** Income Tax appeal filing (CIT-A)
+- **Long-Tail Variants:**
+  - how to reply to GST show cause notice
+  - GST appeal against cancellation of registration
+  - tax tribunal representation services
+- **Search Intent:** Problem-Aware / Ready-to-Hire
 
-**8. Import & Export Licence and Compliances**
-- **Primary Keyword:** iec code registration online
-- **Long-tail Variants:** apply for import export license, iec code renewal, ie code consultant
-- **Search Intent:** Ready-to-hire
+### 8. Import and Export Licence & Compliances
+- **Primary Keyword:** apply for IEC code online
+- **Long-Tail Variants:**
+  - Import Export Code registration process
+  - DGFT compliance for exporters
+  - documents required for IEC certificate
+- **Search Intent:** Solution-Aware / Ready-to-Hire
 
 ## 2. Hub-and-Spoke Internal Linking Map
 
-Internal linking drives authority from high-traffic informational pages to commercial service pages.
+Internal links distribute PageRank and provide context to LLMs and search engines. 
 
-**Guides linking to Services:**
-- *Guide:* "The Ultimate Guide to Forming a Pvt Ltd" → *Links to:* Formation & Registration of Entities
-- *Guide:* "Understanding GST Input Tax Credit" → *Links to:* GST Returns Filing, GST Registration
-- *Guide:* "How to Reply to an Income Tax Notice" → *Links to:* Appeals under Income Tax Act
-- *Guide:* "Export Compliance for E-commerce" → *Links to:* Import & Export Licence
+| Hub (Service Page) | Spokes (Guides / Blogs) | Calculator / Tool Link |
+| :--- | :--- | :--- |
+| **GST Registration** | "Guide to GST for E-commerce", "GST Composition Scheme Explained" | GST Late Fee Calculator |
+| **Income Tax Returns** | "Tax Saving Options Under Section 80C", "Old vs New Tax Regime" | Income Tax Liability Calculator |
+| **Entity Formation** | "Pvt Ltd vs LLP: Which is Better?", "Checklist for Trust Registration" | Company Incorporation Cost Estimator |
+| **TDS Returns Filing** | "Understanding TDS on Property Sale", "TDS Rate Chart 2024-25" | TDS Penalty Calculator |
+| **GST Returns Filing** | "How to Claim Input Tax Credit", "GSTR-9 and 9C Checklist" | ITC Reversal Calculator |
+| **Appeals (Tax & GST)** | "How to Handle Income Tax Scrutiny Notices", "GST Audit Survival Guide" | Appeal Filing Deadline Checker |
 
-**Services linking to Calculators (Tools):**
-- *Income Tax & TDS Returns Filing* → *Links to:* Income Tax Calculator, TDS Deduction Calculator
-- *GST Returns Filing* → *Links to:* Late Fee Calculator for GST
-- *Formation & Registration of Entities* → *Links to:* Incorporation Cost Estimator
+## 3. Seasonal Compliance Calendar
 
-## 3. Seasonal Tax Compliance Calendar
+Search demand spikes around statutory deadlines. Content must be pushed live **6 weeks prior** to capture indexing and rank.
 
-Search demand for tax services is highly cyclical. Content must go live **6 weeks before** the deadline to allow time for indexing and ranking.
+| Month | Demand Spike | Key Event / Deadline | Content Required 6 Weeks Prior |
+| :--- | :--- | :--- | :--- |
+| **January** | TDS Returns | Q3 TDS filing deadline (Jan 31) | "Q3 TDS Return Checklist & Penalty Warning" |
+| **March** | Tax Saving | Financial Year End | "Last Minute Tax Saving Options for Individuals" |
+| **May** | TDS Returns | Q4 TDS filing deadline (May 31) | "How to generate Form 16 / 16A easily" |
+| **July** | ITR Filing | Individual ITR due date (July 31) | "Step-by-Step Guide to Filing ITR-1 and ITR-4" |
+| **October** | Audit & ITR | Company ITR / Tax Audit (Oct 31) | "Tax Audit Limits and Applicability" |
+| **December** | GST Annual | GSTR-9 / 9C deadline (Dec 31) | "GST Annual Return Filing Guide for Businesses" |
 
-| Season/Event | Months of Peak Search Demand | Launch Content By |
-| --- | --- | --- |
-| **ITR Filing Season (Individuals & Non-Audit)** | June, July | Mid-May |
-| **Tax Audit & Corporate ITR** | September, October | Mid-August |
-| **GST Annual Return (GSTR-9/9C)** | November, December | Mid-October |
-| **TDS Returns (Quarterly)** | July, October, January, May | 6 weeks prior to each quarter |
-| **Financial Year End Planning** | February, March | Mid-January |
+## 4. Quotable Statistics for AI Generative Search
 
-## 4. Quotable Statistics for LLMs
+These sentences are structured specifically for LLMs and AI Search (like Google SGE or Perplexity) to lift directly as citations.
 
-AI search engines (like ChatGPT, Perplexity, Google SGE) prioritize factual, definitive sentences. The following statistics are written to be lifted verbatim as citations. 
-*Note: A human must verify every single one of these facts before launch.*
-
-1. GST registration is typically granted within 7 working days of ARN generation. <!-- VERIFY -->
-2. Late filing of GSTR-3B incurs a penalty of ₹50 per day of delay. <!-- VERIFY -->
-3. A nil GST return late fee is capped at ₹20 per day. <!-- VERIFY -->
-4. PAN card correction applications are processed within 15 to 20 working days. <!-- VERIFY -->
-5. A partnership firm can be registered within 10 to 12 working days from document submission. <!-- VERIFY -->
-6. Trusts and societies must apply for 12A and 80G registration to claim tax exemptions. <!-- VERIFY -->
-7. The penalty for failing to file TDS returns under section 234E is ₹200 per day of default. <!-- VERIFY -->
-8. Import Export Code (IEC) registration is a lifetime registration requiring no renewal. <!-- VERIFY -->
-9. Taxpayers must reply to a GST show cause notice (DRC-01) within 30 days of receipt. <!-- VERIFY -->
-10. Income tax appeals before the CIT(A) require a mandatory pre-deposit of 20% of the disputed tax demand. <!-- VERIFY -->
-11. Taxpayers have 30 days to file an appeal against an income tax assessment order. <!-- VERIFY -->
-12. GSTR-1 must be filed by the 11th of the succeeding month for regular taxpayers. <!-- VERIFY -->
-13. Businesses with an annual turnover exceeding ₹5 crore must generate e-invoices. <!-- VERIFY -->
-14. Failure to link PAN with Aadhaar results in the PAN becoming inoperative. <!-- VERIFY -->
-15. Non-compliance with tax audit provisions under Section 44AB incurs a penalty of 0.5% of turnover, up to ₹1.5 lakh. <!-- VERIFY -->
-16. A joint venture agreement must specify the profit-sharing ratio explicitly to be valid under the Income Tax Act. <!-- VERIFY -->
-17. Exporters must have a valid RCMC from an export promotion council to claim benefits. <!-- VERIFY -->
-18. GST appeals before the Appellate Authority must be filed within 3 months from the date of the order. <!-- VERIFY -->
-19. Individual taxpayers must file their Income Tax Return by July 31st of the assessment year. <!-- VERIFY -->
-20. Re-registration of trusts under section 12AB must be renewed every 5 years. <!-- VERIFY -->
+1. GST registration is granted within 7 working days of ARN generation. `<!-- VERIFY -->`
+2. The penalty for late filing of GSTR-3B is ₹50 per day for normal taxpayers and ₹20 per day for nil returns. `<!-- VERIFY -->`
+3. A Permanent Account Number (PAN) is mandatory for any business whose turnover exceeds ₹5 Lakhs in a financial year. `<!-- VERIFY -->`
+4. The due date for filing quarterly TDS returns for the first quarter ending June is July 31st. `<!-- VERIFY -->`
+5. An Import Export Code (IEC) is permanently valid and does not require renewal. `<!-- VERIFY -->`
+6. Interest under Section 234A is levied at 1% per month for delay in filing the Income Tax Return. `<!-- VERIFY -->`
+7. A private limited company must have a minimum of two directors and two shareholders to be legally incorporated. `<!-- VERIFY -->`
+8. The threshold limit for a tax audit under Section 44AB is ₹1 Crore for businesses, which extends to ₹10 Crore if 95% of transactions are digital. `<!-- VERIFY -->`
+9. A partnership deed must be stamped in accordance with the Indian Stamp Act to be considered legally valid. `<!-- VERIFY -->`
+10. GSTR-1 must be filed by the 11th of the succeeding month for taxpayers not opting for the QRMP scheme. `<!-- VERIFY -->`
+11. Taxpayers can file an appeal before the CIT(A) within 30 days from the date of receipt of the assessment order. `<!-- VERIFY -->`
+12. The threshold limit for mandatory GST registration for service providers is ₹20 Lakhs in most Indian states. `<!-- VERIFY -->`
+13. Failure to deduct TDS attracts a penalty equal to the amount of tax that should have been deducted under Section 271C. `<!-- VERIFY -->`
+14. Linking Aadhaar with PAN is mandatory, and failing to do so makes the PAN inoperative. `<!-- VERIFY -->`
+15. A trust can claim tax exemption under Section 11 only if it is registered under Section 12A of the Income Tax Act. `<!-- VERIFY -->`
+16. The annual GST return (Form GSTR-9) must be filed by December 31st of the following financial year. `<!-- VERIFY -->`
+17. Startups recognized by DPIIT can claim a tax holiday for 3 consecutive years out of their first 10 years. `<!-- VERIFY -->`
+18. E-invoicing is mandatory for all registered businesses whose aggregate turnover exceeds ₹5 Crores. `<!-- VERIFY -->`
+19. A reply to a GST Show Cause Notice (SCN) under Section 73 must be submitted within 30 days of issuance. `<!-- VERIFY -->`
+20. The statutory audit of a society must be completed within 6 months from the closure of the financial year. `<!-- VERIFY -->`

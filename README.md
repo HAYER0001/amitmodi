@@ -1,43 +1,36 @@
-# Amit Modi & Associates - Tax Compliance Practice
+# Compliance in Check
 
-This is the repository for "Compliance in Check", a high-performance Next.js 15 web application tailored for an Indian GST, Income Tax, and compliance practice.
-
-## Overview
-
-The site architecture focuses on:
-- High Core Web Vitals (Edge caching, zero unused CSS, optimized static assets)
-- Modern design aesthetics using a "Compliance in Check" theme with a ledger-inspired visual language
-- Search engine optimization for LLMs and Generative AI (GEO)
-- Automated deployment to Vercel
+"Compliance in Check" is a modern, high-performance web application designed for a GST, Tax, and Compliance Practice. Built on Next.js App Router and optimized for both Generative Engine Optimization (GEO) and Core Web Vitals, it treats tax compliance like a game of chess—proactive, strategic, and definitive.
 
 ## The Three-Agent Workflow
 
-This project is built using a coordinated, parallel AI agent workflow. The build is structured into 20 phases, each executed by three specialized agents simultaneously:
-- **Agent A (Architect):** Handles hard architecture, animation, Next.js build config, state, and dependencies.
-- **Agent B (Content & SEO Engineer):** Owns pages, Markdown content, schema markup, SEO, and the editorial spine.
-- **Agent C (Data & Copy Hand):** Focuses on precise, mechanical data entry, typing constants, JSON structures, and data files.
+This repository is built using a highly structured 20-phase, parallel 3-agent workflow:
+- **Agent A (Architect):** Handles Next.js core, routing, 3D assets, components, state, and `package.json`.
+- **Agent B (Content & SEO Engineer):** Responsible for editorial strategy, MDX pages, SEO data, and runbooks (you are reading an Agent B file).
+- **Agent C (Data & Copy Hand):** Focuses on JSON/TS data files, checklists, FAQs, and tightly constrained structured data.
 
-## Documentation Reference
+Each agent operates strictly within its designated folder ownership. If an agent needs a file modified outside its zone, it leaves a request in `HANDOFF.md`.
 
-For more detailed information on specific areas, see the following documentation:
-- [Deployment Runbook](./DEPLOYMENT.md) - A step-by-step guide for setting up GitHub, environment variables, and Vercel deployments.
-- [Content Strategy](./CONTENT-STRATEGY.md) - The editorial spine detailing service mappings, internal linking, seasonal calendars, and quotable statistics.
+## Running Locally
 
-## How to Run Locally
+To run the Next.js frontend locally:
 
-To spin up the development server locally:
-
-1. **Install Dependencies:**
-   Ensure you are in the `site/` subdirectory.
+1. Navigate to the frontend directory (if applicable):
    ```bash
    cd site
+   ```
+2. Install dependencies:
+   ```bash
    npm install
    ```
-
-2. **Run the Development Server:**
+3. Start the development server:
    ```bash
    npm run dev
    ```
+4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-3. **View the Application:**
-   Open your browser and navigate to `http://localhost:3000`.
+## Documentation
+
+For further information regarding content and deployment strategy, please refer to:
+- [Deployment Runbook](./DEPLOYMENT.md) - A zero-assumed-knowledge guide for setting up the Vercel deployment, environments, and domain mapping.
+- [Content Strategy](./CONTENT-STRATEGY.md) - The editorial spine detailing service mappings, keyword SEO, interlinking, and AI-optimized quotable statistics.

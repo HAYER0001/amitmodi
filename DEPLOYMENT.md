@@ -1,107 +1,112 @@
-# Deployment Runbook
+# DEPLOYMENT RUNBOOK
 
-This guide covers the complete deployment process, from GitHub creation to going live on Vercel.
+This runbook covers the end-to-end process of deploying the "Compliance in Check" web application to Vercel, including setting up the GitHub repository, configuring environment variables, attaching a custom domain, and handling rollbacks.
 
 ## 1. Creating the GitHub Repository
 
-We use the GitHub CLI (`gh`) for seamless repository creation.
+We will create a GitHub repository to host the code and trigger Vercel deployments.
 
-**Authenticate with GitHub CLI:**
-If this is your first time using `gh`, you must authenticate:
-```bash
-gh auth login
-```
-Follow the interactive prompts to log in via your web browser.
+### Option A: Using the GitHub CLI (`gh`) - Recommended
+1. **Authenticate the GitHub CLI**:
+   ```bash
+   gh auth login
+   ```
+   Follow the interactive prompts to authenticate via your web browser.
 
-**Create the Repository:**
-```bash
-gh repo create amitmodi-site --public --source=. --remote=origin
-```
-*(You can use `--private` if you prefer a private repository.)*
+2. **Create the repository and push code**:
+   ```bash
+   # Run this from the root of your project
+   gh repo create amitmodi-site --public --source=. --remote=origin --push
+   ```
 
-**Fallback (if `gh` is not installed):**
-1. Go to https://github.com/new and create a new repository named `amitmodi-site`.
-2. In your local terminal, link it and push:
-```bash
-git remote add origin https://github.com/<your-username>/amitmodi-site.git
-git push -u origin main
-```
+### Option B: Using the GitHub Web UI (Fallback)
+If you don't have the `gh` CLI installed:
+1. Go to [GitHub](https://github.com/new) and create a new repository (e.g., `amitmodi-site`).
+2. Run the following commands in your local project root:
+   ```bash
+   git remote add origin https://github.com/YOUR_USERNAME/amitmodi-site.git
+   git branch -M main
+   git push -u origin main
+   ```
 
-## 2. Connecting to Vercel
+## 2. Connecting the Repository to Vercel
 
-We deploy to Vercel for zero-config serverless hosting and Edge caching.
+We use Vercel for zero-config deployments of our Next.js App Router application.
 
-**Install Vercel CLI:**
-```bash
-npm i -g vercel
-```
+1. **Install the Vercel CLI**:
+   ```bash
+   npm i -g vercel
+   ```
 
-**Log in to Vercel:**
-```bash
-vercel login
-```
+2. **Authenticate with Vercel**:
+   ```bash
+   vercel login
+   ```
+   Select your preferred login method (e.g., GitHub).
 
-**Link and Deploy:**
-Run the following command at the repository root:
-```bash
-vercel link
-```
+3. **Link the project**:
+   ```bash
+   vercel link
+   ```
+   *Interactive Prompts:*
+   - Set up and develop `~/path/to/amitmodi-site`? **Y**
+   - Which scope do you want to deploy to? **(Select your team/personal account)**
+   - Link to existing project? **N**
+   - What's your project's name? **amitmodi-site**
+   - In which directory is your code located? **./** (Leave as default, BUT see below)
 
-**CRITICAL: Vercel Interactive Prompts**
-When you run `vercel link` or `vercel`, you will be asked a series of questions. Answer exactly as follows:
-- Set up and deploy? **Y**
-- Which scope do you want to deploy to? **(Select your account)**
-- Link to existing project? **N**
-- What's your project's name? **amitmodi-site**
-- In which directory is your code located? **./site** *(THIS IS CRUCIAL! Do not accept the default `./`. The Next.js app lives in the `site` subdirectory.)*
-- Auto-detected Project Settings (Next.js): **Leave as defaults**
+   **CRITICAL SETTING:** Since Agent A is scaffolding the Next.js app into the `site/` subdirectory, Vercel needs to know this is the Root Directory. When configuring the project in the Vercel dashboard or CLI, ensure the **Root Directory** is explicitly set to `site`. If you miss this, the build will fail because it won't find `package.json`.
 
-**Deploy to Production:**
-Once linked, trigger a production deployment:
-```bash
-vercel --prod
-```
+4. **Deploy to Production**:
+   ```bash
+   vercel --prod
+   ```
 
 ## 3. Environment Variables
 
 This project requires specific environment variables to function correctly. 
-**NEVER commit these values to git.** They should be stored in `.env.local` for local development and entered securely in the Vercel dashboard.
 
-| Variable Name | Purpose | Required At | Where Set |
-| --- | --- | --- | --- |
-| `NEXT_PUBLIC_SITE_URL` | The base URL of the site (e.g., https://amitmodi.com) | Build/Runtime | Vercel (Production/Preview), `.env.local` (Local) |
-| `RESEND_API_KEY` | API key for Resend to send transactional emails (forms) | Runtime | Vercel (Production), `.env.local` (Local) |
-| `CONTACT_TO_EMAIL` | The practice's email address receiving form submissions | Runtime | Vercel (Production), `.env.local` (Local) |
-| `NEXT_PUBLIC_GA_ID` | Google Analytics 4 Measurement ID | Runtime | Vercel (Production), `.env.local` (Local) |
-| `NEXT_PUBLIC_GTM_ID` | Google Tag Manager Container ID | Runtime | Vercel (Production), `.env.local` (Local) |
+**CRITICAL RULE:** Never commit these values to git. Add them only to `.env.local` for local development, and the Vercel Dashboard (`Settings > Environment Variables`) for production.
 
-To add these in Vercel:
-Go to **Project Settings > Environment Variables** in the Vercel Dashboard and paste the keys and values.
+| Variable Name | Required At | Where to Set | Description |
+| :--- | :--- | :--- | :--- |
+| `NEXT_PUBLIC_SITE_URL` | Build time | Vercel UI | The production URL of the site (e.g., `https://www.yourdomain.com`). |
+| `RESEND_API_KEY` | Runtime | Vercel UI | API key for Resend to send transactional emails (e.g., lead capture). |
+| `CONTACT_TO_EMAIL` | Runtime | Vercel UI | The email address that receives the consultation form submissions. |
+| `NEXT_PUBLIC_GA_ID` | Build time | Vercel UI | Google Analytics 4 Measurement ID (`G-XXXXXXXXXX`). |
+| `NEXT_PUBLIC_GTM_ID` | Build time | Vercel UI | Google Tag Manager ID (if applicable). |
 
-## 4. Custom Domain Attachment
+## 4. Custom Domain Configuration
 
-To use a custom domain (e.g., `amitmodi.com`), configure it in Vercel and your DNS provider.
+To attach a custom domain, go to your Vercel Project Dashboard > **Settings** > **Domains**.
 
-1. Go to **Project Settings > Domains** in the Vercel Dashboard.
-2. Enter your domain (e.g., `amitmodi.com`).
-3. Vercel will recommend adding the `www` subdomain and setting one to redirect to the other (usually `www` redirects to the apex domain).
+Add your domain (e.g., `example.com`). Vercel will recommend setting up the `www` subdomain and redirecting the apex (root) domain to it, or vice versa.
 
-**DNS Records:**
-You must configure the following records with your DNS registrar (e.g., GoDaddy, Namecheap, Cloudflare):
+### DNS Records to Configure in your Domain Registrar
 
-| Type | Name | Value | Purpose |
-| --- | --- | --- | --- |
-| A | `@` (Apex) | `76.76.21.21` | Points the apex domain (`amitmodi.com`) to Vercel |
-| CNAME | `www` | `cname.vercel-dns.com.` | Points `www.amitmodi.com` to Vercel |
+**1. Apex Domain Configuration (`example.com`)**
+If you want users to visit `example.com` directly:
+- **Type:** `A`
+- **Name:** `@` (or leave blank, depending on registrar)
+- **Value:** `76.76.21.21` (Vercel's Anycast IP)
 
-*(Note: Vercel will automatically provision SSL certificates once DNS propagates.)*
+**2. WWW Subdomain Configuration (`www.example.com`)**
+If you want users to visit `www.example.com` directly:
+- **Type:** `CNAME`
+- **Name:** `www`
+- **Value:** `cname.vercel-dns.com.`
 
-## 5. Rollback a Bad Deploy
+*Best Practice:* Set `www.example.com` as your primary domain in Vercel, and configure `example.com` to redirect to `www.example.com` (Vercel does this automatically when you add both).
 
-If a deployment breaks production, you can revert instantly without waiting for a new build.
+## 5. Rolling Back a Bad Deploy
 
-1. Open the Vercel Dashboard and go to the **Deployments** tab.
-2. Find the previous successful deployment that you want to restore.
-3. Click the three dots (`...`) next to that deployment.
-4. Select **Assign Custom Domains** or **Promote to Production** (depending on the project setup).
-5. Confirm. The rollback takes effect in under a minute via Vercel's Edge Network.
+If a deployment breaks production, you can roll back instantly from the Vercel Dashboard:
+
+1. Go to your project on Vercel.
+2. Click on the **Deployments** tab.
+3. Find the previous successful deployment in the list.
+4. Click the three dots (`...`) next to that deployment.
+5. Select **Promote to Production** (or **Assign Custom Domains**).
+6. Confirm the prompt.
+
+The rollback is instantaneous because Vercel simply updates the routing at the Edge network to point to the previously built version.
