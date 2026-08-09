@@ -38,10 +38,16 @@ We map your obligations, file the returns, and keep the authorities satisfied be
 Primary: Book a Consultation
 Secondary: View Services
 
-### The "What Goes Wrong" Section
-*The cost of reacting instead of planning.*
+### The "What Goes Wrong" Section (Problem)
+*Headline:* The Cost of Reacting Instead of Planning
 
-Most businesses treat compliance as a reaction. A notice arrives in the mail, and everything stops. A deadline passes, and penalties quietly compound. By the time you realize the error, the cost to fix it is triple the cost of doing it right the first time. We replace this cycle with structure. We map your obligations, file the returns, and keep the authorities satisfied.
+Most businesses treat compliance as a reaction. A notice arrives in the mail, and everything stops. A deadline passes, and penalties quietly compound. By the time you realize the error, the cost to fix it is triple the cost of doing it right the first time. We replace this cycle with structure.
+
+**Consequences of Missed Compliance:**
+- **Late GST return filing:** Attracts a late fee under Section 47 of CGST Act along with interest on the delayed payment of tax. (Penalty: ₹50 per day `<!-- VERIFY -->`)
+- **Missed ITR deadline:** Results in a late filing fee and the permanent loss of the ability to carry forward business losses to offset future profits. (Penalty: Up to ₹5,000 under Section 234F of Income Tax Act `<!-- VERIFY -->`)
+- **TDS non-deduction:** The specific business expense will be disallowed, artificially inflating your profit and resulting in a higher income tax liability. (Penalty: 30% of expense disallowed under Section 40(a)(ia) of Income Tax Act `<!-- VERIFY -->`)
+- **Non-response to departmental notice:** The assessing officer may pass an ex parte best judgement assessment order, making the demanded tax final and payable immediately. (Penalty: 100% of tax due under Section 144 of Income Tax Act `<!-- VERIFY -->`)
 
 ### The Eight Services (One-Liners)
 1. **PAN Card Services:** Application, correction, and Aadhaar linking handled accurately.
@@ -65,15 +71,43 @@ We operate on facts, precision, and history.
 ### The Process Section
 *What actually happens after someone contacts us.*
 
-1. **The Audit:** We review your current filings and identify any immediate exposure.
-2. **The Blueprint:** We list exactly what needs to be filed, by when, and the required data.
-3. **The Execution:** You send us the raw data. We do the math, format the files, and submit them.
-4. **The Archive:** Every filed return and challan is stored and sent to you for your permanent records.
+1. **The Initial Audit:** We review your current compliance status, existing filings, and identify any immediate exposure to penalties or notices. (1 Day `<!-- VERIFY -->`)
+2. **Data Collection & Blueprinting:** We list exactly what needs to be filed and provide you with a secure portal to upload your raw data. (2 Days `<!-- VERIFY -->`)
+3. **Calculation & Reconciliation:** We process your ledgers, reconcile input tax credit mismatches, and calculate your exact statutory liabilities before the deadline. (3 Days `<!-- VERIFY -->`)
+4. **Filing & Submission:** We format the required forms and securely submit your tax returns to the government portal. (1 Day `<!-- VERIFY -->`)
+5. **Archiving & Reporting:** We deliver the filed acknowledgement receipts and challans to you for your permanent business records. (1 Day `<!-- VERIFY -->`)
 
 ### Closing CTA
-Do not wait for the deadline.
-Let us review your compliance position today.
-**[Button: Request an Audit]**
+**Headline:** Do not wait for the deadline.
+**Body:** Let us review your compliance position today. We map your obligations and keep the authorities satisfied so you can focus on growth.
+**CTA Label:** Request an Audit
+**Promise:** We will review your request and call you back within one business day. `<!-- VERIFY -->`
+
+### Homepage FAQs
+
+1. **What does the first consultation cost?**
+Our initial consultation is purely diagnostic and is offered at no cost. During this 30-minute meeting, we evaluate your current tax compliance status, identify any immediate filing exposures, and provide a clear roadmap of the statutory requirements your specific business entity must fulfill.
+
+2. **How fast can you register a GST number?**
+Once you provide the complete set of required KYC and business address documents, we typically file the GST registration application within one business day. The GST department usually processes the application and issues the GST Identification Number (GSTIN) within 7 working days. `<!-- VERIFY -->`
+
+3. **Do you work with clients outside your city?**
+Yes, we provide end-to-end tax compliance and advisory services to businesses across India. Because the Income Tax and GST portals are entirely digital, we manage all data collection securely online and can represent your tax matters effectively regardless of your physical location.
+
+4. **What do you need from me to start?**
+We require your basic business incorporation documents, previous year's filed income tax returns, current GST certificates, and access to your recent accounting ledgers. Once you contact us, we provide a precise, customized checklist of documents needed based on your specific legal entity structure.
+
+5. **What happens if I have already received a notice?**
+If you have received a tax notice, time is critical. You must share the complete notice document with us immediately. We will analyze the assessing officer's demands, determine the legal grounds for a defense, and draft a formal, evidence-backed response within the statutory timeline.
+
+6. **Do you handle both filing and appeals?**
+Yes, we offer comprehensive tax defense. We manage your regular monthly and annual statutory filings to prevent issues from arising, and we also provide formal representation before the Commissioner of Appeals and tax tribunals if you receive an unjust assessment order or demand.
+
+7. **How do you charge?**
+We charge fixed professional fees for standardized compliance tasks like GST registration, entity formation, and periodic return filings. For complex matters such as tax appeals, scrutiny assessments, and retrospective audits, we provide a customized, transparent fee estimate based on the scope of work.
+
+8. **Who will actually be handling my file?**
+Your case is managed exclusively by our core team of qualified tax professionals. We do not outsource your confidential financial data to third-party data entry agencies. A dedicated consultant is assigned to your business to ensure continuity and precise adherence to all deadlines.
 
 ---
 
