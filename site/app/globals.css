@@ -1,26 +1,158 @@
+@import "../styles/tokens.css";
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
+/*
+ * Tailwind v4 @theme — every locked token exposed as a utility class.
+ * bg-paper / text-ink / border-rule / bg-seal / text-stamp / rounded-pill /
+ * shadow-cut / font-display / text-display — and so on.
+ * @theme inline keeps the utilities reading the tokens.css variables directly
+ * (no emitted :root copies), so [data-theme="dark"] remaps flow through.
+ */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* colours */
+  --color-paper: var(--paper);
+  --color-paper-deep: var(--paper-deep);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-rule: var(--rule);
+  --color-seal: var(--seal);
+  --color-seal-deep: var(--seal-deep);
+  --color-stamp: var(--stamp);
+  --color-brass: var(--brass);
+  --color-night: var(--night);
+
+  /* spacing (4px base) */
+  --spacing-1: var(--s-1);
+  --spacing-2: var(--s-2);
+  --spacing-3: var(--s-3);
+  --spacing-4: var(--s-4);
+  --spacing-5: var(--s-5);
+  --spacing-6: var(--s-6);
+  --spacing-7: var(--s-7);
+  --spacing-8: var(--s-8);
+  --spacing-9: var(--s-9);
+  --spacing-10: var(--s-10);
+  --spacing-11: var(--s-11);
+  --spacing-12: var(--s-12);
+  --spacing-13: var(--s-13);
+  --spacing-14: var(--s-14);
+  --spacing-15: var(--s-15);
+  --spacing-16: var(--s-16);
+
+  /* radius */
+  --radius-sm: var(--r-sm);
+  --radius-md: var(--r-md);
+  --radius-pill: var(--r-pill);
+
+  /* shadow */
+  --shadow-cut: var(--shadow-cut);
+
+  /* typefaces — loaded via next/font in layout.tsx, self-hosted */
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --font-label: var(--font-label);
+  --font-margin: var(--font-margin);
+
+  /* fluid type scale (375px → 1920px) */
+  --text-display: var(--t-display);
+  --text-display--line-height: 0.88;
+  --text-display--letter-spacing: -0.03em;
+  --text-h1: var(--t-h1);
+  --text-h1--line-height: 0.95;
+  --text-h2: var(--t-h2);
+  --text-h2--line-height: 1.05;
+  --text-h3: var(--t-h3);
+  --text-body: var(--t-body);
+  --text-body--line-height: 1.65;
+  --text-label: var(--t-label);
+  --text-label--line-height: 1.4;
+  --text-label--letter-spacing: 0.14em;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ---- fluid type scale ---- */
+:root {
+  --t-display: clamp(3.5rem, 12vw, 11rem); /* line-height 0.88, ls -0.03em (above) */
+  --t-h1: clamp(2.5rem, 6vw, 5rem);
+  --t-h2: clamp(1.75rem, 3.5vw, 3rem);
+  --t-h3: clamp(1.25rem, 2vw, 1.75rem);
+  --t-body: clamp(1rem, 1.1vw, 1.1875rem);
+  --t-label: 0.75rem;
+}
+
+html {
+  background-color: var(--paper);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ---- signature surfaces ---- */
+
+/* faint ledger rules at a 96px square pitch — pure CSS, no image */
+.ledger-grid {
+  background-image:
+    repeating-linear-gradient(
+      to right,
+      var(--rule) 0 1px,
+      transparent 1px 96px
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      var(--rule) 0 1px,
+      transparent 1px 96px
+    );
+}
+
+/* warm paper + a whisper of grain (inline SVG feTurbulence, <400 bytes) */
+.paper {
+  background-color: var(--paper);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+}
+
+/* floating cut-out collage elements */
+.cut-out {
+  box-shadow: var(--shadow-cut);
+}
+
+/* pencil marginalia: set --rot per instance, e.g. style={{ "--rot": "-6deg" }} */
+.marginalia {
+  font-family: var(--font-margin);
+  color: var(--ink-soft);
+  opacity: 0.45;
+  font-size: 0.875rem;
+  line-height: 1.35;
+  --rot: 0deg;
+  rotate: var(--rot);
+}
+
+/* ---- scrollbar (thin, --rule track, --ink-soft thumb) ---- */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ink-soft) var(--rule);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--rule);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--ink-soft);
+  border-radius: var(--r-pill);
+  border: 2px solid var(--paper);
+}
+
+/* ---- focus-visible: 2px --seal outline, 3px offset, every interactive ---- */
+:where(a, button, input, select, textarea, summary, [role="button"]):focus-visible {
+  outline: 2px solid var(--seal);
+  outline-offset: 3px;
 }

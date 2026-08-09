@@ -1,0 +1,60 @@
+/*
+ * styles/tokens.css — DESIGN TOKENS, Phase 2
+ * Values are LOCKED per MASTER-BUILD-PLAN.md section 4.
+ * Do not substitute, improve, or add colours.
+ */
+
+:root {
+  /* ---- palette (locked) ---- */
+  --paper: #efede8; /* warm newsprint, the dominant surface */
+  --paper-deep: #e4e1da; /* section alternation */
+  --ink: #14140f; /* body text, near-black warm */
+  --ink-soft: #55534b; /* secondary text */
+  --rule: #d9d6ce; /* ledger grid lines, hairlines */
+  --seal: #0a6b4e; /* primary accent — CTAs, active states, key numbers */
+  --seal-deep: #064834; /* hover */
+  --stamp: #b3392b; /* RESERVED: deadlines, penalties, warnings only */
+  --brass: #a8842c; /* trust badges, credential marks */
+  --night: #12130f; /* dark-mode surface */
+
+  /* ---- spacing (4px base) ---- */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 20px;
+  --s-6: 24px;
+  --s-7: 28px;
+  --s-8: 32px;
+  --s-9: 36px;
+  --s-10: 40px;
+  --s-11: 44px;
+  --s-12: 48px;
+  --s-13: 52px;
+  --s-14: 56px;
+  --s-15: 60px;
+  --s-16: 64px;
+
+  /* ---- radius ---- */
+  --r-sm: 2px;
+  --r-md: 6px;
+  --r-pill: 999px;
+
+  /* ---- shadow ---- */
+  /* paper lifted off paper: soft, offset, low opacity */
+  --shadow-cut:
+    0 1px 1px rgba(20, 20, 15, 0.04),
+    0 4px 8px rgba(20, 20, 15, 0.08),
+    0 16px 32px rgba(20, 20, 15, 0.1);
+}
+
+/* Dark theme remaps ONLY the surfaces the plan specifies.
+   --seal and --stamp stay identical in both themes. */
+:root[data-theme="dark"] {
+  --paper: var(--night);
+  --ink: #edeae3;
+  --rule: #2a2b24;
+  --seal: #0a6b4e;
+  --seal-deep: #064834;
+  --stamp: #b3392b;
+}

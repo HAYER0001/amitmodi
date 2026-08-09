@@ -1,14 +1,36 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import {
+  Instrument_Serif,
+  Newsreader,
+  IBM_Plex_Mono,
+  Caveat,
+} from "next/font/google";
+import { ThemeProvider } from "next-themes";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const display = Instrument_Serif({
+  variable: "--font-display",
+  display: "swap",
+  subsets: ["latin"],
+  weight: "400",
+});
+
+const body = Newsreader({
+  variable: "--font-body",
+  display: "swap",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const label = IBM_Plex_Mono({
+  variable: "--font-label",
+  display: "swap",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
+const margin = Caveat({
+  variable: "--font-margin",
+  display: "swap",
   subsets: ["latin"],
 });
 
@@ -23,11 +45,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${display.variable} ${body.variable} ${label.variable} ${margin.variable} antialiased`}
       >
-        {children}
+        <ThemeProvider attribute="data-theme" defaultTheme="light">
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );
