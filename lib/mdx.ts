@@ -35,11 +35,11 @@ const postSchema = z.object({
     .string()
     .min(1, "slug is required")
     .regex(/^[a-z0-9-]+$/, "slug must be lowercase letters, numbers and hyphens"),
-  summary: z.string().min(1, "summary is required"),
+  summary: z.string().min(1, "summary is required").optional(),
   datePublished: z.coerce.date(),
   dateModified: z.coerce.date().optional(),
   dateReviewed: z.coerce.date().optional(),
-  tags: z.array(z.string().min(1)).min(1, "at least one tag is required"),
+  tags: z.array(z.string().min(1)).default([]),
   category: z.enum(POST_CATEGORIES).optional(),
   serviceTag: z.string().optional(),
   author: z.string().min(1).optional(),
@@ -59,9 +59,10 @@ function categoryFor(dir: string): PostCategory {
 }
 
 /**
- * Accept both frontmatter dialects — the architect's structural templates
- * (summary / datePublished / serviceTag) and the content agent's launch
- * articles (description / publishedAt / serviceSlug) — and collapse them to
+ * Accept the frontmatter dialects the content agents actually write — the
+ * architect's structural templates (summary / datePublished / serviceTag),
+ * the launch articles (description / publishedAt / serviceSlug), and the
+ * phase-15 guides (date / description / serviceTag) — and collapse them to
  * one canonical shape before Zod validates it. A post missing BOTH the
  * summary keys (or the date keys, or tags) still fails the build loudly.
  */
@@ -72,7 +73,7 @@ function normalizeFrontmatter(
     title: data.title,
     slug: data.slug,
     summary: data.summary ?? data.description,
-    datePublished: data.datePublished ?? data.publishedAt,
+    datePublished: data.datePublished ?? data.publishedAt ?? data.date,
     dateModified: data.dateModified ?? data.updatedAt,
     dateReviewed: data.dateReviewed,
     tags: data.tags,
@@ -153,10 +154,20 @@ function readPost(dir: string, file: string): Post {
   }
 
   const fm = parsed.data;
+  /* Articles must state their summary in frontmatter — that is the Phase 14
+   * loud-fail contract. Guides carry theirs in a body summary-box, so a guide
+   * missing the field degrades to its own first paragraph instead of killing
+   * the whole build. */
+  if (dir === "blog" && !fm.summary) {
+    throw new Error(
+      `Invalid frontmatter in content/${dir}/${file} — summary: summary is required`,
+    );
+  }
+  const summary = fm.summary ?? (extractExcerpt(content) || fm.title);
   return {
     slug: fm.slug,
     title: fm.title,
-    summary: fm.summary,
+    summary,
     datePublished: fm.datePublished,
     dateModified: fm.dateModified ?? null,
     dateReviewed: fm.dateReviewed ?? null,
@@ -176,6 +187,25 @@ function readPost(dir: string, file: string): Post {
 
 /* ---- accessors -------------------------------------------------------- */
 
+/**
+ * Try to read a file as an article, returning null when it does not satisfy
+ * the article schema. Used ONLY for the glossary directory: a glossary term is
+ * a distinct content type (lib/glossary.ts) whose frontmatter is deliberately
+ * tolerantly-schemaed — a term does not need a date, a tag list, or a summary.
+ * Files that are not article-shaped are surfaced by the glossary routes, never
+ * thrown here. Articles (blog/guides) keep the strict, fail-loudly contract.
+ */
+function tryReadPost(dir: string, file: string): Post | null {
+  try {
+    return readPost(dir, file);
+  } catch (error) {
+    if (error instanceof Error && error.message.startsWith("Invalid frontmatter in content/")) {
+      return null;
+    }
+    throw error;
+  }
+}
+
 /** Every post on disk, newest first. Throws on invalid frontmatter. */
 export function getAllPosts(): Post[] {
   const posts: Post[] = [];
@@ -184,6 +214,11 @@ export function getAllPosts(): Post[] {
     if (!fs.existsSync(full)) continue;
     for (const file of fs.readdirSync(full)) {
       if (!file.endsWith(".mdx")) continue;
+      if (dir === "glossary") {
+        const post = tryReadPost(dir, file);
+        if (post) posts.push(post);
+        continue;
+      }
       posts.push(readPost(dir, file));
     }
   }

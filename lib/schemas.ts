@@ -98,3 +98,43 @@ export const stepSchemas = {
 export type ConsultationApiResponse =
   | { ok: true; message: string }
   | { ok: false; error: string };
+
+/* ---- lead-magnet download (Phase 15, Agent A) -------------------------- */
+
+/**
+ * The downloadable PDFs a visitor can request. The pages they live on are
+ * never gated — only these artefacts are, so the email is real before a file
+ * goes out. The filenames match the Phase 15-C manifest under public/docs/.
+ */
+export const LEAD_MAGNET_ASSETS = [
+  "gst-compliance-checklist",
+  "document-checklist-pack",
+  "annual-compliance-calendar",
+] as const;
+
+export type LeadMagnetAsset = (typeof LEAD_MAGNET_ASSETS)[number];
+
+/**
+ * One contract, validated twice: the LeadMagnet form validates before it lets
+ * a visitor submit, and app/api/download/route.ts re-validates the payload
+ * with this same schema on every POST. The honeypot `company` field must stay
+ * empty — the API short-circuits on it before validating, so a bot learns
+ * nothing.
+ */
+export const downloadSchema = z.object({
+  email: z
+    .string()
+    .trim()
+    .toLowerCase()
+    .email("Enter a valid email address, like you@example.com"),
+  consent: z.literal(true, { error: "Tick the box so we can email you the download link" }),
+  asset: z.enum(LEAD_MAGNET_ASSETS, { error: "Choose a download to request" }),
+  company: z.literal("", { error: "Leave this field empty" }),
+});
+
+export type DownloadValues = z.input<typeof downloadSchema>;
+export type DownloadOutput = z.output<typeof downloadSchema>;
+
+export type DownloadApiResponse =
+  | { ok: true; message: string }
+  | { ok: false; error: string };
