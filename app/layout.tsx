@@ -10,6 +10,7 @@ import "./globals.css";
 import Header from "@/components/sections/Header";
 import Footer from "@/components/sections/Footer";
 import ScrollRail from "@/components/ui/ScrollRail";
+import SmoothScroll from "@/components/ui/SmoothScroll";
 
 const display = Instrument_Serif({
   variable: "--font-display",
@@ -49,7 +50,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en-IN" suppressHydrationWarning>
+    <html
+      lang="en-IN"
+      suppressHydrationWarning
+      data-motion="full"
+    >
+      <head>
+        {/* set data-motion before paint so CSS can respond pre-hydration */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `document.documentElement.dataset.motion=window.matchMedia("(prefers-reduced-motion: reduce)").matches?"reduced":"full"`,
+          }}
+        />
+      </head>
       <body
         className={`${display.variable} ${body.variable} ${label.variable} ${margin.variable} paper ledger-grid antialiased`}
       >
@@ -61,9 +74,11 @@ export default function RootLayout({
           Skip to content
         </a>
         <ThemeProvider attribute="data-theme" defaultTheme="light">
-          <Header />
-          <main id="main">{children}</main>
-          <Footer />
+          <SmoothScroll>
+            <Header />
+            <main id="main">{children}</main>
+            <Footer />
+          </SmoothScroll>
           <ScrollRail />
         </ThemeProvider>
       </body>
