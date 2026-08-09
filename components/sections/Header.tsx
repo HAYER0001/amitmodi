@@ -153,7 +153,7 @@ export default function Header() {
           <Link
             href="/"
             aria-label={`${BRAND.tradingName} — home`}
-            className="shrink-0 font-display text-2xl leading-none text-ink"
+            className="flex min-h-11 shrink-0 items-center gap-[0.22em] font-display text-2xl leading-none text-ink"
           >
             Amit&nbsp;Modi <span className="text-seal">&amp;&nbsp;Co.</span>
           </Link>

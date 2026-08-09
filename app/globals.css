@@ -18,6 +18,13 @@
  * (no emitted :root copies), so [data-theme="dark"] remaps flow through.
  */
 @theme inline {
+  /* Breakpoints.
+     Tailwind's smallest default is sm at 640px, which treats a 320px phone and
+     a 600px phone as the same device. They are not: a third of India's mobile
+     traffic is on screens under 400px, and that is the audience this practice
+     actually serves. `xs` gives us a handle on the narrowest tier. */
+  --breakpoint-xs: 26rem; /* 416px */
+
   /* colours */
   --color-paper: var(--paper);
   --color-paper-deep: var(--paper-deep);
@@ -218,6 +225,43 @@ body {
   .cut-out-drift {
     animation: none;
     will-change: auto;
+  }
+}
+
+/*
+ * Marginalia density is a function of available canvas.
+ *
+ * Eighteen notes across a 1440px page read as annotation. The same eighteen on a
+ * 320px phone read as vandalism — they land on the headline, the body copy and
+ * the call to action, because there is simply nowhere else for them to go. The
+ * keep-out rectangle cannot save them: on mobile the copy spans the full width,
+ * so there is no "outside".
+ *
+ * So thin them out by viewport. Hiding is done in CSS rather than by rendering
+ * fewer, because the positions are seeded and must stay identical between server
+ * and client — changing the count on the client would be a hydration mismatch.
+ */
+@media (max-width: 639px) {
+  .marginalia:nth-child(n + 5) {
+    display: none;
+  }
+  .marginalia {
+    font-size: 0.8rem;
+    opacity: 0.4;
+  }
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  .marginalia:nth-child(n + 11) {
+    display: none;
+  }
+}
+
+/* Collage objects are large on a small screen; keep only the two that sit
+   clear of the copy. */
+@media (max-width: 639px) {
+  .cut-out-drift:nth-of-type(n + 3) {
+    display: none;
   }
 }
 

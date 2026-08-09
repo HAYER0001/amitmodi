@@ -39,6 +39,7 @@ type Model3DProps = {
  */
 function useModelGating(): "loading" | "fallback" | "ok" {
   const [state, setState] = useState<"loading" | "fallback" | "ok">("loading");
+
   useEffect(() => {
     if (
       typeof window === "undefined" ||
@@ -48,18 +49,39 @@ function useModelGating(): "loading" | "fallback" | "ok" {
       setState("fallback");
       return;
     }
-    const cores = navigator.hardwareConcurrency ?? 8;
-    if (cores > 0 && cores < 4) {
-      setState("fallback");
-      return;
-    }
-    const coarsePointer = window.matchMedia?.("(pointer: coarse)").matches ?? false;
-    if (coarsePointer && window.innerWidth < 768) {
-      setState("fallback");
-      return;
-    }
-    setState("ok");
+
+    const evaluate = () => {
+      const cores = navigator.hardwareConcurrency ?? 8;
+      if (cores > 0 && cores < 4) return setState("fallback");
+      const coarsePointer =
+        window.matchMedia?.("(pointer: coarse)").matches ?? false;
+      if (coarsePointer && window.innerWidth < 768) return setState("fallback");
+      return setState("ok");
+    };
+
+    evaluate();
+
+    /*
+     * Re-evaluate on resize and orientation change.
+     *
+     * Running this once on mount meant the decision was frozen at whatever the
+     * viewport happened to be when the page loaded. Rotate a tablet from
+     * portrait to landscape, or drag a desktop window wider, and the model
+     * stayed switched off for the rest of the session — the user crossed the
+     * threshold and nothing noticed. A media query listener is the right
+     * instrument here because it fires on exactly the transitions we care
+     * about, rather than on every pixel of a drag.
+     */
+    const mq = window.matchMedia("(min-width: 768px)");
+    const onChange = () => evaluate();
+    mq.addEventListener("change", onChange);
+    window.addEventListener("orientationchange", onChange);
+    return () => {
+      mq.removeEventListener("change", onChange);
+      window.removeEventListener("orientationchange", onChange);
+    };
   }, []);
+
   return state;
 }
 

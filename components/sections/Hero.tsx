@@ -144,10 +144,17 @@ export default function Hero() {
         />
       </div>
 
-      {/* corner labels — the top-right is the live clock, client-only */}
-      <div className="relative z-10 flex items-start justify-between px-5 pt-6 sm:px-8">
-        <p className="font-label text-xs uppercase tracking-[0.14em] text-ink-soft">{CORNER_LABELS.topLeft}</p>
-        <p className="font-label text-xs uppercase tracking-[0.14em] text-ink-soft">
+      {/* Corner labels — the top-right is the live clock, client-only.
+          gap-4 and min-w-0 so the two never butt into each other: at 320px the
+          eyebrow and the timestamp were colliding mid-word ("GST & INDIRECT"
+          running straight into "09 AUG 2026"). The clock is secondary texture,
+          so it steps aside entirely on the narrowest screens rather than
+          squeezing the label that actually says what this practice does. */}
+      <div className="relative z-10 flex items-start justify-between gap-4 px-5 pt-6 sm:px-8">
+        <p className="min-w-0 font-label text-xs uppercase tracking-[0.14em] text-ink-soft">
+          {CORNER_LABELS.topLeft}
+        </p>
+        <p className="hidden shrink-0 font-label text-xs uppercase tracking-[0.14em] text-ink-soft xs:block">
           {now ?? CORNER_LABELS.topRight}
         </p>
       </div>

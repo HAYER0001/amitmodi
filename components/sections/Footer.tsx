@@ -60,7 +60,7 @@ export default function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="inline-flex min-h-11 items-center text-sm text-ink-soft transition-colors hover:text-seal"
+                    className="inline-flex min-h-11 min-w-11 items-center text-sm text-ink-soft transition-colors hover:text-seal"
                   >
                     {link.label}
                   </Link>
@@ -85,7 +85,7 @@ export default function Footer() {
         <div className="mx-auto max-w-7xl px-4 pb-6 sm:px-6">
           <a
             href={`tel:${phone.replace(/[^\d+]/g, "")}`}
-            className="inline-flex min-h-11 items-center text-sm text-ink-soft transition-colors hover:text-seal"
+            className="inline-flex min-h-11 min-w-11 items-center text-sm text-ink-soft transition-colors hover:text-seal"
           >
             {phone}
           </a>
@@ -95,7 +95,7 @@ export default function Footer() {
         <div className="mx-auto max-w-7xl px-4 pb-6 sm:px-6">
           <a
             href={`mailto:${email}`}
-            className="inline-flex min-h-11 items-center text-sm text-ink-soft transition-colors hover:text-seal"
+            className="inline-flex min-h-11 min-w-11 items-center text-sm text-ink-soft transition-colors hover:text-seal"
           >
             {email}
           </a>

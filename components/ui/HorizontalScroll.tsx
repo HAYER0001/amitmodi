@@ -103,13 +103,20 @@ export default function HorizontalScroll({
       aria-label="Horizontal gallery — use arrow keys to scroll"
       onKeyDown={onTrackKeyDown}
       className={cn(
-        "flex w-max gap-4 overflow-x-auto overscroll-x-contain",
+        /*
+         * The SCROLLER. It must stay viewport-width and clip its overflow.
+         *
+         * `w-max` and `overflow-x-auto` cannot live on the same element: an
+         * element sized to fit its own content has nothing left to scroll, so
+         * the 2200px track pushed the whole page sideways instead of scrolling
+         * inside itself. The track below carries w-max; this box stays w-full.
+         */
+        "w-full overflow-x-auto overscroll-x-contain",
         "scrollbar-thin [scrollbar-width:thin]",
         "outline-none focus-visible:ring-2 focus-visible:ring-seal",
-        className,
       )}
     >
-      {children}
+      <div className={cn("flex w-max gap-4", className)}>{children}</div>
     </div>
   );
 
