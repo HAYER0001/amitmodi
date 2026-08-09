@@ -5,7 +5,8 @@ Format each entry as:  `- [ ] <what you need> — requested in Phase <n>`
 
 ## Agent A — Architect
 
-- [ ] Dark-mode contrast: --ink-soft (#55534B) and --paper-deep (#E4E1DA) are NOT remapped in [data-theme="dark"] per locked spec §4 — verify they stay readable on --night, or the human must approve dark variants — requested in Phase 2
+- [ ] Dark-mode contrast: --ink-soft (#55534B) and --paper-deep (#E4E1DA) are NOT remapped in [data-theme="dark"] per locked spec §4 — verify contrast stays readable on --night, or the human must approve dark variants — requested in Phase 2
+- [ ] BUILD BREAKS: `site/app/styleguide/page.tsx` lines 17 and 83 contain unescaped `"` quotes (`react/no-unescaped-entities` fails `npm run build`) — fix by escaping (e.g. `&ldquo;`) — requested in Phase 3
 
 ## Agent A — Phase 1
 
