@@ -9,11 +9,25 @@
 import type { CSSProperties } from "react";
 import { pickMarginalia } from "@/data/marginalia";
 
+/** A rectangle, in viewport percentages, that marginalia must stay clear of. */
+export type ExcludeZone = {
+  top: number;
+  left: number;
+  right: number;
+  bottom: number;
+};
+
+/* Covers the left-aligned headline, subhead and CTA block of a typical hero.
+   Callers with a different layout pass their own. */
+const DEFAULT_EXCLUDE: ExcludeZone = { top: 24, left: 2, right: 62, bottom: 84 };
+
 type MarginaliaProps = {
   /** Number of marginalia items to scatter. */
   count: number;
   /** Seed — same seed ⇒ same positions. */
   seed: number;
+  /** Rectangle the copy occupies; nothing is placed inside it. */
+  exclude?: ExcludeZone;
   className?: string;
 };
 
@@ -35,16 +49,46 @@ function itemSeed(base: number, index: number) {
   return (Math.imul(base, 0x9e3779b1) ^ Math.imul(index + 1, 0x85ebca6b)) >>> 0;
 }
 
-export default function Marginalia({ count, seed, className = "" }: MarginaliaProps) {
+export default function Marginalia({ count, seed, exclude, className = "" }: MarginaliaProps) {
   const items = pickMarginalia(count, seed);
+
+  /*
+   * Keep-out zone.
+   *
+   * Marginalia are page texture, not obstruction. Scattered blind, they land on
+   * top of the headline and the result reads as a rendering fault rather than as
+   * annotation — the reference always keeps its chess notation clear of the
+   * display type. `exclude` marks the rectangle the main copy occupies; any
+   * point landing inside it is pushed out to the nearest side rather than
+   * resampled, so placement stays deterministic (server and client must agree
+   * or React throws a hydration mismatch).
+   */
+  const zone = exclude ?? DEFAULT_EXCLUDE;
 
   const scattered = items.map((_, index) => {
     const rand = mulberry32(itemSeed(seed, index));
-    return {
-      top: 6 + Math.floor(rand() * 78), // 6–84%
-      left: 4 + Math.floor(rand() * 80), // 4–84%
-      rotate: Math.round((rand() * 14 - 7) * 10) / 10, // ±7°
-    };
+    let top = 6 + Math.floor(rand() * 78); // 6–84%
+    let left = 4 + Math.floor(rand() * 80); // 4–84%
+    const rotate = Math.round((rand() * 14 - 7) * 10) / 10; // ±7°
+
+    const insideX = left > zone.left && left < zone.right;
+    const insideY = top > zone.top && top < zone.bottom;
+    if (insideX && insideY) {
+      // Push out along whichever axis needs the smaller move.
+      const dxLeft = left - zone.left;
+      const dxRight = zone.right - left;
+      const dyTop = top - zone.top;
+      const dyBottom = zone.bottom - top;
+      const minDx = Math.min(dxLeft, dxRight);
+      const minDy = Math.min(dyTop, dyBottom);
+      if (minDx <= minDy) {
+        left = dxLeft < dxRight ? Math.max(2, zone.left - 3) : Math.min(94, zone.right + 3);
+      } else {
+        top = dyTop < dyBottom ? Math.max(3, zone.top - 4) : Math.min(94, zone.bottom + 4);
+      }
+    }
+
+    return { top, left, rotate };
   });
 
   return (

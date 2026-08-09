@@ -80,7 +80,11 @@
 
 /* ---- fluid type scale ---- */
 :root {
-  --t-display: clamp(3.5rem, 12vw, 11rem); /* line-height 0.88, ls -0.03em (above) */
+  /* The display size is the whole first impression. In the reference the
+     headline occupies ~95% of the viewport width — it reads as an event, not as
+     a heading. At 12vw ours filled barely 60% and the hero looked empty, so the
+     type is pushed until it genuinely fills the measure. */
+  --t-display: clamp(3.25rem, 15.5vw, 14rem); /* line-height 0.88, ls -0.03em (above) */
   --t-h1: clamp(2.5rem, 6vw, 5rem);
   --t-h2: clamp(1.75rem, 3.5vw, 3rem);
   --t-h3: clamp(1.25rem, 2vw, 1.75rem);
@@ -129,14 +133,29 @@ body {
 }
 
 /* pencil marginalia: set --rot per instance, e.g. style={{ "--rot": "-6deg" }} */
+/* Pencil marginalia — statute references scattered as page texture.
+   Sized and weighted to read as someone's working notes on the position:
+   legible if you look, invisible if you don't. At 0.875rem/0.45 they were so
+   faint they registered as dirt on the screen rather than as annotation, which
+   wasted the whole device. Scales with the viewport so they hold their
+   relationship to the display type. */
 .marginalia {
   font-family: var(--font-margin);
   color: var(--ink-soft);
-  opacity: 0.45;
-  font-size: 0.875rem;
-  line-height: 1.35;
+  opacity: 0.55;
+  font-size: clamp(0.9rem, 1.15vw, 1.3rem);
+  line-height: 1.3;
+  white-space: nowrap;
   --rot: 0deg;
   rotate: var(--rot);
+}
+
+/* A quarter of them in seal green, like a second pass of annotation in a
+   different pen. The reference does exactly this and it stops the scatter
+   reading as a single mechanical effect. */
+.marginalia:nth-child(4n + 3) {
+  color: var(--seal);
+  opacity: 0.4;
 }
 
 /* ---- scrollbar (thin, --rule track, --ink-soft thumb) ---- */

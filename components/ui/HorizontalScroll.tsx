@@ -114,7 +114,22 @@ export default function HorizontalScroll({
   );
 
   if (!pinned) {
-    return swipeTrack;
+    /*
+     * sectionRef MUST be attached in this branch too.
+     *
+     * `pinned` is `isDesktop && !reduced`, and `isDesktop` starts false because
+     * it is only resolved in an effect after mount. So the FIRST render always
+     * lands here — on desktop as well as mobile. Returning markup without
+     * sectionRef left useScroll({ target: sectionRef }) pointing at a node that
+     * never existed, which is exactly the
+     *   "Target ref is defined but not hydrated"
+     * runtime error, thrown on every single page load.
+     */
+    return (
+      <section ref={sectionRef} className={cn("relative", className)}>
+        {swipeTrack}
+      </section>
+    );
   }
 
   return (

@@ -72,18 +72,18 @@ export default function Hero() {
           disk. Hardcoding them here squashes every image the moment an asset is
           regenerated at a different size. */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        {/* the brass knight — the hero object. Loads only on capable devices,
-            only when near the viewport, and never blocks first paint. */}
-        <div className="absolute right-[2%] top-1/2 hidden w-[34vw] max-w-[520px] -translate-y-1/2 md:block">
-          <Model3D
-            src="/models/knight-brass.glb"
-            fallbackImage={ASSETS["cut-brass-seal"].src}
-            rotationSpeed={0.12}
-            className="aspect-square w-full"
-          />
-        </div>
+        {/* Dense statute marginalia, scattered across the WHOLE frame including
+            behind the headline. In the reference the chess notation is the
+            texture of the page, not a decoration parked in the margins — there
+            are a dozen-plus notes and they read as someone's working notes on
+            the position. Sparse marginalia just look like stray debris. */}
+        <Marginalia count={18} seed={1} />
 
-        <div className="absolute left-[3%] top-[18%] w-24 -rotate-6 sm:w-32 md:w-36">
+        {/* The collage OVERLAPS the type. This is the single biggest difference
+            between the reference and a template: the chess piece sits inside the
+            word, breaking the letterforms, so the object and the type occupy one
+            plane instead of politely sharing a screen. */}
+        <div className="absolute left-[6%] top-[12%] w-24 -rotate-6 sm:w-32 md:w-40">
           <CutOut
             src={ASSETS["cut-file-folder"].src}
             alt=""
@@ -91,7 +91,7 @@ export default function Hero() {
             height={ASSETS["cut-file-folder"].height}
           />
         </div>
-        <div className="absolute bottom-[16%] left-[6%] w-20 rotate-6 sm:w-28">
+        <div className="absolute bottom-[12%] left-[4%] w-20 rotate-6 sm:w-28 md:w-32">
           <CutOut
             src={ASSETS["cut-coin-stack"].src}
             alt=""
@@ -99,7 +99,7 @@ export default function Hero() {
             height={ASSETS["cut-coin-stack"].height}
           />
         </div>
-        <div className="absolute bottom-[26%] right-[42%] hidden w-24 -rotate-12 lg:block">
+        <div className="absolute right-[8%] top-[16%] hidden w-24 -rotate-12 lg:block">
           <CutOut
             src={ASSETS["cut-paperclip"].src}
             alt=""
@@ -107,7 +107,41 @@ export default function Hero() {
             height={ASSETS["cut-paperclip"].height}
           />
         </div>
-        <Marginalia count={10} seed={1} />
+      </div>
+
+      {/* The knight sits ABOVE the headline in z-order and overlaps its right
+          end, exactly as the chess piece breaks "MONEY" in the reference.
+
+          aspect-square MUST be on this wrapper, not passed down as Model3D's
+          className. Passed down, this box collapsed to height 0 — so the
+          IntersectionObserver inside Model3D was observing a zero-height
+          element, never fired, and the canvas never mounted at all. The model
+          was correct the whole time; the box around it had no height. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute right-[4%] top-[44%] z-20 hidden aspect-square w-[30vw] max-w-[440px] -translate-y-1/2 md:block"
+      >
+        <Model3D
+          src="/models/knight-brass.glb"
+          fallbackImage={ASSETS["cut-brass-seal"].src}
+          rotationSpeed={0.12}
+          className="relative h-full w-full"
+        />
+      </div>
+
+      {/* A single small ink figure standing at the headline's baseline — the
+          reference puts a tiny observer against the huge type, and that contrast
+          is what gives the composition its scale. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute bottom-[19%] left-[46%] z-20 hidden w-14 lg:block xl:w-16"
+      >
+        <CutOut
+          src={ASSETS["fig-worried"].src}
+          alt=""
+          width={ASSETS["fig-worried"].width}
+          height={ASSETS["fig-worried"].height}
+        />
       </div>
 
       {/* corner labels — the top-right is the live clock, client-only */}
@@ -119,7 +153,10 @@ export default function Hero() {
       </div>
 
       <div className="relative z-10 flex flex-1 flex-col items-start justify-center px-5 sm:px-8">
-        <h1 className="max-w-[11ch] font-display text-display leading-[0.88] tracking-[-0.03em] text-seal">
+        {/* max-w in ch, not px — the headline must break to two lines and fill
+            the measure at every width. Capping it narrower left the reference's
+            defining move (type that fills the screen) on the table. */}
+        <h1 className="max-w-[13ch] font-display text-display leading-[0.88] tracking-[-0.03em] text-seal">
           {SELECTED.headline}
         </h1>
         <p className="mt-6 max-w-md font-body text-body leading-relaxed text-ink">
