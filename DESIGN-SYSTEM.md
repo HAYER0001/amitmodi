@@ -70,3 +70,17 @@ Every component built in this project must strictly adhere to the following acce
 - **Visible Focus:** Every interactive element must have a clear, visible focus state for keyboard navigation (never `outline: none` without a custom focus ring).
 - **Color Independence:** Any meaning communicated by color (like `--stamp` for errors, or `--seal` for success) must also be conveyed through text or a supplementary icon. Color cannot be the only visual means of conveying information.
 - **Keyboard Operability:** Full keyboard operability is required. Users must be able to navigate, interact with, and submit every form and component built in later phases using only the keyboard.
+
+## 5. Images & Assets
+
+### Component Usage Rules
+- **`<Figure>`:** Use exclusively for *meaningful* images that add editorial value (e.g., `fig-*`, `spread-*`, `cover-*`). It renders an HTML `<figure>` with an optional `<figcaption>`. This ensures the caption is visible to everyone and properly semantic.
+- **`<CutOut>`:** Use for purely *decorative* or textural assets (e.g., `cut-rupee-*`, `cut-paperclip`). These bypass `<Figure>` entirely to prevent cluttering the accessibility tree with empty `alt` attributes or meaningless semantic wrappers.
+- **`<Model3D>`:** Use specifically for interactive 3D `.glb` assets.
+
+### Captions vs Alt Text
+- **Alt Text:** Descriptive text hidden from sighted users but critical for screen readers. It describes the literal visual content of the image.
+- **Captions:** Editorial text visible to all users via `<figcaption>`. It must explain *why* the image matters in context and add information rather than just restating what the image looks like.
+
+### The No-Text-In-Images Rule
+No image on this site may ever contain readable text. Generated text in images is notoriously unreliable, unsearchable by search engines, and impossible to translate or style dynamically. Any textual information must be built natively in HTML/CSS.
