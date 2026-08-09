@@ -27,14 +27,16 @@ They focus on the end result—peace of mind, defense, and quiet handling of com
 ### Hero Section
 **Headline Variants:**
 1. The Board is Set.
-2. Compliance is Strategy.
+2. Compliance is Strategy. (SELECTED)
+   *Reasoning:* Reframes tax compliance from a reactionary chore into a proactive business advantage, alleviating the anxiety of a growing business.
 3. The Position is Secure.
 
 **Subhead:**
-We manage your GST, tax, and statutory filings so you can run your business. No missed deadlines. No unexpected notices.
+We map your obligations, file the returns, and keep the authorities satisfied before the notices arrive.
 
 **CTA Label:**
-Book a Consultation
+Primary: Book a Consultation
+Secondary: View Services
 
 ### The "What Goes Wrong" Section
 *The cost of reacting instead of planning.*
