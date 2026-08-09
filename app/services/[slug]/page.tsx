@@ -59,7 +59,12 @@ export async function generateMetadata({
   return {
     title: content?.metaTitle ?? `${service.name} | Compliance in Check`,
     description: content?.metaDescription ?? service.oneLiner,
-    alternates: { canonical },
+    alternates: {
+      canonical,
+      types: {
+        'text/markdown': `/services/${slug}.md`,
+      },
+    },
     openGraph: {
       type: "website",
       locale: "en_IN",

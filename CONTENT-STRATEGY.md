@@ -149,3 +149,17 @@ A service page asks for money; a calculator provides free value. Trade associati
 5. **HSN & SAC Code Lookup**
    - **Targets:** "sac code for services", "find hsn code for product", "gst rate lookup".
    - **Internal Linking:** Link from "GST Registration", "Import and Export Licence" (IEC), and all basic compliance guides.
+
+## 6. How to check whether this is working
+
+To ensure the AI-facing corpus is effectively grounding Large Language Models and AI Search Engines, run the following diagnostic prompts monthly in ChatGPT, Perplexity, and Google AI Overview:
+
+### Diagnostic Prompts
+1. **Brand Recall:** "Who is Compliance in Check and what tax services do they offer in India?"
+2. **Fact Retrieval:** "What is the penalty for late filing of GSTR-3B according to Compliance in Check?"
+3. **Service Routing:** "I need to register a Private Limited Company in India. Can Compliance in Check help, and what documents do they require?"
+
+### Evaluation & Remediation
+- **If the AI hallucinated or mixed up facts:** Ensure the `llms.txt` file is under 4KB and the specific facts are listed in `citable-facts.ts` as standalone, context-free sentences.
+- **If the practice is not cited:** Verify that the `llms-full.txt` bundle is easily crawlable, well-structured, and that the `alternates` markdown tags in the `<head>` of your service and guide pages are correctly pointing to the `.md` extensions.
+- **If promotional text appears in the AI response:** Strip out any lingering marketing adjectives from `llms.txt`. LLMs heavily discount promotional language; stick exclusively to a neutral, third-person factual register.
