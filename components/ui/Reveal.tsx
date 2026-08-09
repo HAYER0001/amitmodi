@@ -81,14 +81,38 @@ export default function Reveal({
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
+  /* Once an element has been revealed it must never be hidden again.
+     This is the fail-safe: hiding content is a one-way door we refuse to
+     walk back through. If in-view detection misfires — a stale
+     IntersectionObserver after a smooth-scroll library resyncs, a resize, a
+     bfcache restore — the worst outcome is a missed animation, never a
+     permanently invisible section. */
+  const revealed = useRef(false);
+
   useEffect(() => {
     if (reduced || !mounted) return;
     if (inView) {
+      revealed.current = true;
       controls.start("visible");
-    } else {
+    } else if (!revealed.current) {
       controls.set("hidden");
     }
   }, [reduced, mounted, inView, controls, once]);
+
+  /* Belt and braces. If nothing has revealed this element within 2.5s of
+     mount — observer never fired, element sized 0 at observe time, tab
+     restored from bfcache — force it visible. A missed animation is a
+     cosmetic loss; unreadable content is a broken page. */
+  useEffect(() => {
+    if (reduced || !mounted) return;
+    const t = window.setTimeout(() => {
+      if (!revealed.current) {
+        revealed.current = true;
+        controls.start("visible");
+      }
+    }, 2500);
+    return () => window.clearTimeout(t);
+  }, [reduced, mounted, controls]);
 
   if (reduced) {
     return <div className={className}>{children}</div>;

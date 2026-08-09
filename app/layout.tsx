@@ -41,7 +41,7 @@ const margin = Caveat({
 });
 
 export const metadata: Metadata = {
-  title: "Compliance in Check",
+  title: "Amit Modi & Co.",
   description:
     "Tax and compliance guidance for Indian businesses — registration, filing, and appeals.",
 };

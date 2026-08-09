@@ -2,6 +2,15 @@
 @import "tailwindcss";
 
 /*
+ * Lenis's own stylesheet. REQUIRED — not optional polish.
+ * Lenis stamps `lenis lenis-smooth` onto <html> at runtime, but the rules those
+ * classes depend on live here. Without this import, `html.lenis body { height: auto }`
+ * never applies, the scroll container desyncs from the real scroll position, and the
+ * viewport paints blank mid-page. Removing this line silently breaks the whole site.
+ */
+@import "lenis/dist/lenis.css";
+
+/*
  * Tailwind v4 @theme — every locked token exposed as a utility class.
  * bg-paper / text-ink / border-rule / bg-seal / text-stamp / rounded-pill /
  * shadow-cut / font-display / text-display — and so on.

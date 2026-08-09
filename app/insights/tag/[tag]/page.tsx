@@ -26,7 +26,7 @@ export async function generateMetadata({
   const { tag } = await params;
   return buildMetadata({
     title: withSiteName(`${tag} — Insights`),
-    description: `Posts filed under “${tag}” on the Compliance in Check insights archive.`,
+    description: `Posts filed under “${tag}” on the Amit Modi & Co. insights archive.`,
     path: `/insights/tag/${encodeURIComponent(tag)}`,
   });
 }

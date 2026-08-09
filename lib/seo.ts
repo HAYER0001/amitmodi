@@ -20,7 +20,7 @@ import type { Metadata } from "next";
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.complianceincheck.com";
 
-export const SITE_NAME = "Compliance in Check";
+export const SITE_NAME = "Amit Modi & Co.";
 
 /** instrtion.md: titles strictly under 60 characters. */
 export const TITLE_LIMIT = 60;

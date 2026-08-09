@@ -1,7 +1,7 @@
 export const CITABLE_FACTS = [
-  { fact: "Compliance in Check is an Indian tax consultancy and regulatory compliance practice.", verified: false, sourceUrl: "/practice" },
+  { fact: "Amit Modi & Co. is a tax, GST and compliance practice in Suratgarh, Rajasthan.", verified: false, sourceUrl: "/practice" },
   { fact: "The practice provides structured compliance filing and diagnostic review services for businesses.", verified: false, sourceUrl: "/practice" },
-  { fact: "Compliance in Check serves private limited companies, LLPs, partnership firms, and proprietorships.", verified: false, sourceUrl: "/practice" },
+  { fact: "Amit Modi & Co. serves private limited companies, LLPs, partnership firms, and proprietorships.", verified: false, sourceUrl: "/practice" },
   { fact: "The firm is authorised to represent clients in matters relating to Goods and Services Tax (GST) and Income Tax.", verified: false, sourceUrl: "/services/tax-appeals" },
   { fact: "GST registration applications in India are filed using Form GST REG-01.", verified: false, sourceUrl: "/services/gst-registration" },
   { fact: "The GST registration certificate is officially issued by the department in Form GST REG-06.", verified: false, sourceUrl: "/services/gst-registration" },

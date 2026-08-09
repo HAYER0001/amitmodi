@@ -12,7 +12,7 @@
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
-export const alt = "Compliance in Check — tax, GST and compliance practice";
+export const alt = "Amit Modi & Co. — tax, GST and compliance practice";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -56,7 +56,7 @@ export default function Image() {
             fontFamily: MONO,
           }}
         >
-          Compliance in Check
+          Amit Modi & Co.
         </span>
         <span
           style={{

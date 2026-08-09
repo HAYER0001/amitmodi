@@ -7,7 +7,7 @@ import { PRACTICE_CONTENT } from '@/data/practice-content';
 import { SERVICES } from '@/data/services';
 
 export async function GET() {
-  let content = `# Compliance in Check - Complete Knowledge Base\n\n`;
+  let content = `# Amit Modi & Co. - Complete Knowledge Base\n\n`;
 
   // 1. Practice Facts
   content += `## 1. Practice Overview\n`;

@@ -11,7 +11,7 @@ import { getAllServices } from "@/lib/content";
  */
 
 export const runtime = "edge";
-export const alt = "Compliance in Check — service overview";
+export const alt = "Amit Modi & Co. — service overview";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -44,7 +44,7 @@ export default async function Image({
           fontSize: 48,
         }}
       >
-        Compliance in Check
+        Amit Modi & Co.
       </div>,
       size,
     );
@@ -86,7 +86,7 @@ export default async function Image({
             fontFamily: MONO,
           }}
         >
-          Compliance in Check
+          Amit Modi & Co.
         </span>
         <span
           style={{

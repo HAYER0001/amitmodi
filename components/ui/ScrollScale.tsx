@@ -39,7 +39,16 @@ export default function ScrollScale({
   );
 
   if (reduced) {
-    return <div className={className}>{children}</div>;
+    /* The ref MUST still be attached here. useScroll({ target: ref }) runs
+       unconditionally above, so returning an element without the ref leaves
+       Framer Motion tracking a node that never exists — it throws
+       "Target ref is defined but not hydrated" and the scroll listener is
+       left in a broken state for the rest of the page. */
+    return (
+      <div ref={ref} className={className}>
+        {children}
+      </div>
+    );
   }
 
   return (

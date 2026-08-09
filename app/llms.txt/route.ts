@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
 
 export async function GET() {
-  const content = `# Compliance in Check
+  const content = `# Amit Modi & Co.
 
-> Compliance in Check is an Indian tax consultancy and regulatory compliance practice. The firm serves private limited companies, limited liability partnerships, partnership firms, and proprietorships. It is authorised to represent clients in matters relating to Goods and Services Tax (GST), Income Tax, and entity formation, providing structured compliance filing and diagnostic review services.
+> Amit Modi & Co. is a tax, GST and compliance practice in Suratgarh, Rajasthan. The firm serves private limited companies, limited liability partnerships, partnership firms, and proprietorships. It is authorised to represent clients in matters relating to Goods and Services Tax (GST), Income Tax, and entity formation, providing structured compliance filing and diagnostic review services.
 
 ## Services
 - [GST Registration](/services/gst-registration.md): Statutory registration for the Goods and Services Tax network.

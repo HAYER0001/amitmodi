@@ -88,7 +88,7 @@ const COPY = {
   messageLabel: "Your message (optional)",
   messagePlaceholder: "Tell us about your situation — what happened, the deadline you are facing, or the documents involved.",
   consentLabel:
-    "I understand that Compliance in Check will use the details I share only to respond to my request, and will not share them with anyone else.",
+    "I understand that Amit Modi & Co. will use the details I share only to respond to my request, and will not share them with anyone else.",
   backLabel: "Back",
   continueLabel: "Continue",
   submitLabel: "Request a consultation",

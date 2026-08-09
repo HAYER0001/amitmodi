@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { CTA, MAIN_NAV } from "@/data/navigation";
+import { BRAND } from "@/data/brand";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 import MobileNav from "@/components/sections/MobileNav";
 
@@ -146,13 +147,15 @@ export default function Header() {
         )}
       >
         <div className="mx-auto flex h-full max-w-none items-center justify-between gap-3 px-4 sm:px-6">
-          {/* wordmark — font-display, the quiet anchor */}
+          {/* wordmark — the practice's own name, never a campaign line.
+              The design-system codename must never surface to a visitor: the
+              client is hiring Amit Modi, so his name goes above the door. */}
           <Link
             href="/"
-            aria-label="Compliance in Check — home"
+            aria-label={`${BRAND.tradingName} — home`}
             className="shrink-0 font-display text-2xl leading-none text-ink"
           >
-            Compliance <span className="text-seal">in&nbsp;Check</span>
+            Amit&nbsp;Modi <span className="text-seal">&amp;&nbsp;Co.</span>
           </Link>
 
           {/* centre: primary nav */}

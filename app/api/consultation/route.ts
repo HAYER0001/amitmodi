@@ -31,7 +31,7 @@ const hits = new Map<string, { count: number; resetAt: number }>();
 
 const CONTACT_TO = process.env.CONTACT_TO_EMAIL;
 const RESEND_FROM =
-  process.env.RESEND_FROM || "Compliance in Check <onboarding@resend.dev>";
+  process.env.RESEND_FROM || "Amit Modi & Co. <onboarding@resend.dev>";
 
 const GENERIC_ERROR = "Your request could not be sent. Please try again in a moment.";
 const RATE_LIMIT_ERROR = "Too many requests. Please try again in a little while.";
@@ -105,7 +105,7 @@ function formDataToObject(formData: FormData): Record<string, unknown> {
 function notificationBody(input: ConsultationOutput, ip: string): string {
   return [
     "New consultation request",
-    "Site: Compliance in Check",
+    "Site: Amit Modi & Co.",
     "",
     `SERVICE: ${serviceLabel(input.service)}`,
     `SITUATION: ${SITUATION_LABELS[input.situation]}`,
@@ -142,7 +142,7 @@ function confirmationBody(input: ConsultationOutput): string {
     "",
     "You don't need to do anything else. Want to add more detail? Just reply to this email.",
     "",
-    "— The Compliance in Check team",
+    "— The Amit Modi & Co. team",
   ].join("\n");
 }
 
@@ -165,7 +165,7 @@ async function sendConfirmation(resend: Resend, input: ConsultationOutput) {
     from: RESEND_FROM,
     to: input.email,
     replyTo: CONTACT_TO || RESEND_FROM,
-    subject: "We received your consultation request — Compliance in Check",
+    subject: "We received your consultation request — Amit Modi & Co.",
     text: confirmationBody(input),
   });
 }

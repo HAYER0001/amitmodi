@@ -116,7 +116,7 @@ export default function Footer() {
         )}
       >
         <p className="font-label text-xs uppercase tracking-[0.14em] text-ink-soft">
-          © {new Date().getFullYear()} Compliance in Check. All rights reserved.
+          © {new Date().getFullYear()} Amit Modi & Co. All rights reserved.
         </p>
         {/* trust-badge row — only badges with real values render */}
         <ul className="flex flex-wrap items-center justify-center gap-3">

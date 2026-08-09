@@ -32,7 +32,7 @@ const hits = new Map<string, { count: number; resetAt: number }>();
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.complianceincheck.com";
 const CONTACT_TO = process.env.CONTACT_TO_EMAIL;
 const RESEND_FROM =
-  process.env.RESEND_FROM || "Compliance in Check <onboarding@resend.dev>";
+  process.env.RESEND_FROM || "Amit Modi & Co. <onboarding@resend.dev>";
 
 const GENERIC_ERROR = "Your request could not be sent. Please try again in a moment.";
 const RATE_LIMIT_ERROR = "Too many requests. Please try again in a little while.";
@@ -87,7 +87,7 @@ function downloadBody(input: DownloadOutput): string {
     "",
     "The link stays valid, so you can come back to it later.",
     "",
-    "— The Compliance in Check team",
+    "— The Amit Modi & Co. team",
     "",
     "If you did not request this download, you can ignore this email.",
   ].join("\n");
@@ -96,7 +96,7 @@ function downloadBody(input: DownloadOutput): string {
 function leadNoteBody(input: DownloadOutput, ip: string): string {
   return [
     "New download lead",
-    "Site: Compliance in Check",
+    "Site: Amit Modi & Co.",
     "",
     `ASSET: ${ASSET_TITLES[input.asset]} (${input.asset}.pdf)`,
     `EMAIL: ${input.email}`,
@@ -157,7 +157,7 @@ export async function POST(request: NextRequest) {
       from: RESEND_FROM,
       to: input.email,
       replyTo: CONTACT_TO || RESEND_FROM,
-      subject: `Your download is ready: ${ASSET_TITLES[input.asset]} — Compliance in Check`,
+      subject: `Your download is ready: ${ASSET_TITLES[input.asset]} — Amit Modi & Co.`,
       text: downloadBody(input),
     });
   } catch (error) {

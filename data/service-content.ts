@@ -33,7 +33,7 @@ export const SERVICES = {
   },
   'gst-registration': {
     h1: 'GST Registration',
-    metaTitle: 'GST Registration | Compliance in Check',
+    metaTitle: 'GST Registration | Amit Modi & Co.',
     metaDescription: 'Secure your Goods and Services Tax Identification Number (GSTIN). We structure your application to prevent rejections and establish your indirect tax identity.',
     directAnswer: 'Goods and Services Tax (GST) registration is a mandatory statutory requirement for Indian businesses whose annual aggregate turnover exceeds the prescribed threshold limit for their state and supply type. Registration legally authorizes a business to collect tax from customers and claim input tax credit on business purchases.',
     whoNeedsIt: [

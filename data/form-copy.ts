@@ -47,12 +47,12 @@ export const FORM_COPY = {
     descriptionTooShort: "Provide a few more details so we can assist you better.",
     consentRequired: "Check the box to agree to our privacy policy before submitting."
   },
-  consent: "I agree to let Compliance in Check store this information to contact me regarding my inquiry. My details will never be sold or shared with third parties.",
+  consent: "I agree to let Amit Modi & Co. store this information to contact me regarding my inquiry. My details will never be sold or shared with third parties.",
   messages: {
     successToast: "Your consultation request has been successfully submitted.",
     thankYouHeading: "We have received your request.",
     thankYouBody: "Our team is reviewing your details. We will call you within one business day to discuss your compliance requirements. A confirmation email has been sent to your inbox.",
-    failureMessage: "We could not submit your request due to a technical error. Please call us directly at +91 98765 43210 to book your consultation."
+    failureMessage: "We could not submit your request due to a technical error. Please call us directly at +91 94145 04617 to book your consultation."
   },
   situations: [
     { id: "routine", label: "I need to start regular compliance filings." },
@@ -63,6 +63,6 @@ export const FORM_COPY = {
   ],
   confirmationEmail: {
     subject: "We have received your consultation request",
-    body: "Thank you for reaching out to Compliance in Check.\n\nOur team is currently reviewing your compliance requirements. A dedicated tax professional will call you within one business day to discuss your case and provide an initial diagnostic review.\n\nTo make our call as productive as possible, please keep your recent tax filings, notices (if any), and basic financial ledgers accessible.\n\nIf your matter is extremely urgent and requires immediate intervention, please call us directly at +91 98765 43210.\n\nWe look forward to speaking with you.\n\nRegards,\nThe Compliance in Check Team"
+    body: "Thank you for reaching out to Amit Modi & Co.\n\nOur team is currently reviewing your compliance requirements. A dedicated tax professional will call you within one business day to discuss your case and provide an initial diagnostic review.\n\nTo make our call as productive as possible, please keep your recent tax filings, notices (if any), and basic financial ledgers accessible.\n\nIf your matter is extremely urgent and requires immediate intervention, please call us directly at +91 94145 04617.\n\nWe look forward to speaking with you.\n\nRegards,\nThe Amit Modi & Co. team"
   }
 };

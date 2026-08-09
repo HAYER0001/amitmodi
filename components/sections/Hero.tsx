@@ -2,11 +2,21 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import { HERO_VARIANTS, CORNER_LABELS } from "@/data/hero-copy";
+import { ASSETS } from "@/data/assets";
 import Marginalia from "@/components/ui/Marginalia";
 import CutOut from "@/components/ui/CutOut";
 import Magnetic from "@/components/ui/Magnetic";
+
+/* three.js is ~150 KB gzipped. It must never be in the first-paint bundle, so
+   Model3D is only ever reached through this dynamic, ssr:false import. The
+   component itself then gates on device capability and viewport proximity. */
+const Model3D = dynamic(() => import("@/components/ui/Model3D"), {
+  ssr: false,
+  loading: () => null,
+});
 
 /*
  * Hero.tsx — the full-viewport opening section.
@@ -57,16 +67,45 @@ export default function Hero() {
       aria-label="Introduction"
       className="paper ledger-grid relative flex min-h-[100svh] flex-col overflow-hidden"
     >
-      {/* decorative collage — never part of the LCP */}
+      {/* decorative collage — never part of the LCP.
+          Dimensions come from data/assets.ts, which mirrors the real files on
+          disk. Hardcoding them here squashes every image the moment an asset is
+          regenerated at a different size. */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        <div className="absolute right-[6%] top-[16%] w-28 rotate-6 sm:w-40">
-          <CutOut src="/images/cut-file-folder.png" alt="" width={160} height={213} />
+        {/* the brass knight — the hero object. Loads only on capable devices,
+            only when near the viewport, and never blocks first paint. */}
+        <div className="absolute right-[2%] top-1/2 hidden w-[34vw] max-w-[520px] -translate-y-1/2 md:block">
+          <Model3D
+            src="/models/knight-brass.glb"
+            fallbackImage={ASSETS["cut-brass-seal"].src}
+            rotationSpeed={0.12}
+            className="aspect-square w-full"
+          />
         </div>
-        <div className="absolute bottom-[20%] left-[4%] w-24 -rotate-6 sm:w-32">
-          <CutOut src="/images/cut-coin-stack.png" alt="" width={128} height={170} />
+
+        <div className="absolute left-[3%] top-[18%] w-24 -rotate-6 sm:w-32 md:w-36">
+          <CutOut
+            src={ASSETS["cut-file-folder"].src}
+            alt=""
+            width={ASSETS["cut-file-folder"].width}
+            height={ASSETS["cut-file-folder"].height}
+          />
         </div>
-        <div className="absolute right-[38%] top-[62%] hidden w-20 rotate-12 lg:block">
-          <CutOut src="/images/cut-brass-seal.png" alt="" width={80} height={80} />
+        <div className="absolute bottom-[16%] left-[6%] w-20 rotate-6 sm:w-28">
+          <CutOut
+            src={ASSETS["cut-coin-stack"].src}
+            alt=""
+            width={ASSETS["cut-coin-stack"].width}
+            height={ASSETS["cut-coin-stack"].height}
+          />
+        </div>
+        <div className="absolute bottom-[26%] right-[42%] hidden w-24 -rotate-12 lg:block">
+          <CutOut
+            src={ASSETS["cut-paperclip"].src}
+            alt=""
+            width={ASSETS["cut-paperclip"].width}
+            height={ASSETS["cut-paperclip"].height}
+          />
         </div>
         <Marginalia count={10} seed={1} />
       </div>

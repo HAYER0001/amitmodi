@@ -107,7 +107,7 @@ function ShareLinks({ slug }: { slug: string }) {
     },
     {
       label: "Share by email",
-      href: `mailto:?subject=${encodeURIComponent("A post from Compliance in Check")}&body=${encodeURIComponent(url)}`,
+      href: `mailto:?subject=${encodeURIComponent("A post from Amit Modi & Co.")}&body=${encodeURIComponent(url)}`,
     },
   ];
   return (

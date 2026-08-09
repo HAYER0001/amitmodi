@@ -42,7 +42,7 @@ const COPY = {
   emailPlaceholder: "you@example.com",
   emailHint: "We email the download link. We never sell or share this address.",
   consentLabel:
-    "I understand that Compliance in Check will email me the download link and may follow up about the practice's services.",
+    "I understand that Amit Modi & Co. will email me the download link and may follow up about the practice's services.",
   submitLabel: "Email me the download",
   sendingLabel: "Sending…",
   successTitle: "Check your inbox",

@@ -18,7 +18,7 @@
 
 import { Component, Suspense, type ReactNode, useEffect, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { useGLTF } from "@react-three/drei";
+import { useGLTF, Center, Environment, Lightformer } from "@react-three/drei";
 import { useReducedMotion } from "framer-motion";
 import * as THREE from "three";
 
@@ -108,9 +108,14 @@ function Model({ src, rotationSpeed }: { src: string; rotationSpeed: number }) {
     };
   }, [scene, src]);
 
+  /* Centre the model on the origin so it rotates about its own axis rather
+     than orbiting. Tripo exports sit on the ground plane (y: 0 → ~0.98), so
+     without this the knight swings around a point beneath its feet. */
   return (
     <group ref={group}>
-      <primitive object={scene} />
+      <Center>
+        <primitive object={scene} />
+      </Center>
     </group>
   );
 }
@@ -180,12 +185,42 @@ export default function Model3D({
           <Suspense fallback={fallback()}>
             <Canvas
               dpr={[1, 1.75]}
-              camera={{ position: [0, 0, 5], fov: 40 }}
+              camera={{ position: [0, 0, 2.7], fov: 35 }}
               gl={{ antialias: true, alpha: true }}
               style={{ position: "absolute", inset: 0 }}
             >
-              <ambientLight intensity={0.9} />
-              <directionalLight position={[4, 6, 5]} intensity={1.2} />
+              {/* Brass is a METAL. A metallic PBR surface is almost entirely
+                  reflection, so with lights alone and nothing to reflect it
+                  renders near-black — which is exactly what happens without
+                  this Environment.
+
+                  drei's <Environment preset="..."> would fix it by fetching an
+                  HDR from a CDN, which the Phase-20 Content Security Policy
+                  blocks. Building the environment from <Lightformer>s instead
+                  renders it into a local render target: same effect, zero
+                  network requests, nothing for the CSP to reject. */}
+              <Environment resolution={128}>
+                <Lightformer
+                  intensity={2.2}
+                  position={[0, 3, 2]}
+                  scale={[6, 6, 1]}
+                  color="#fffaf0"
+                />
+                <Lightformer
+                  intensity={1.1}
+                  position={[-4, 1, 1]}
+                  scale={[4, 6, 1]}
+                  color="#e8e4d8"
+                />
+                <Lightformer
+                  intensity={0.8}
+                  position={[4, -1, -2]}
+                  scale={[4, 4, 1]}
+                  color="#cfc6b0"
+                />
+              </Environment>
+              <ambientLight intensity={0.35} />
+              <directionalLight position={[4, 6, 5]} intensity={1.1} />
               <Model src={src} rotationSpeed={rotationSpeed} />
             </Canvas>
           </Suspense>

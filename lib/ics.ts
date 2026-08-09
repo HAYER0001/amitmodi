@@ -114,10 +114,10 @@ export function buildCalendarICS(): string {
   const lines = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//Compliance in Check//Compliance Calendar//EN",
+    "PRODID:-//Amit Modi & Co.//Compliance Calendar//EN",
     "CALSCALE:GREGORIAN",
     "METHOD:PUBLISH",
-    "X-WR-CALNAME:Compliance in Check — statutory deadlines",
+    "X-WR-CALNAME:Amit Modi & Co. — statutory deadlines",
     "X-WR-TIMEZONE:Asia/Kolkata",
   ];
 
