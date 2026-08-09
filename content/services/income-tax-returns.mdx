@@ -1,0 +1,116 @@
+---
+slug: 'income-tax-returns'
+title: 'Income Tax Return (ITR) Filing in India'
+metaTitle: 'Income Tax Return (ITR) Filing Guide | Compliance & Process'
+metaDescription: 'Detailed technical guide on filing Income Tax Returns in India. Understand statutory obligations, forms, deadlines, failure modes, and penalties.'
+updated: '2026-08-09'
+author: 'Compliance in Check'
+reviewedBy: 'Compliance in Check'
+---
+
+## Who is required to file an Income Tax Return (ITR) in India?
+
+Filing an Income Tax Return (ITR) is a mandatory annual statutory obligation where individuals and businesses declare their income, deductions, and tax liabilities to the Income Tax Department. Filing within the prescribed statutory deadlines allows businesses to carry forward losses and claim refunds for excess tax paid.
+
+## Who needs this
+
+Filing an ITR is not just for those who owe tax; it is a statutory requirement for a broad spectrum of entities and individuals under Section 139(1) of the Income Tax Act, 1961 <!-- VERIFY -->. 
+- **Individuals & HUFs:** Any individual whose gross total income (before deductions under Chapter VI-A like 80C) exceeds the basic exemption limit (₹2.5 Lakhs under the old regime, or ₹3 Lakhs under the new regime <!-- VERIFY -->) must file.
+- **Companies and Firms:** Every Private Limited Company, Public Limited Company, Limited Liability Partnership (LLP), and traditional Partnership Firm must file an ITR annually, **regardless of whether they made a profit or incurred a loss**. This is an absolute mandate.
+- **Specific Financial Transactions:** Even if income is below the exemption limit, individuals must file if they have deposited more than ₹1 Crore <!-- VERIFY --> in one or more current accounts, incurred expenditure exceeding ₹2 Lakhs <!-- VERIFY --> for foreign travel, or incurred electricity expenditure exceeding ₹1 Lakh <!-- VERIFY -->.
+- **Foreign Assets:** Resident and Ordinarily Resident (ROR) individuals holding foreign assets or holding signing authority in any account located outside India must file an ITR.
+- **Claiming Refunds or Losses:** Anyone wishing to claim a refund of excess Tax Deducted at Source (TDS) or wanting to carry forward business losses or capital losses to future years must file the return on or before the due date.
+
+## What the process actually involves
+
+Filing an ITR is a highly data-intensive process requiring reconciliation across multiple statutory databases and portals.
+
+**Step 1: Data Gathering and Bookkeeping Validation**
+For businesses, the process begins with finalizing the books of accounts (Ledgers, Trial Balance, P&L, Balance Sheet). For individuals, it involves collating Salary Slips (Form 16), Bank Statements, and Investment Proofs. 
+
+**Step 2: Reconciliation with Form 26AS and AIS / TIS**
+This is a critical compliance checkpoint. The taxpayer must access the Income Tax e-filing portal and download Form 26AS (Annual Information Statement of taxes paid) and the Annual Information Statement (AIS) / Taxpayer Information Summary (TIS). Every entry of income (salary, interest, dividends, sale of securities, high-value transactions) and TDS reflected in these documents must be strictly reconciled with the taxpayer's own records. The portal aggregates data from banks, mutual funds, and sub-registrars via Statement of Financial Transactions (SFT) filings <!-- VERIFY -->.
+
+**Step 3: Selection of the Correct ITR Form**
+The Income Tax Department prescribes different forms based on the entity type and nature of income:
+- **ITR-1 (Sahaj):** For resident individuals with income up to ₹50 Lakhs <!-- VERIFY --> from salary, one house property, and other sources (interest).
+- **ITR-2:** For individuals/HUFs not having income from business or profession, but having capital gains or multiple house properties.
+- **ITR-3:** For individuals/HUFs having income from profits and gains of business or profession.
+- **ITR-4 (Sugam):** For individuals, HUFs, and Firms (other than LLP) having total income up to ₹50 Lakhs <!-- VERIFY --> and opting for the presumptive taxation scheme under Sections 44AD, 44ADA, or 44AE <!-- VERIFY -->.
+- **ITR-5:** For LLPs, Partnership Firms, AOPs, and BOIs.
+- **ITR-6:** For Companies (other than companies claiming exemption under section 11).
+- **ITR-7:** For persons including companies required to file return under sections 139(4A) or 139(4B) or 139(4C) or 139(4D) only (e.g., Trusts, Political Parties).
+
+**Step 4: Computation of Total Income and Tax Liability**
+Income is computed under five heads: Salary, House Property, Business/Profession, Capital Gains, and Other Sources. Permissible deductions (like Section 80C, 80D <!-- VERIFY -->) are applied. The tax liability is then calculated based on the applicable slab rates or corporate tax rates, adding applicable Surcharge and Health & Education Cess (4%) <!-- VERIFY -->.
+
+**Step 5: Payment of Self-Assessment Tax**
+If the computed tax liability exceeds the TDS/TCS and Advance Tax already paid, the balance must be paid as Self-Assessment Tax under Section 140A <!-- VERIFY --> before filing the return. Interest under sections 234A, 234B, and 234C <!-- VERIFY --> may also be applicable and must be paid simultaneously.
+
+**Step 6: E-Filing and Verification**
+The XML/JSON utility is prepared and uploaded to the e-filing portal. Crucially, filing is not complete until the return is verified. This must be done within 30 days <!-- VERIFY --> of filing, typically via Aadhaar OTP, Net Banking EVC, or by sending a physically signed ITR-V to the Centralized Processing Center (CPC) in Bengaluru.
+
+## Documents you will need
+
+- **Individuals:** PAN, Aadhaar, Form 16 (Salary), Form 16A/16B/16C (TDS certificates), Bank Statements for all active accounts, Home Loan Interest Certificate, Capital Gains statements from brokers, and proof of 80C/80D investments.
+- **Businesses (Firms/LLPs/Companies):** PAN, Finalized Balance Sheet and Profit & Loss Account, Audit Report (if applicable under Section 44AB <!-- VERIFY -->), Bank Statements, GST Returns (GSTR-1, GSTR-3B, GSTR-9 for reconciliation), and Details of Directors/Partners.
+
+## How long it takes and what can delay it
+
+Preparing and filing an ITR can take anywhere from a few hours for a simple salaried individual to several weeks for a complex corporate return requiring a statutory audit.
+
+**Failure Modes and Delays:**
+1. **AIS / TIS Mismatch:** The most common failure mode. If the taxpayer's computed income is less than what is reported in the AIS (e.g., failing to report savings bank interest or a mutual fund redemption), the portal's automated risk management system will flag the return, issuing a defective return notice under Section 139(9) <!-- VERIFY --> or an intimation of proposed adjustment under Section 143(1)(a) <!-- VERIFY -->.
+2. **PAN-Aadhaar Non-Linkage:** If a taxpayer's PAN is not linked with their Aadhaar, the PAN becomes inoperative. E-filing is blocked, and any pending refunds are withheld. Linking requires a penalty payment of ₹1,000 <!-- VERIFY --> and takes 4-5 days <!-- VERIFY --> to reflect on the portal.
+3. **Invalid Bank Account for Refund:** If the bank account pre-validated on the portal has a name mismatch with the PAN database or is closed/dormant, the CPC cannot issue the refund. The taxpayer must re-validate a new account and raise a refund reissue request, delaying the refund by weeks.
+4. **Failure to Verify within 30 Days:** If the return is filed but not e-verified (e.g., Aadhaar OTP fails due to mobile number mismatch) within the strict 30-day window <!-- VERIFY -->, the return is treated as *invalid* (non est in law). The taxpayer must file a fresh belated return, attracting late fees and losing the right to carry forward losses.
+5. **Form 26AS vs. Books Mismatch:** For businesses, if the revenue declared in the P&L does not reconcile with the receipts shown in Form 26AS, or if TDS claimed is more than what is reflected in 26AS, the CPC will raise an automated tax demand.
+6. **GST Turnover Reconciliation Failure:** The ITR form requires reporting of GST turnover. If this figure does not match the aggregate turnover reported in GSTR-1/GSTR-3B filings, the department's analytics engine will flag the discrepancy for scrutiny assessment.
+7. **Incomplete Director/Partner Details:** Failing to provide accurate DINs or PANs of directors in corporate returns, or unlisted equity share details, will cause the JSON validation utility to throw fatal errors, preventing upload.
+8. **Digital Signature (DSC) Expiry or Java Errors:** Corporate returns and audit reports MUST be signed using a DSC. Expired DSCs, missing emSigner utilities, or browser cache issues frequently block last-minute uploads on the due date.
+9. **Defective Return Notice (139(9)):** Filing an ITR-3 without attaching the required Balance Sheet and P&L data when gross receipts mandate it, leads to a notice. The taxpayer gets 15 days <!-- VERIFY --> to rectify; failure renders the return invalid.
+10. **Portal Downtime on Due Dates:** Massive traffic spikes on July 31st or October 31st often cause the e-filing portal to crash or timeout during JSON upload, resulting in missed deadlines despite the taxpayer being ready.
+
+## What it costs
+
+- **Late Filing Fees (Section 234F):** If filed after the due date, a late fee of ₹5,000 <!-- VERIFY --> is levied. If the total income is below ₹5 Lakhs, the fee is restricted to ₹1,000 <!-- VERIFY -->.
+- **Interest Penalty (Section 234A):** 1% per month <!-- VERIFY --> or part of a month on the outstanding tax liability from the due date until the actual date of filing.
+- **Professional Fees:** Vary widely. Simple salaried returns may cost ₹1,000 to ₹3,000 <!-- VERIFY -->. Complex business returns with balance sheet finalization can cost ₹10,000 to ₹50,000+ <!-- VERIFY --> depending on volume and complexity.
+
+## What happens if you do not do this
+
+Failing to file an Income Tax Return has severe compounding consequences:
+- **Best Judgment Assessment:** Under Section 144 <!-- VERIFY -->, the Assessing Officer can unilaterally assess your income to the best of their judgment based on available information (like AIS data) and demand taxes, often much higher than actual liability.
+- **Loss of Carry Forward Rights:** Under Section 80 <!-- VERIFY -->, you absolutely cannot carry forward business losses, capital losses, or losses from owning and maintaining racehorses to set off against future profits if the return is not filed before the original due date.
+- **Prosecution and Imprisonment:** For willful failure to furnish returns, Section 276CC <!-- VERIFY --> prescribes rigorous imprisonment. If the tax evaded exceeds ₹25,000, the term is 6 months to 7 years <!-- VERIFY --> with a fine. For lesser amounts, it is 3 months to 2 years <!-- VERIFY -->.
+- **Penalty for Under-reporting:** Under Section 270A <!-- VERIFY -->, a penalty of 50% <!-- VERIFY --> of the tax payable on under-reported income can be levied, which jumps to 200% <!-- VERIFY --> for misreporting.
+- **Inability to Obtain Loans or Visas:** Banks universally require 2-3 years of acknowledged ITRs (ITR-V) to process business loans, mortgages, or substantial personal loans. Similarly, many foreign embassies require ITRs to process travel or work visas to prove financial stability in India.
+
+## Common mistakes
+
+- **Ignoring the Annual Information Statement (AIS):** Filing based solely on Form 16 while ignoring massive mutual fund redemptions or high-value fixed deposit interest reported in the AIS. The tax department *already knows* about these transactions.
+- **Choosing the Wrong ITR Form:** A salaried employee who engages in intraday stock trading (speculative business income) filing ITR-1 or ITR-2 instead of the mandatory ITR-3. This makes the return defective.
+- **Failing to Report Exempt Income:** Believing that because agricultural income or PPF interest is exempt from tax, it doesn't need to be reported. It MUST be reported in the designated 'Exempt Income' schedule; otherwise, sudden bank deposits from these sources lack documentary backing during scrutiny.
+- **Non-Disclosure of Foreign Assets:** Resident individuals failing to disclose foreign bank accounts, Restricted Stock Units (RSUs) of foreign parent companies (like Google/Amazon shares), or foreign property in the 'Schedule FA'. This attracts draconian penalties under the Black Money Act, 2015 <!-- VERIFY -->, specifically a flat penalty of ₹10 Lakhs <!-- VERIFY --> per year of non-disclosure.
+- **Claiming Fake Deductions:** Claiming HRA exemptions with fake rent receipts or claiming bogus political donations (Section 80GGC <!-- VERIFY -->) via unregistered syndicates. The department employs AI to detect clusters of suspicious deductions linked to specific tax preparers.
+
+## How this practice handles it
+
+Our practice utilizes a zero-tolerance approach to reconciliation errors. Before drafting any return, we execute a mandatory 3-way match: Client Books vs. Form 26AS vs. AIS/TIS. We deploy specialized software to parse and reconcile thousands of stock market transactions directly from broker contract notes to ensure capital gains are accurately categorized as short-term or long-term. For businesses, our team conducts a preemptive GST turnover reconciliation (ITR vs. GSTR-3B) to eliminate the risk of automated notices. We manage the entire verification lifecycle, tracking the 30-day e-verification window with automated escalations. Furthermore, we maintain a secure, encrypted repository of all working papers, supporting calculations, and investment proofs, ensuring that if an assessment under Section 143(3) <!-- VERIFY --> (Scrutiny) ever occurs, the defense is robust, documented, and ready for deployment instantly.
+
+## Frequently asked questions
+
+**If my company had zero revenue this year, do I still need to file an ITR?**
+Yes. Every registered company must file an ITR-6 annually, declaring a "Nil" return or reporting the expenses incurred, regardless of revenue. Non-filing will lead to late fees and potential strike-off actions by the MCA.
+
+**What is the due date for filing ITR?**
+For individuals and non-audit cases, the original due date under Section 139(1) <!-- VERIFY --> is typically July 31st <!-- VERIFY --> of the assessment year. For companies and entities requiring a tax audit, it is October 31st <!-- VERIFY -->. Transfer pricing cases have a due date of November 30th <!-- VERIFY -->.
+
+**Can I revise my return if I made a mistake?**
+Yes. Under Section 139(5) <!-- VERIFY -->, a return can be revised to correct any omission or wrong statement. However, the revised return must be filed before December 31st <!-- VERIFY --> of the relevant assessment year or before the completion of the assessment, whichever is earlier.
+
+**What is a Belated Return?**
+If you miss the original due date, you can file a Belated Return under Section 139(4) <!-- VERIFY --> until December 31st <!-- VERIFY --> of the assessment year. However, this attracts a late filing fee of up to ₹5,000 <!-- VERIFY --> and disables the carry forward of losses.
+
+**Is it mandatory to link Aadhaar with PAN to file ITR?**
+Yes. E-filing is not possible without an operative PAN, which requires linkage with Aadhaar. If unlinked, you cannot file, you cannot claim refunds, and higher TDS rates will be applied to your income.
