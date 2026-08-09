@@ -1,28 +1,18 @@
 import type { Metadata } from "next";
 import HSNLookup from "@/components/tools/HSNLookup";
 import { queryStringFromParams } from "../_params";
+import { buildMetadata, withSiteName } from "@/lib/seo";
 
 /*
  * app/tools/hsn-sac-lookup/page.tsx — SSR entry for the HSN/SAC lookup.
  */
 
-const CANONICAL = "/tools/hsn-sac-lookup";
-
-export const metadata: Metadata = {
-  title: "HSN & SAC Code Lookup — GST Rates | Compliance in Check",
+export const metadata: Metadata = buildMetadata({
+  title: withSiteName("HSN & SAC Code Lookup — GST Rates"),
   description:
     "Look up the GST slab rate for goods (HSN) and services (SAC) codes — from milk and mobile phones to hotels and consultancy — with the fine-print notes.",
-  alternates: { canonical: CANONICAL },
-  openGraph: {
-    type: "website",
-    locale: "en_IN",
-    url: CANONICAL,
-    siteName: "Compliance in Check",
-    title: "HSN & SAC Code Lookup",
-    description: "The GST rate for the goods or services code you're filing under.",
-  },
-  robots: { index: true, follow: true },
-};
+  path: "/tools/hsn-sac-lookup",
+});
 
 export default async function HSNLookupPage({
   searchParams,

@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { PostCard, Pagination } from "../../../../_components";
 import { getAllTags, getPostsByTag, canonicalTag, paginate } from "@/lib/mdx";
+import { buildMetadata, withSiteName } from "@/lib/seo";
 
 /*
  * app/insights/tag/[tag]/page/[page]/page.tsx — paginated tag archives with
@@ -32,12 +33,11 @@ export async function generateMetadata({
   params: Promise<{ tag: string; page: string }>;
 }): Promise<Metadata> {
   const { tag, page } = await params;
-  return {
-    title: `${tag} — Insights, Page ${page} | Compliance in Check`,
+  return buildMetadata({
+    title: withSiteName(`${tag} — Insights, Page ${page}`),
     description: `Posts filed under “${tag}” — page ${page}.`,
-    alternates: { canonical: `/insights/tag/${tag}/page/${page}` },
-    robots: { index: true, follow: true },
-  };
+    path: `/insights/tag/${encodeURIComponent(tag)}/page/${page}`,
+  });
 }
 
 export default async function TagArchivePage({

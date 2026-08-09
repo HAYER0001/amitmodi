@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { getPublishedTerms } from "@/lib/glossary";
 import GlossaryIndex from "./_GlossaryIndex";
+import { buildMetadata } from "@/lib/seo";
 
 /*
  * app/glossary/page.tsx — the A–Z glossary index (Phase 15, Agent A).
@@ -12,22 +13,12 @@ import GlossaryIndex from "./_GlossaryIndex";
  * the markup, not because a search endpoint returns them.
  */
 
-export const metadata: Metadata = {
-  title: "Tax & Compliance Glossary, A–Z | Compliance in Check",
+export const metadata: Metadata = buildMetadata({
+  title: "Tax & Compliance Glossary, A–Z",
   description:
-    "A plain-language glossary of the terms Indian businesses hit — ITC, GSTIN, RCM, LUT, TDS, TCS, e-Way Bill, and more. Each entry links to the service that handles it.",
-  alternates: { canonical: "/glossary" },
-  openGraph: {
-    type: "website",
-    locale: "en_IN",
-    url: "/glossary",
-    siteName: "Compliance in Check",
-    title: "Tax & Compliance Glossary, A–Z",
-    description:
-      "Every compliance term a business owner will hit, defined in plain language and linked to the practice that handles it.",
-  },
-  robots: { index: true, follow: true },
-};
+    "A plain-language glossary of Indian tax and compliance terms — ITC, GSTIN, RCM, LUT, TDS, TCS, e-Way Bill, and more.",
+  path: "/glossary",
+});
 
 export default function GlossaryPage() {
   const terms = getPublishedTerms();

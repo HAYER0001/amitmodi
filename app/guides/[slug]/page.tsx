@@ -11,6 +11,7 @@ import { LeadMagnet } from "@/components/content/LeadMagnet";
 import { getPublishedPosts, getPostBySlug, type Post, type TocItem } from "@/lib/mdx";
 import { formatGuideDate, magnetForGuide } from "../_components";
 import { PrintGuideButton } from "../_PrintGuideButton";
+import { buildMetadata, withSiteName, fitDescription } from "@/lib/seo";
 
 /*
  * app/guides/[slug]/page.tsx — the guide template (Phase 15, Agent A).
@@ -31,8 +32,6 @@ export function generateStaticParams() {
     .map((post) => ({ slug: post.slug }));
 }
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "";
-
 export async function generateMetadata({
   params,
 }: {
@@ -41,28 +40,15 @@ export async function generateMetadata({
   const { slug } = await params;
   const guide = getPostBySlug(slug);
   if (!guide) return {};
-  return {
-    title: `${guide.title} | Compliance in Check`,
-    description: guide.summary,
-    alternates: {
-      canonical: `/guides/${slug}`,
-      types: {
-        'text/markdown': `/guides/${slug}.md`,
-      },
-    },
-    openGraph: {
-      type: "article",
-      locale: "en_IN",
-      url: `${SITE_URL}/guides/${slug}`,
-      siteName: "Compliance in Check",
-      title: guide.title,
-      description: guide.summary,
-      publishedTime: guide.datePublished.toISOString(),
-      modifiedTime: (guide.dateModified ?? guide.datePublished).toISOString(),
-      authors: [guide.author],
-    },
-    robots: { index: true, follow: true },
-  };
+  return buildMetadata({
+    title: withSiteName(guide.title),
+    description: fitDescription(guide.summary),
+    path: `/guides/${slug}`,
+    type: "article",
+    publishedTime: guide.datePublished.toISOString(),
+    modifiedTime: (guide.dateModified ?? guide.datePublished).toISOString(),
+    alternateTypes: { "text/markdown": `/guides/${slug}.md` },
+  });
 }
 
 /* ---- guide sub-parts --------------------------------------------------- */

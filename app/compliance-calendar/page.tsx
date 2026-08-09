@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import ClosingCTA from "@/components/sections/ClosingCTA";
 import { COMPLIANCE_CALENDAR } from "@/data/compliance-calendar";
+import { buildMetadata, withSiteName } from "@/lib/seo";
 
 /*
  * app/compliance-calendar/page.tsx — a public, indexable calendar of the
@@ -16,22 +17,12 @@ import { COMPLIANCE_CALENDAR } from "@/data/compliance-calendar";
  * recurring reminders, once a month, forever.
  */
 
-export const metadata: Metadata = {
-  title: "Compliance Calendar — Statutory Deadlines | Compliance in Check",
+export const metadata: Metadata = buildMetadata({
+  title: withSiteName("Compliance Calendar — Statutory Deadlines"),
   description:
-    "The recurring deadlines an Indian business carries — monthly, quarterly, and annual GST, income tax, TDS, and statutory filings. Subscribe to the .ics and never miss one.",
-  alternates: { canonical: "/compliance-calendar" },
-  openGraph: {
-    type: "website",
-    locale: "en_IN",
-    url: "/compliance-calendar",
-    siteName: "Compliance in Check",
-    title: "Compliance Calendar — Statutory Deadlines",
-    description:
-      "Verified recurring deadlines for GST, income tax, and TDS filings, with a subscribe-able calendar.",
-  },
-  robots: { index: true, follow: true },
-};
+    "Monthly, quarterly, and annual GST, income tax, TDS, and statutory deadlines — subscribe to the .ics and never miss one.",
+  path: "/compliance-calendar",
+});
 
 type CalendarEntry = {
   id: string;

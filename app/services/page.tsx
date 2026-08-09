@@ -5,13 +5,14 @@ import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import Reveal from "@/components/ui/Reveal";
 import { getAllServices, formatTurnaround } from "@/lib/content";
 import type { Service, ServiceCategory } from "@/types/content";
+import { buildMetadata, withSiteName } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Services | Compliance in Check",
+export const metadata: Metadata = buildMetadata({
+  title: withSiteName("Services"),
   description:
     "GST registration, income tax and TDS returns, appeals, and import-export licensing for Indian businesses — handled by one practice.",
-  alternates: { canonical: "/services" },
-};
+  path: "/services",
+});
 
 const CATEGORIES: { id: ServiceCategory; label: string }[] = [
   { id: "registration", label: "Registration" },

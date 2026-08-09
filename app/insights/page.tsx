@@ -2,13 +2,14 @@ import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { PostCard, TagFilter, Pagination } from "./_components";
 import { getPublishedPosts, getPostsByTag, paginate } from "@/lib/mdx";
+import { buildMetadata, withSiteName } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Insights | Compliance in Check",
+export const metadata: Metadata = buildMetadata({
+  title: withSiteName("Insights"),
   description:
     "Compliance notes, guides, and updates for Indian businesses — GST, income tax, TDS, and trade.",
-  alternates: { canonical: "/insights" },
-};
+  path: "/insights",
+});
 
 /*
  * app/insights/page.tsx — page 1 of the archive. Filterable by tag via

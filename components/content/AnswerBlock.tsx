@@ -8,7 +8,7 @@ interface AnswerBlockProps {
 
 export function AnswerBlock({ question, answer, supportingFacts }: AnswerBlockProps) {
   return (
-    <section className="bg-paper-deep p-8 border-l-4 border-seal my-12 rounded-sm" aria-labelledby="answer-heading">
+    <section id="direct-answer" className="bg-paper-deep p-8 border-l-4 border-seal my-12 rounded-sm" aria-labelledby="answer-heading">
       <h2 id="answer-heading" className="font-display text-4xl mb-6 text-ink">
         {question}
       </h2>

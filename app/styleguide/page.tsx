@@ -1,11 +1,12 @@
 import React from 'react';
+import { buildMetadata } from '@/lib/seo';
 
-export const metadata = {
-  robots: {
-    index: false,
-    follow: false
-  }
-};
+export const metadata = buildMetadata({
+  title: 'Design System & Styleguide',
+  description: 'Internal design reference — never indexed.',
+  path: '/styleguide',
+  noIndex: true,
+});
 
 export default function Styleguide() {
   return (

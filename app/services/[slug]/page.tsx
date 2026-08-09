@@ -14,6 +14,7 @@ import { getContent, type PenaltyNote } from "../_content-bridge";
 import { getAllServices, verifiedOnly } from "@/lib/content";
 import { DOCUMENTS_BY_SERVICE } from "@/data/documents";
 import type { ProcessStep } from "@/types/content";
+import { buildMetadata, withSiteName, fitDescription } from "@/lib/seo";
 
 /*
  * app/services/[slug]/page.tsx — the dynamic service template.
@@ -56,26 +57,12 @@ export async function generateMetadata({
   const service = getAllServices().find((s) => s.slug === slug);
   if (!service) return {};
   const content = getContent(slug);
-  const canonical = `/services/${slug}`;
-  return {
-    title: content?.metaTitle ?? `${service.name} | Compliance in Check`,
-    description: content?.metaDescription ?? service.oneLiner,
-    alternates: {
-      canonical,
-      types: {
-        'text/markdown': `/services/${slug}.md`,
-      },
-    },
-    openGraph: {
-      type: "website",
-      locale: "en_IN",
-      url: canonical,
-      siteName: "Compliance in Check",
-      title: content?.metaTitle ?? service.name,
-      description: content?.metaDescription ?? service.oneLiner,
-    },
-    robots: { index: true, follow: true },
-  };
+  return buildMetadata({
+    title: withSiteName(content?.metaTitle ?? service.name),
+    description: fitDescription(content?.metaDescription ?? service.oneLiner),
+    path: `/services/${slug}`,
+    alternateTypes: { "text/markdown": `/services/${slug}.md` },
+  });
 }
 
 /* ---- Page-local structural sections ---------------------------------- */

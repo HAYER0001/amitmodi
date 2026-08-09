@@ -17,6 +17,7 @@ import {
 } from "@/lib/mdx";
 import { getAllServices } from "@/lib/content";
 import { formatPostDate } from "../_components";
+import { buildMetadata, withSiteName, fitDescription } from "@/lib/seo";
 
 /*
  * app/insights/[slug]/page.tsx — the article template (Phase 14, Agent A).
@@ -50,25 +51,14 @@ export async function generateMetadata({
   const { slug } = await params;
   const post = getPostBySlug(slug);
   if (!post) return {};
-  const url = `${SITE_URL}/insights/${slug}`;
-  return {
-    title: `${post.title} | Compliance in Check`,
-    description: post.summary,
-    alternates: { canonical: `/insights/${slug}` },
-    openGraph: {
-      type: "article",
-      locale: "en_IN",
-      url,
-      siteName: "Compliance in Check",
-      title: post.title,
-      description: post.summary,
-      publishedTime: post.datePublished.toISOString(),
-      modifiedTime: (post.dateModified ?? post.datePublished).toISOString(),
-      authors: [post.author],
-      tags: post.tags,
-    },
-    robots: { index: true, follow: true },
-  };
+  return buildMetadata({
+    title: withSiteName(post.title),
+    description: fitDescription(post.summary),
+    path: `/insights/${slug}`,
+    type: "article",
+    publishedTime: post.datePublished.toISOString(),
+    modifiedTime: (post.dateModified ?? post.datePublished).toISOString(),
+  });
 }
 
 /* ---- article sub-parts ------------------------------------------------- */

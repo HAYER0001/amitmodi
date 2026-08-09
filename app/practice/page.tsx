@@ -5,13 +5,14 @@ import CredentialBar from "@/components/sections/CredentialBar";
 import ClosingCTA from "@/components/sections/ClosingCTA";
 import { PRACTICE_CONTENT } from "@/data/practice-content";
 import { brand } from "@/lib/brand";
+import { buildMetadata, withSiteName } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "About the Practice | Compliance in Check",
+export const metadata: Metadata = buildMetadata({
+  title: withSiteName("About the Practice"),
   description:
     "Structured, uncompromising regulatory compliance and tax defense for Indian businesses.",
-  alternates: { canonical: "/practice" },
-};
+  path: "/practice",
+});
 
 /*
  * app/practice/page.tsx — the practice's own page (Phase 13, §V).

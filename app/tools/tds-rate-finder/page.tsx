@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import TDSRateFinder from "@/components/tools/TDSRateFinder";
 import { parseTDSQuery } from "@/lib/calc/tds-rate";
 import { queryStringFromParams } from "../_params";
+import { buildMetadata, withSiteName } from "@/lib/seo";
 
 /*
  * app/tools/tds-rate-finder/page.tsx — SSR entry for the TDS rate finder.
@@ -9,23 +10,12 @@ import { queryStringFromParams } from "../_params";
 
 const DEFAULTS = { paymentTypeId: "194j-professional", amount: 100000 } as const;
 
-const CANONICAL = "/tools/tds-rate-finder";
-
-export const metadata: Metadata = {
-  title: "TDS Rate Finder — Section, Rate & Threshold | Compliance in Check",
+export const metadata: Metadata = buildMetadata({
+  title: withSiteName("TDS Rate Finder — Section, Rate & Threshold"),
   description:
-    "Find the exact TDS section, rate, and threshold for any payment — interest, contracts, rent, professional fees, property purchase and more — and the precise amount to deduct.",
-  alternates: { canonical: CANONICAL },
-  openGraph: {
-    type: "website",
-    locale: "en_IN",
-    url: CANONICAL,
-    siteName: "Compliance in Check",
-    title: "TDS Rate Finder",
-    description: "The exact TDS section, rate, threshold and deduction for the payment you're making.",
-  },
-  robots: { index: true, follow: true },
-};
+    "Find the exact TDS section, rate, and threshold for any payment — interest, contracts, rent, professional fees, and more.",
+  path: "/tools/tds-rate-finder",
+});
 
 export default async function TDSRateFinderPage({
   searchParams,

@@ -8,6 +8,7 @@ import {
   paginate,
   getAllPosts,
 } from "@/lib/mdx";
+import { buildMetadata, withSiteName } from "@/lib/seo";
 
 /*
  * app/insights/page/[page]/page.tsx — pages 2+ of the archive, with real
@@ -33,13 +34,12 @@ export async function generateMetadata({
   params: Promise<{ page: string }>;
 }): Promise<Metadata> {
   const { page } = await params;
-  return {
-    title: `Insights — Page ${page} | Compliance in Check`,
+  return buildMetadata({
+    title: withSiteName(`Insights — Page ${page}`),
     description:
       "Compliance notes, guides, and updates for Indian businesses — page by page.",
-    alternates: { canonical: `/insights/page/${page}` },
-    robots: { index: true, follow: true },
-  };
+    path: `/insights/page/${page}`,
+  });
 }
 
 export default async function InsightsPage({

@@ -11,6 +11,7 @@ import {
   type GlossaryTerm,
 } from "@/lib/glossary";
 import { SERVICES } from "@/data/services";
+import { buildMetadata, withSiteName, fitDescription } from "@/lib/seo";
 
 /*
  * app/glossary/[term]/page.tsx — one statically generated page per term.
@@ -28,8 +29,6 @@ export function generateStaticParams() {
   return getPublishedTerms().map((term) => ({ term: term.slug }));
 }
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "";
-
 export async function generateMetadata({
   params,
 }: {
@@ -38,24 +37,12 @@ export async function generateMetadata({
   const { term: slug } = await params;
   const entry = getTermBySlug(slug);
   if (!entry) return {};
-  const description =
-    entry.definition.length > 160
-      ? `${entry.definition.slice(0, 157).trimEnd()}…`
-      : entry.definition;
-  return {
-    title: `${entry.term} definition | Compliance in Check`,
-    description,
-    alternates: { canonical: `/glossary/${entry.slug}` },
-    openGraph: {
-      type: "article",
-      locale: "en_IN",
-      url: `${SITE_URL}/glossary/${entry.slug}`,
-      siteName: "Compliance in Check",
-      title: `${entry.term} — what it means`,
-      description,
-    },
-    robots: { index: true, follow: true },
-  };
+  return buildMetadata({
+    title: withSiteName(`${entry.term} definition`),
+    description: fitDescription(entry.definition),
+    path: `/glossary/${entry.slug}`,
+    type: "article",
+  });
 }
 
 function serviceLinkFor(entry: GlossaryTerm) {

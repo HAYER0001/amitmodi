@@ -1,5 +1,25 @@
 import { BRAND, hasFact } from '@/data/brand';
 import { SERVICES } from '@/data/services';
+import type { ProcessStep } from '@/types/content';
+
+type ServiceLike = {
+  name: string;
+  oneLiner: string;
+  pricing?: { startsAt: number };
+};
+
+type ArticleLike = {
+  title: string;
+  summary: string;
+  coverImage?: string;
+  datePublished: Date;
+  dateModified: Date | null;
+  author: string;
+  slug: string;
+  category: string;
+  wordCount?: number;
+  keywords?: string[];
+};
 
 export function WebSiteSchema({ domain }: { domain: string }) {
   const schema = {
@@ -17,7 +37,7 @@ export function WebSiteSchema({ domain }: { domain: string }) {
 }
 
 export function OrganizationSchema({ domain }: { domain: string }) {
-  const schema: any = {
+  const schema: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": ["Organization", "AccountingService"],
     "name": BRAND.tradingName,
@@ -60,7 +80,7 @@ export function OrganizationSchema({ domain }: { domain: string }) {
 export function LocalBusinessSchema({ domain }: { domain: string }) {
   if (BRAND.address.lat === null || BRAND.address.lng === null) return null;
 
-  const schema: any = {
+  const schema: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     "name": BRAND.tradingName,
@@ -97,13 +117,14 @@ export function LocalBusinessSchema({ domain }: { domain: string }) {
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />;
 }
 
-export function ServiceSchema({ service, content, domain }: { service: any, content: any, domain: string }) {
-  const schema: any = {
+export function ServiceSchema({ service, content, domain }: { service: unknown, content: { whatsIncluded?: string[] } | null, domain: string }) {
+  const s = service as ServiceLike;
+  const schema: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "Service",
-    "name": service.name,
-    "description": service.oneLiner,
-    "serviceType": service.name,
+    "name": s.name,
+    "description": s.oneLiner,
+    "serviceType": s.name,
     "provider": {
       "@type": "Organization",
       "name": BRAND.tradingName,
@@ -112,11 +133,11 @@ export function ServiceSchema({ service, content, domain }: { service: any, cont
     "areaServed": [BRAND.serviceArea.primaryCity, ...BRAND.serviceArea.states].map(a => ({ "@type": "Place", "name": a }))
   };
 
-  if (service.pricing && service.pricing.startsAt > 0) {
+  if (s.pricing && s.pricing.startsAt > 0) {
     schema.offers = {
       "@type": "Offer",
       "priceCurrency": "INR",
-      "price": service.pricing.startsAt
+      "price": s.pricing.startsAt
     };
   }
 
@@ -155,8 +176,8 @@ export function FAQPageSchema({ faqs }: { faqs: Array<{question: string, answer:
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />;
 }
 
-export function ArticleSchema({ post, domain }: { post: any, domain: string }) {
-  const schema: any = {
+export function ArticleSchema({ post, domain }: { post: ArticleLike, domain: string }) {
+  const schema: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": post.title,
@@ -190,7 +211,7 @@ export function ArticleSchema({ post, domain }: { post: any, domain: string }) {
 }
 
 export function PersonSchema({ domain }: { domain: string }) {
-  const schema: any = {
+  const schema: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "Person",
     "name": BRAND.principal.name,
@@ -242,7 +263,7 @@ export function BreadcrumbListSchema({ crumbs, domain }: { crumbs: {label: strin
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />;
 }
 
-export function HowToSchema({ steps, title, description }: { steps: any[], title: string, description: string }) {
+export function HowToSchema({ steps, title, description }: { steps: ProcessStep[], title: string, description: string }) {
   if (steps.length === 0) return null;
   const totalDays = steps.reduce((acc, step) => acc + (step.durationDays || 0), 0);
   
@@ -276,7 +297,7 @@ export function HowToSchema({ steps, title, description }: { steps: any[], title
 }
 
 export function WebPageSchema({ domain, url, speakableSelector }: { domain: string, url: string, speakableSelector?: string }) {
-  const schema: any = {
+  const schema: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "WebPage",
     "url": `${domain}${url}`

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import ITRFormSelector from "@/components/tools/ITRFormSelector";
 import { parseITRQuery } from "@/lib/calc/itr-form";
 import { queryStringFromParams } from "../_params";
+import { buildMetadata, withSiteName } from "@/lib/seo";
 
 /*
  * app/tools/itr-form-selector/page.tsx — SSR entry for the ITR selector.
@@ -14,23 +15,12 @@ const DEFAULTS = {
   totalIncome: 3000000,
 } as const;
 
-const CANONICAL = "/tools/itr-form-selector";
-
-export const metadata: Metadata = {
-  title: "Which ITR Should I File? — ITR 1 to 7 Selector | Compliance in Check",
+export const metadata: Metadata = buildMetadata({
+  title: withSiteName("Which ITR Should I File? — ITR 1 to 7 Selector"),
   description:
-    "Answer five questions and get the right income tax return form — ITR-1 Sahaj through ITR-7 — with the reasons, based on your taxpayer status, income, and any disqualifying conditions.",
-  alternates: { canonical: CANONICAL },
-  openGraph: {
-    type: "website",
-    locale: "en_IN",
-    url: CANONICAL,
-    siteName: "Compliance in Check",
-    title: "Which ITR Should I File?",
-    description: "The right ITR form in five questions, with the reasons spelled out.",
-  },
-  robots: { index: true, follow: true },
-};
+    "Answer five questions and get the right ITR form — ITR-1 Sahaj through ITR-7 — with reasons based on your taxpayer status and income.",
+  path: "/tools/itr-form-selector",
+});
 
 export default async function ITRFormSelectorPage({
   searchParams,

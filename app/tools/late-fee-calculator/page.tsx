@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import LateFeeCalculator from "@/components/tools/LateFeeCalculator";
 import { parseLateFeeQuery } from "@/lib/calc/gst-late-fee";
 import { queryStringFromParams } from "../_params";
+import { buildMetadata, withSiteName } from "@/lib/seo";
 
 /*
  * app/tools/late-fee-calculator/page.tsx — SSR entry for the late-fee tool.
@@ -15,23 +16,12 @@ const DEFAULTS = {
   taxPayable: 0,
 } as const;
 
-const CANONICAL = "/tools/late-fee-calculator";
-
-export const metadata: Metadata = {
-  title: "GST Late Fee & Interest Calculator | Compliance in Check",
+export const metadata: Metadata = buildMetadata({
+  title: withSiteName("GST Late Fee & Interest Calculator"),
   description:
     "Work out the late fee and 18% interest on a delayed GSTR-1 or GSTR-3B. Per-day fee, turnover-tier caps, and net cash tax — all itemised.",
-  alternates: { canonical: CANONICAL },
-  openGraph: {
-    type: "website",
-    locale: "en_IN",
-    url: CANONICAL,
-    siteName: "Compliance in Check",
-    title: "GST Late Fee & Interest Calculator",
-    description: "The true cost of a missed GST due date: per-day late fee plus 18% interest, itemised.",
-  },
-  robots: { index: true, follow: true },
-};
+  path: "/tools/late-fee-calculator",
+});
 
 export default async function LateFeeCalculatorPage({
   searchParams,

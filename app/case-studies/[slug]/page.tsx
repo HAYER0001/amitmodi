@@ -7,6 +7,7 @@ import {
   getConsentedCaseStudies,
   getCaseStudy,
 } from "@/lib/case-studies";
+import { buildMetadata, withSiteName } from "@/lib/seo";
 
 /*
  * app/case-studies/[slug]/page.tsx — one STAR case study.
@@ -31,12 +32,11 @@ export async function generateMetadata({
   const { slug } = await params;
   const study = getCaseStudy(slug);
   if (!study) return {};
-  return {
-    title: `${study.title} | Compliance in Check`,
+  return buildMetadata({
+    title: withSiteName(study.title),
     description: "A matter handled by the practice, in our own words.",
-    alternates: { canonical: `/case-studies/${slug}` },
-    robots: { index: true, follow: true },
-  };
+    path: `/case-studies/${slug}`,
+  });
 }
 
 export default async function CaseStudyPage({

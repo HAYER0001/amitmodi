@@ -3,6 +3,7 @@ import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import ConsultationForm from "@/components/forms/ConsultationForm";
 import { Toaster } from "@/components/ui/Toast";
 import { brand } from "@/lib/brand";
+import { buildMetadata, withSiteName } from "@/lib/seo";
 
 /*
  * app/contact/page.tsx — the consultation funnel.
@@ -15,23 +16,12 @@ import { brand } from "@/lib/brand";
  * fallback when the API had to reject the submission.
  */
 
-const CANONICAL = "/contact";
-
-export const metadata: Metadata = {
-  title: "Request a Consultation — Compliance in Check",
+export const metadata: Metadata = buildMetadata({
+  title: withSiteName("Request a Consultation"),
   description:
     "Tell us what you need help with and when. A member of the team will get back to you within one business day about GST, income tax, and compliance.",
-  alternates: { canonical: CANONICAL },
-  openGraph: {
-    type: "website",
-    locale: "en_IN",
-    url: CANONICAL,
-    siteName: "Compliance in Check",
-    title: "Request a Consultation",
-    description: "Compliance help, within one business day.",
-  },
-  robots: { index: true, follow: true },
-};
+  path: "/contact",
+});
 
 function ErrorBanner({ error }: { error: string | undefined }) {
   if (error !== "1" && error !== "rate") return null;

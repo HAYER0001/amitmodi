@@ -2,13 +2,14 @@ import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { GuideCard } from "./_components";
 import { getPublishedPosts } from "@/lib/mdx";
+import { buildMetadata, withSiteName } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Compliance Guides | Compliance in Check",
+export const metadata: Metadata = buildMetadata({
+  title: withSiteName("Compliance Guides"),
   description:
     "Long-form, evergreen guides for Indian businesses — entity formation, GST compliance, income-tax notices, and first-time exporting. Depth is the point.",
-  alternates: { canonical: "/guides" },
-};
+  path: "/guides",
+});
 
 /*
  * app/guides/page.tsx — the guides hub. One card per evergreen guide,

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import ClosingCTA from "@/components/sections/ClosingCTA";
+import { buildMetadata, withSiteName } from "@/lib/seo";
 
 /*
  * app/tools/page.tsx — the /tools hub.
@@ -50,21 +51,12 @@ const TOOLS = [
   },
 ] as const;
 
-export const metadata: Metadata = {
-  title: "Free Compliance Calculators & Tools | Compliance in Check",
+export const metadata: Metadata = buildMetadata({
+  title: withSiteName("Compliance Calculators & Tools"),
   description:
-    "GST amount calculator, late-fee and interest calculator, TDS rate finder, ITR form selector, and an HSN/SAC code lookup — free tools that show their working.",
-  alternates: { canonical: "/tools" },
-  openGraph: {
-    type: "website",
-    locale: "en_IN",
-    url: "/tools",
-    siteName: "Compliance in Check",
-    title: "Free Compliance Calculators & Tools",
-    description: "Calculators that show their working — GST, late fees, TDS, ITR selection, and HSN/SAC codes.",
-  },
-  robots: { index: true, follow: true },
-};
+    "GST calculator, late-fee and interest calculator, TDS rate finder, ITR form selector, and an HSN/SAC code lookup — free tools that show their working.",
+  path: "/tools",
+});
 
 export default function ToolsPage() {
   return (

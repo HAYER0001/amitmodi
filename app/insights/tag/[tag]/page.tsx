@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { PostCard, Pagination } from "../../_components";
 import { getAllTags, getPostsByTag, canonicalTag, paginate } from "@/lib/mdx";
+import { buildMetadata, withSiteName } from "@/lib/seo";
 
 /*
  * app/insights/tag/[tag]/page.tsx — one statically generated archive per tag.
@@ -23,12 +24,11 @@ export async function generateMetadata({
   params: Promise<{ tag: string }>;
 }): Promise<Metadata> {
   const { tag } = await params;
-  return {
-    title: `${tag} — Insights | Compliance in Check`,
+  return buildMetadata({
+    title: withSiteName(`${tag} — Insights`),
     description: `Posts filed under “${tag}” on the Compliance in Check insights archive.`,
-    alternates: { canonical: `/insights/tag/${tag}` },
-    robots: { index: true, follow: true },
-  };
+    path: `/insights/tag/${encodeURIComponent(tag)}`,
+  });
 }
 
 export default async function TagArchive({

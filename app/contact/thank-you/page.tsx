@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import Link from "next/link";
 
 /*
@@ -10,11 +11,12 @@ import Link from "next/link";
  * visitor already answered the questions.
  */
 
-export const metadata: Metadata = {
-  title: "Request Received — Compliance in Check",
+export const metadata: Metadata = buildMetadata({
+  title: "Request Received",
   description: "Your consultation request is in. We will get back to you within one business day.",
-  robots: { index: false, follow: false },
-};
+  path: "/contact/thank-you",
+  noIndex: true,
+});
 
 const NEXT_STEPS = [
   {

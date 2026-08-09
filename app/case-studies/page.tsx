@@ -6,13 +6,14 @@ import {
   getConsentedCaseStudies,
   sectionExcerpt,
 } from "@/lib/case-studies";
+import { buildMetadata, withSiteName } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Case Studies | Compliance in Check",
+export const metadata: Metadata = buildMetadata({
+  title: withSiteName("Case Studies"),
   description:
     "How the practice works, matter by matter — Situation, Task, Action, Result.",
-  alternates: { canonical: "/case-studies" },
-};
+  path: "/case-studies",
+});
 
 /*
  * app/case-studies/page.tsx — index of consented case studies.

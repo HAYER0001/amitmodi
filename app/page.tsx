@@ -1,4 +1,4 @@
-import { homepageMetadata } from "./metadata";
+import type { Metadata } from "next";
 import Hero from "@/components/sections/Hero";
 import HeroBridge from "@/components/sections/HeroBridge";
 import TheProblem from "@/components/sections/TheProblem";
@@ -9,8 +9,14 @@ import CredentialBar from "@/components/sections/CredentialBar";
 import TestimonialCarousel from "@/components/sections/TestimonialCarousel";
 import ClientMarquee from "@/components/sections/ClientMarquee";
 import ClosingCTA from "@/components/sections/ClosingCTA";
+import { buildMetadata } from "@/lib/seo";
 
-export const metadata = homepageMetadata;
+export const metadata: Metadata = buildMetadata({
+  title: "GST & Tax Compliance Practice",
+  description:
+    "Proactive GST, Income Tax, and statutory compliance filing for growing businesses. We handle the deadlines and defend your revenue from unjust notices.",
+  path: "/",
+});
 
 /*
  * Homepage — the narrative, one beat of an argument per section.
