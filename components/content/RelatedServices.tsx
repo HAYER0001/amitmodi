@@ -19,7 +19,7 @@ export function RelatedServices({ services }: { services: RelatedServiceProps[] 
         {services.map((service) => (
           <Link 
             key={service.slug} 
-            href={`/${service.slug}`}
+            href={`/services/${service.slug}`}
             className="group block p-6 border border-rule rounded-sm bg-white hover:bg-paper hover:border-seal transition-all focus:outline-none focus:ring-2 focus:ring-seal h-full flex flex-col"
           >
             <h3 className="font-display text-xl text-ink group-hover:text-seal transition-colors mb-3">
