@@ -53,9 +53,15 @@ We use Vercel for zero-config deployments of our Next.js App Router application.
    - Which scope do you want to deploy to? **(Select your team/personal account)**
    - Link to existing project? **N**
    - What's your project's name? **amitmodi-site**
-   - In which directory is your code located? **./** (Leave as default, BUT see below)
+   - In which directory is your code located? **./** (leave as the default)
 
-   **CRITICAL SETTING:** Since Agent A is scaffolding the Next.js app into the `site/` subdirectory, Vercel needs to know this is the Root Directory. When configuring the project in the Vercel dashboard or CLI, ensure the **Root Directory** is explicitly set to `site`. If you miss this, the build will fail because it won't find `package.json`.
+   **Root Directory: leave it as `./`.** The Next.js app lives at the repository root —
+   `package.json`, `app/` and `next.config.ts` all sit at the top level, alongside the
+   planning documents. There is no `site/` subfolder.
+
+   > If you previously set the Root Directory to `site` in the Vercel dashboard, change it
+   > back to `./` now — Vercel caches this setting per project, and a stale value fails the
+   > build with "No package.json found", which reads like a dependency problem and is not one.
 
 4. **Deploy to Production**:
    ```bash

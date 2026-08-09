@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ffprobe -v error -show_entries format=duration,size,bit_rate -show_entries stream=codec_name,width,height,r_frame_rate -of default=noprint_wrappers=1 \"/Users/bhagatsingh/Desktop/AMITMODI/moneyincheck-1r.mp4\")",
+      "Bash(swiftc -O extract.swift -o extract)",
+      "Bash(./extract \"/Users/bhagatsingh/Desktop/AMITMODI/moneyincheck-1r.mp4\" ./frames_main 20)"
+    ]
+  }
+}

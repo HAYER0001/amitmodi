@@ -15,19 +15,17 @@ Each agent operates strictly within its designated folder ownership. If an agent
 
 To run the Next.js frontend locally:
 
-1. Navigate to the frontend directory (if applicable):
-   ```bash
-   cd site
-   ```
-2. Install dependencies:
+Everything runs from the repository root — there is no separate frontend folder.
+
+1. Install dependencies:
    ```bash
    npm install
    ```
-3. Start the development server:
+2. Start the development server:
    ```bash
    npm run dev
    ```
-4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 ## Documentation
 
