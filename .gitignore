@@ -40,3 +40,21 @@ coverage
 
 # Never commit secrets — see DEPLOYMENT.md
 .env*.local
+
+# Yarn / pnpm (unused here, but keep the tree clean if anyone tries them)
+.pnp
+.pnp.*
+.yarn/*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Raw generated assets — optimised finals are committed, sources stay local
+public/images/_raw/
+public/models/_raw/
+
+# Reference material — design references, not site assets.
+# These are ~55 MB of video. Committing them bloats the repo permanently,
+# because git keeps every blob forever even after a later deletion.
+*.mp4
+*.mov
+attachment_*.png
