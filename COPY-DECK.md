@@ -379,3 +379,66 @@ Attempting to import or export commercial goods without an active IEC will resul
 - **Headline:** The page cannot be found.
 - **Body:** The document or page you are looking for has been moved or deleted.
 - **Action:** [Button: Return to the Homepage]
+
+---
+
+## 4. Consultation Form Copy
+
+### Step Headings
+- **Service Selection:** What do you need help with?
+  *Subheading:* Select the primary service you require so we can prepare before we call.
+  *Button:* Continue to details
+- **Situation:** What is your current situation?
+  *Subheading:* This helps us understand the urgency and assign the right expert.
+  *Button:* Continue to contact details
+- **Contact Details:** Where should we reach you?
+  *Subheading:* We will contact you within one business day.
+  *Button:* Request a consultation
+
+### Situations (Self-Triage)
+- I need to start regular compliance filings.
+- I've received a notice from the tax department.
+- A statutory filing deadline is approaching.
+- I need to register a new business or get a new license.
+- I made a mistake in my previous filings and need to fix it.
+
+### Form Fields
+- **Full Name:** e.g. Ramesh Kumar
+- **Company Name (Optional):** e.g. Acme Tech Private Limited
+- **Mobile Number:** 9876543210
+- **Email Address:** ramesh@example.com
+- **Description:** Mention any specific deadlines, notices, or turnover figures...
+
+### Error Messages
+- **Service Required:** Select a service from the list to proceed.
+- **Situation Required:** Select your current situation to proceed.
+- **Name Required:** Enter your full name.
+- **Phone Invalid:** Enter a 10-digit mobile number, like 9876543210.
+- **Email Invalid:** Enter a valid email address, like ramesh@example.com.
+- **Description Too Short:** Provide a few more details so we can assist you better.
+- **Consent Required:** Check the box to agree to our privacy policy before submitting.
+
+### Consent Text
+I agree to let Compliance in Check store this information to contact me regarding my inquiry. My details will never be sold or shared with third parties.
+
+### Post-Submission Messages
+- **Success Toast:** Your consultation request has been successfully submitted.
+- **Thank You Page Heading:** We have received your request.
+- **Thank You Page Body:** Our team is reviewing your details. We will call you within one business day to discuss your compliance requirements. A confirmation email has been sent to your inbox.
+- **Failure Message:** We could not submit your request due to a technical error. Please call us directly at +91 98765 43210 to book your consultation.
+
+### Confirmation Email
+**Subject:** We have received your consultation request
+
+Thank you for reaching out to Compliance in Check.
+
+Our team is currently reviewing your compliance requirements. A dedicated tax professional will call you within one business day to discuss your case and provide an initial diagnostic review.
+
+To make our call as productive as possible, please keep your recent tax filings, notices (if any), and basic financial ledgers accessible.
+
+If your matter is extremely urgent and requires immediate intervention, please call us directly at +91 98765 43210.
+
+We look forward to speaking with you.
+
+Regards,
+The Compliance in Check Team
