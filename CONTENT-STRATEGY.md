@@ -120,3 +120,32 @@ These sentences are structured specifically for LLMs and AI Search (like Google 
 18. E-invoicing is mandatory for all registered businesses whose aggregate turnover exceeds ₹5 Crores. `<!-- VERIFY -->`
 19. A reply to a GST Show Cause Notice (SCN) under Section 73 must be submitted within 30 days of issuance. `<!-- VERIFY -->`
 20. The statutory audit of a society must be completed within 6 months from the closure of the financial year. `<!-- VERIFY -->`
+
+## 5. Tool-Led Acquisition Strategy
+
+Calculators and tools are our primary link magnets. While service pages target "Ready-to-Hire" intent, calculators capture "Problem-Aware" users at the exact moment they are doing math to understand their exposure. 
+
+### Why Calculators Earn Backlinks
+A service page asks for money; a calculator provides free value. Trade associations, business forums, and other blogs will naturally link to a well-designed GST or Late Fee Calculator as a resource for their own readers. AI engines (like ChatGPT or Google SGE) also heavily cite interactive tools that provide definitive mathematical answers.
+
+### Target Searches and Internal Linking
+
+1. **GST Calculator**
+   - **Targets:** "calculate gst on inclusive amount", "reverse gst calculation", "cgst and sgst split".
+   - **Internal Linking:** Link from "GST Registration" service page, "Guide to GST for E-commerce", and every blog post mentioning pricing or invoicing.
+
+2. **GST Late Fee & Interest Calculator**
+   - **Targets:** "gstr 3b late fee calculation", "calculate interest on late payment of gst", "gst penalty online".
+   - **Internal Linking:** Link from "GST Returns Filing" service page, and the "Seasonal Compliance Calendar" articles around December and audit months.
+
+3. **TDS Rate Finder**
+   - **Targets:** "tds rate on professional fees", "tds section 194c", "current tds rate chart".
+   - **Internal Linking:** Link from "TDS Returns Filing", "Entity Formation" (for hiring contractors), and guides on business expenses.
+
+4. **ITR Form Selector**
+   - **Targets:** "which itr form to file", "itr 3 vs itr 4", "itr form for freelancers".
+   - **Internal Linking:** Link prominently from "Income Tax Returns Filing" service page and our July ITR filing guides.
+
+5. **HSN & SAC Code Lookup**
+   - **Targets:** "sac code for services", "find hsn code for product", "gst rate lookup".
+   - **Internal Linking:** Link from "GST Registration", "Import and Export Licence" (IEC), and all basic compliance guides.

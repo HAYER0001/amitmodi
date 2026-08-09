@@ -1,0 +1,83 @@
+---
+title: GST Calculator Explainer
+---
+
+# GST Calculator Guide
+
+The Goods and Services Tax (GST) is a comprehensive, multi-stage, destination-based tax that is levied on every value addition. Understanding how GST is calculated is crucial for businesses and consumers alike. This tool simplifies the process of determining the final price of goods or services, whether you need to add GST to a base amount or extract it from a total amount.
+
+## How this calculation works
+
+The GST calculation is fundamentally straightforward but depends on whether the given amount is exclusive or inclusive of GST. There are two primary formulas used in this calculator:
+
+**1. Adding GST (Exclusive Amount):**
+When you have a base price and need to add GST, the formula is:
+GST Amount = (Base Amount × GST Rate) / 100
+Total Amount = Base Amount + GST Amount
+
+**2. Removing GST (Inclusive Amount):**
+When you have a total price that already includes GST and need to find the base price and the GST portion, the formula is:
+Base Amount = Total Amount / (1 + (GST Rate / 100))
+GST Amount = Total Amount - Base Amount
+
+In India, GST is typically divided into two components for intra-state transactions: Central GST (CGST) and State GST (SGST), each taking half of the total rate. For inter-state transactions, a single Integrated GST (IGST) is applied. Common GST rates are 5% <!-- VERIFY -->, 12% <!-- VERIFY -->, 18% <!-- VERIFY -->, and 28% <!-- VERIFY -->.
+
+## A worked example
+
+Let's look at a practical scenario to illustrate how these calculations apply in the real world.
+
+**Scenario A: Adding GST**
+Suppose you are selling an electronic gadget, and the base price (before tax) is ₹10,000. The applicable GST rate for this electronic item is 18% <!-- VERIFY -->.
+*   **GST Amount:** (₹10,000 × 18) / 100 = ₹1,800
+*   **Total Amount (Invoice Value):** ₹10,000 + ₹1,800 = ₹11,800
+If this is an intra-state sale, the ₹1,800 GST is split into ₹900 CGST (9% <!-- VERIFY -->) and ₹900 SGST (9% <!-- VERIFY -->).
+
+**Scenario B: Removing GST**
+Now imagine you purchased office furniture for a total of ₹23,600, and this price includes an 18% <!-- VERIFY --> GST. You want to know the base value to claim Input Tax Credit (ITC).
+*   **Base Amount:** ₹23,600 / (1 + (18 / 100)) = ₹23,600 / 1.18 = ₹20,000
+*   **GST Amount:** ₹23,600 - ₹20,000 = ₹3,600
+Here, the base value is ₹20,000, and the GST paid is ₹3,600.
+
+## Edge cases handled and not handled
+
+Our GST calculator is designed to be highly reliable for standard transactions, but it is important to know its boundaries.
+
+**Edge Cases Handled:**
+*   **Standard Rates:** The calculator supports all standard GST tax slabs such as 0% <!-- VERIFY -->, 5% <!-- VERIFY -->, 12% <!-- VERIFY -->, 18% <!-- VERIFY -->, and 28% <!-- VERIFY -->.
+*   **Special Rates:** It can accommodate special rates like 3% <!-- VERIFY --> (for gold) and 0.25% <!-- VERIFY --> (for rough diamonds), provided the user inputs the correct percentage.
+*   **Fractional Inputs:** It handles decimal values for both the base amount and the GST rate to ensure precision.
+
+**Edge Cases Not Handled:**
+*   **Cess Calculation:** Compensation Cess, which is levied on certain demerit and luxury goods (like automobiles and tobacco) over and above the 28% <!-- VERIFY --> rate, is not automatically calculated.
+*   **TCS/TDS:** Tax Collected at Source (TCS) and Tax Deducted at Source (TDS) under GST are not factored into these basic calculations.
+*   **Mixed/Composite Supplies:** The tool does not automatically determine the dominant rate for mixed or composite supplies; you must know the applicable rate beforehand.
+
+## When you actually need a professional
+
+While a simple GST calculator is perfect for straightforward invoices, business taxation can get immensely complicated. Relying solely on a basic tool can lead to severe compliance issues and financial penalties in complex scenarios. You absolutely need a professional tax advisor or chartered accountant when dealing with:
+
+*   **Multi-State Operations:** If your business has branches in multiple states, determining when to apply IGST versus CGST/SGST can be intricate, especially with state-specific regulations and branch transfers.
+*   **Reverse Charge Mechanism (RCM):** For certain goods and services (like freight or legal services), the liability to pay GST falls on the recipient rather than the supplier. A standard calculator will simply add tax, which is incorrect for RCM invoices.
+*   **Input Tax Credit (ITC) Reversals:** Claiming ITC is not always straightforward. You might need to reverse claimed ITC due to non-payment to suppliers within 180 days <!-- VERIFY -->, or if the goods were used for both taxable and exempt supplies (Rule 42 and 43). A simple calculator cannot track or compute these reversals.
+*   **Export and SEZ Transactions:** Exports and supplies to Special Economic Zones (SEZs) are considered zero-rated supplies, but they involve specific documentation, bonds (LUT), and refund procedures that require professional guidance.
+*   **Threshold Monitoring:** If your turnover is nearing the ₹40 Lakhs <!-- VERIFY --> limit (or ₹20 Lakhs <!-- VERIFY --> / ₹10 Lakhs <!-- VERIFY --> in special category states), you need professional advice on the timing and implications of mandatory GST registration.
+
+## Frequently Asked Questions
+
+**1. What is the difference between CGST, SGST, and IGST?**
+CGST (Central) and SGST (State) are levied simultaneously on intra-state sales (within the same state), typically splitting the total GST rate equally. IGST (Integrated) is collected by the Central Government on inter-state sales (between different states) and imports.
+
+**2. Is GST calculated on the discounted price or the MRP?**
+GST is calculated on the actual transaction value, which is the price after applying any discounts, provided the discount is recorded on the invoice. It is not calculated on the Maximum Retail Price (MRP) unless the item is sold at MRP.
+
+**3. Does the GST calculator account for the Composition Scheme?**
+No, this standard calculator computes regular GST. Businesses under the Composition Scheme pay a flat rate (like 1% <!-- VERIFY --> or 5% <!-- VERIFY -->) on their total turnover and cannot collect GST from customers or claim Input Tax Credit.
+
+**4. How do I handle delivery charges in GST calculation?**
+Delivery charges are typically considered part of a composite supply. The GST rate applicable to the principal supply (the main item being sold) is applied to the delivery charges as well. You should add the delivery fee to the base amount before calculating GST.
+
+**5. Are there any items exempt from GST?**
+Yes, several essential items and services are exempt from GST, meaning the rate is 0% <!-- VERIFY -->. This includes fresh produce, milk, unbranded flour, and certain educational and healthcare services.
+
+**6. What happens if I apply the wrong GST rate on an invoice?**
+If you apply a lower rate, you will be liable to pay the difference along with interest and potential penalties. If you apply a higher rate, your customer pays more, and while you remit it to the government, it complicates their ITC claims and your pricing competitiveness.

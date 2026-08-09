@@ -1,0 +1,67 @@
+# HSN & SAC Code Lookup Explainer
+
+Welcome to the HSN and SAC Code Lookup tool! Navigating the complexities of the Goods and Services Tax (GST) system requires accurate classification of your offerings. HSN (Harmonized System of Nomenclature) is used for goods, while SAC (Services Accounting Code) is used for services. This guide will help you understand how this tool helps you find the correct codes and GST rates.
+
+## How this classification works
+
+The HSN and SAC classification system is structured hierarchically. The tool leverages a comprehensive database of GST rules and schedules to match your search query against the official classification headings, sub-headings, and tariff items.
+
+Here are the primary rules governing the classification:
+1. **Rule of Specificity:** A specific description is preferred over a general one. For instance, if you are selling "leather jackets," the tool will prioritize the specific HSN for leather apparel rather than the generic code for clothing.
+2. **Essential Character Rule:** If a product is a mixture of different materials or is made up of different components, it is classified according to the material or component that gives it its essential character.
+3. **End-use:** Sometimes, classification depends on the end-use of the product, although this is less common and must be explicitly mentioned in the tariff schedule.
+4. **General Interpretative Rules (GIR):** If the above rules do not resolve the classification, the GIR are applied sequentially to determine the most appropriate heading.
+
+The tool applies these rules algorithmically to present you with the most likely HSN or SAC codes, along with the applicable GST rates, which typically range from 0% <!-- VERIFY --> to 28% <!-- VERIFY -->, depending on the item.
+
+## A worked example
+
+Let's walk through a real-world example: classifying "Roasted Coffee Beans."
+
+1. **User Input:** You enter "roasted coffee beans" into the lookup tool.
+2. **Search Process:** The tool scans the database. It knows that coffee falls under Chapter 09 (Coffee, tea, maté, and spices).
+3. **Filtering:** It identifies heading 0901, which covers "Coffee, whether or not roasted or decaffeinated; coffee husks and skins; coffee substitutes containing coffee in any proportion."
+4. **Refinement:** The tool narrows it down to the specific sub-heading for roasted coffee, which is 0901 21 00 (Not decaffeinated) or 0901 22 00 (Decaffeinated).
+5. **Output:** The tool displays these specific HSN codes. It also shows the applicable GST rate, which for roasted coffee beans is generally 5% <!-- VERIFY -->.
+
+By understanding the product's specific nature, the tool provides the exact code needed for invoicing and compliance.
+
+## Edge cases handled and not handled
+
+**Edge Cases Handled:**
+* **Synonyms and Common Terms:** The tool is designed to understand common synonyms. Searching for "cell phone" will map to the official terminology "cellular network or for other wireless networks."
+* **Phonetic Misspellings:** Minor spelling errors in your search query are often corrected or matched to the closest accurate term in the tariff database.
+* **Dual Nature Items:** Items that can be both goods and services (like software on a physical medium vs. software as a download) will prompt the tool to show options for both HSN and SAC codes, asking you to clarify the nature of the transaction.
+
+**Edge Cases Not Handled:**
+* **Custom-Built Machinery:** Highly specialized, custom-designed machinery that doesn't fit standard descriptions may return generic classifications that require expert refinement.
+* **Newly Invented Products:** Completely novel products without existing precedents in the tariff schedules may not yield accurate results until the tax authorities issue specific clarifications.
+
+## When you actually need a professional
+
+While this tool is highly accurate for standard goods and services, a simple lookup is sometimes insufficient. You need a professional tax consultant in the following scenarios:
+
+* **Composite Supplies:** When two or more goods or services are naturally bundled and supplied together (e.g., a hotel room with complimentary breakfast), the principal supply dictates the rate. A professional can help determine which is the principal supply.
+* **Mixed Supplies:** When two or more individual supplies of goods or services are made in conjunction but are not naturally bundled (e.g., a Diwali gift hamper with sweets at 5% <!-- VERIFY --> and aerated drinks at 28% <!-- VERIFY -->), the highest rate applies. Expert advice is crucial to properly structure or classify these.
+* **Contradictory Advance Rulings:** In cases where Authority for Advance Rulings (AAR) in different states have given conflicting decisions on the same product, a tax expert is needed to assess the risk and determine the safest classification for your jurisdiction.
+* **Novel Tech Products:** Cutting-edge software services, blockchain products, or new digital assets often lack direct classifications, requiring professional interpretation of the law.
+
+## Frequently Asked Questions
+
+**1. Is it mandatory to mention HSN/SAC codes on invoices?**
+Yes, under GST rules, mentioning HSN/SAC codes is mandatory. Taxpayers with an aggregate turnover of up to Rs. 5 crores <!-- VERIFY --> in the preceding financial year must mention a 4-digit HSN code for B2B invoices. Those with a turnover exceeding Rs. 5 crores <!-- VERIFY --> must mention a 6-digit code for all invoices.
+
+**2. What happens if I use the wrong HSN or SAC code?**
+Using the wrong code can lead to applying the incorrect GST rate. This can result in short payment of taxes, attracting interest at 18% <!-- VERIFY --> per annum and severe penalties under the GST Act. It can also cause issues for your buyers claiming Input Tax Credit.
+
+**3. Does this tool provide 8-digit HSN codes?**
+Yes, the tool attempts to provide up to 8-digit precision for HSN codes where applicable, especially for imports and exports where 8-digit classification is often required by customs authorities.
+
+**4. Are GST rates fixed, or do they change?**
+GST rates are not permanently fixed. The GST Council periodically reviews and changes rates based on economic conditions. Our tool database is regularly updated, but you should always verify the current rate, especially for volatile categories.
+
+**5. How do I classify a product that seems to fit into two different HSN codes?**
+If a product seems to fit two codes, the Rule of Specificity applies—choose the more specific description. If still ambiguous, the essential character of the product should determine the classification. If you remain unsure, consult a tax professional.
+
+**6. Do SAC codes apply to the export of services?**
+Yes, SAC codes are mandatory for all services, including the export of services. Accurately classifying exported services is vital, as they are generally treated as zero-rated supplies (0% <!-- VERIFY --> GST), and the correct SAC code is required to claim refunds on unutilized Input Tax Credit.
