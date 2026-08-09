@@ -6,6 +6,7 @@ import { AnswerBlock } from "@/components/content/AnswerBlock";
 import { DocumentChecklist } from "@/components/content/DocumentChecklist";
 import { FAQAccordion } from "@/components/content/FAQAccordion";
 import { RelatedServices } from "@/components/content/RelatedServices";
+import { ServiceSchema, FAQPageSchema, HowToSchema, WebPageSchema } from "@/components/seo/SchemaEmitters";
 import ClosingCTA from "@/components/sections/ClosingCTA";
 import ServiceHero from "@/components/sections/ServiceHero";
 import PricingBlock from "@/components/sections/PricingBlock";
@@ -238,6 +239,11 @@ export default async function ServicePage({
 
   return (
     <>
+      <ServiceSchema service={service} content={content} domain={process.env.NEXT_PUBLIC_SITE_URL ?? "https://amitmodi.com"} />
+      {service.faqs && <FAQPageSchema faqs={service.faqs} />}
+      {service.process.length > 0 && <HowToSchema steps={service.process} title={`How ${service.name} works`} description={`The process for ${service.name}`} />}
+      <WebPageSchema domain={process.env.NEXT_PUBLIC_SITE_URL ?? "https://amitmodi.com"} url={`/services/${slug}`} speakableSelector="#direct-answer" />
+
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <Breadcrumbs />
         <ServiceHero service={service} />

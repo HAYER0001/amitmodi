@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { BreadcrumbListSchema } from '@/components/seo/SchemaEmitters';
 
 // We import the label map from navigation data. If a route isn't explicitly
 // mapped, we fallback to a formatted version of the URL segment.
@@ -27,9 +28,13 @@ export function Breadcrumbs() {
     return { path, label, isLast: index === segments.length - 1 };
   });
 
+  const schemaCrumbs = [{ label: 'Home', path: '/' }, ...breadcrumbs.map(c => ({ label: c.label, path: c.path }))];
+
   return (
-    <nav aria-label="Breadcrumb" className="my-6">
-      <ol className="flex flex-wrap items-center space-x-2 text-sm font-label text-ink-soft">
+    <>
+      <BreadcrumbListSchema crumbs={schemaCrumbs} domain={process.env.NEXT_PUBLIC_SITE_URL ?? "https://amitmodi.com"} />
+      <nav aria-label="Breadcrumb" className="my-6">
+        <ol className="flex flex-wrap items-center space-x-2 text-sm font-label text-ink-soft">
         <li>
           <Link href="/" className="hover:text-ink transition-colors focus:outline-none focus:ring-2 focus:ring-seal rounded">
             Home
@@ -55,6 +60,7 @@ export function Breadcrumbs() {
           </React.Fragment>
         ))}
       </ol>
-    </nav>
+      </nav>
+    </>
   );
 }

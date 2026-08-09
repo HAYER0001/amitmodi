@@ -11,7 +11,9 @@ import Header from "@/components/sections/Header";
 import Footer from "@/components/sections/Footer";
 import ScrollRail from "@/components/ui/ScrollRail";
 import SmoothScroll from "@/components/ui/SmoothScroll";
+import { WebSiteSchema, OrganizationSchema, LocalBusinessSchema } from "@/components/seo/SchemaEmitters";
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://amitmodi.com";
 const display = Instrument_Serif({
   variable: "--font-display",
   display: "swap",
@@ -62,6 +64,9 @@ export default function RootLayout({
             __html: `document.documentElement.dataset.motion=window.matchMedia("(prefers-reduced-motion: reduce)").matches?"reduced":"full"`,
           }}
         />
+        <WebSiteSchema domain={SITE_URL} />
+        <OrganizationSchema domain={SITE_URL} />
+        <LocalBusinessSchema domain={SITE_URL} />
       </head>
       <body
         className={`${display.variable} ${body.variable} ${label.variable} ${margin.variable} paper ledger-grid antialiased`}

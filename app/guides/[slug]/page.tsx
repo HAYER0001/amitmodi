@@ -5,6 +5,7 @@ import { compileMDX } from "next-mdx-remote/rsc";
 import { mdxComponents } from "@/components/mdx";
 import ReadingProgress from "@/components/mdx/ReadingProgress";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
+import { ArticleSchema } from "@/components/seo/SchemaEmitters";
 import ClosingCTA from "@/components/sections/ClosingCTA";
 import { LeadMagnet } from "@/components/content/LeadMagnet";
 import { getPublishedPosts, getPostBySlug, type Post, type TocItem } from "@/lib/mdx";
@@ -151,6 +152,7 @@ export default async function GuidePage({
 
   return (
     <>
+      <ArticleSchema post={guide} domain={process.env.NEXT_PUBLIC_SITE_URL ?? "https://amitmodi.com"} />
       <ReadingProgress />
 
       <article className="bg-paper-deep">

@@ -4,13 +4,15 @@ import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import ClosingCTA from "@/components/sections/ClosingCTA";
 import { PRACTICE_CONTENT } from "@/data/practice-content";
 import { brand } from "@/lib/brand";
+import { PersonSchema } from "@/components/seo/SchemaEmitters";
+import { buildMetadata, withSiteName } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "The Principal | Compliance in Check",
+export const metadata: Metadata = buildMetadata({
+  title: withSiteName("The Principal"),
   description:
     "The named professional behind the practice — credentials, specialisation, and professional history.",
-  alternates: { canonical: "/practice/principal" },
-};
+  path: "/practice/principal",
+});
 
 /*
  * app/practice/principal/page.tsx — the E-E-A-T page (Phase 13, §V).
@@ -54,6 +56,7 @@ export default function PrincipalPage() {
 
   return (
     <div className="bg-paper-deep">
+      <PersonSchema domain={process.env.NEXT_PUBLIC_SITE_URL ?? "https://amitmodi.com"} />
       <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6">
         <Breadcrumbs />
       </div>
