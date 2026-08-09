@@ -158,6 +158,69 @@ body {
   opacity: 0.4;
 }
 
+/*
+ * Ambient drift.
+ *
+ * The reference page is already alive before you scroll — the notation and the
+ * small figures breathe very slightly. Without it, a static page of scattered
+ * marks reads as a screenshot.
+ *
+ * Deliberately: transform only (never layout), sub-pixel amplitude, very long
+ * durations, and staggered so nothing pulses in unison. Compositor-only work,
+ * so it costs nothing on the main thread and cannot affect INP.
+ */
+@keyframes marginalia-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0.35rem, -0.5rem, 0);
+  }
+}
+
+.marginalia {
+  will-change: transform;
+  animation: marginalia-drift 14s ease-in-out infinite;
+}
+.marginalia:nth-child(3n) {
+  animation-duration: 19s;
+  animation-delay: -4s;
+}
+.marginalia:nth-child(5n) {
+  animation-duration: 23s;
+  animation-delay: -9s;
+}
+
+/* Floating collage objects drift too, slower and further. */
+@keyframes cutout-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(-0.6rem, -1rem, 0);
+  }
+}
+
+.cut-out-drift {
+  will-change: transform;
+  animation: cutout-drift 22s ease-in-out infinite;
+}
+.cut-out-drift:nth-of-type(even) {
+  animation-duration: 28s;
+  animation-delay: -7s;
+}
+
+/* Ambient motion is decoration. Anyone who asked for less motion gets none. */
+@media (prefers-reduced-motion: reduce) {
+  .marginalia,
+  .cut-out-drift {
+    animation: none;
+    will-change: auto;
+  }
+}
+
 /* ---- scrollbar (thin, --rule track, --ink-soft thumb) ---- */
 * {
   scrollbar-width: thin;

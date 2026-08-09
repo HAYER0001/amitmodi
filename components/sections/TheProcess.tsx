@@ -114,7 +114,10 @@ function Connector({ horizontal }: { horizontal: boolean }) {
   }
 
   return horizontal ? (
-    <div ref={ref} aria-hidden="true" className="hidden lg:block">
+    /* Pinned to the number circles' centre (36px circle → 18px), not floating
+       in a stretched row. Cards differ in height, so an unpinned connector sat
+       at a different height in every gap and connected nothing. */
+    <div ref={ref} aria-hidden="true" className="hidden shrink-0 pt-[18px] lg:block">
       <svg width="64" height="2" className="mx-3">
         <motion.line
           x1="0"
@@ -175,7 +178,14 @@ export default function TheProcess() {
             <Fragment key={step.order}>
               {index > 0 && <Connector horizontal />}
               {index > 0 && <Connector horizontal={false} />}
-              <li className="relative pl-14 lg:flex-1 lg:pl-0">
+              {/* The number circle is absolutely positioned at left-0 top-0, so
+                  the content must be pushed clear of it at EVERY breakpoint.
+                  Mobile pushes right (pl-14); desktop drops the gutter, so it
+                  pushes DOWN instead (lg:pt-12) and the number sits above the
+                  title. Previously lg:pl-0 removed the gutter without replacing
+                  it, and the circle landed on the title — "Consultation"
+                  rendered as "sultation", "Documents" as "uments". */}
+              <li className="relative pl-14 lg:flex-1 lg:pl-0 lg:pt-12">
                 <span className="absolute left-0 top-0 flex h-9 w-9 items-center justify-center rounded-full border border-seal bg-paper font-label text-xs text-seal">
                   {step.order}
                 </span>

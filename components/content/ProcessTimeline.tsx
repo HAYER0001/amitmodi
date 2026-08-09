@@ -84,7 +84,11 @@ function Connector({ horizontal }: { horizontal: boolean }) {
   };
 
   return horizontal ? (
-    <div ref={ref} aria-hidden="true" className="hidden w-10 shrink-0 items-center lg:flex">
+    /* Aligned to the number circles, not vertically centred in the row. The
+       cards vary in height, so items-center left each connector floating at a
+       different height with nothing to connect. 18px ≈ the centre of the 36px
+       circle. */
+    <div ref={ref} aria-hidden="true" className="hidden w-10 shrink-0 items-start pt-[18px] lg:flex">
       <svg
         width="40"
         height="2"
@@ -137,9 +141,14 @@ export default function ProcessTimeline({
               {index > 0 && <Connector horizontal />}
               {index > 0 && <Connector horizontal={false} />}
               <li className="relative pl-14 lg:pl-0">
+                {/* On mobile the number is absolutely positioned into the pl-14
+                    gutter. On desktop that gutter is removed (lg:pl-0), so the
+                    number MUST return to normal flow — left absolute it landed
+                    straight on top of the title and ate the first few letters
+                    ("Consultation" rendered as "sultation"). */}
                 <span
                   aria-hidden="true"
-                  className="absolute left-0 top-0 flex h-9 w-9 items-center justify-center rounded-full border border-seal bg-paper font-label text-xs text-seal"
+                  className="absolute left-0 top-0 flex h-9 w-9 items-center justify-center rounded-full border border-seal bg-paper font-label text-xs text-seal lg:static lg:mb-4"
                 >
                   {step.order}
                 </span>

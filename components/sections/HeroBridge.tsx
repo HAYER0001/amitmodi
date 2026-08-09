@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import ScrollText from "@/components/ui/ScrollText";
 import { motion, useScroll, useTransform } from "framer-motion";
 import CutOut from "@/components/ui/CutOut";
 
@@ -26,7 +27,6 @@ export default function HeroBridge() {
   });
 
   const scale = useTransform(scrollYProgress, [0, 1], [0.92, 1]);
-  const color = useTransform(scrollYProgress, [0, 1], ["var(--ink-soft)", "var(--ink)"]);
 
   return (
     <section
@@ -35,12 +35,15 @@ export default function HeroBridge() {
       className="border-t border-rule"
     >
       <div className="relative mx-auto max-w-7xl overflow-hidden px-4 py-24 sm:px-6 sm:py-32">
-        <motion.p
-          style={{ scale, color }}
-          className="max-w-5xl font-display text-h2 text-ink-soft sm:text-h1"
-        >
-          {BRIDGE_COPY}
-        </motion.p>
+        {/* Word-by-word opacity scrubbing rather than one block fading as a
+            unit. Fading a whole paragraph is a transition; resolving it word by
+            word is the reader's own pace made visible, and it is the single
+            move that separates the reference from an ordinary landing page. */}
+        <motion.div style={{ scale }} className="origin-left">
+          <ScrollText className="max-w-5xl font-display text-h2 text-ink sm:text-h1">
+            {BRIDGE_COPY}
+          </ScrollText>
+        </motion.div>
 
         <div aria-hidden="true" className="pointer-events-none absolute right-[8%] top-[30%] hidden w-28 rotate-6 md:block">
           <CutOut src="/images/cut-paperclip.png" alt="" width={112} height={149} />
