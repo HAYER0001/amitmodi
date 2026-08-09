@@ -30,7 +30,7 @@ export async function GET() {
   content += `## 4. Frequently Asked Questions\n`;
   Object.values(SERVICE_FAQS).forEach(faqList => {
     faqList.forEach(faq => {
-      content += `Q: ${faq.question}\nA: ${faq.answer.replace(/\\/\\* <!-- VERIFY --> \\*\\//g, '').replace(/<!-- VERIFY -->/g, '')}\n\n`;
+      content += `Q: ${faq.question}\nA: ${faq.answer.replace(/\s*<!-- VERIFY -->\s*/g, '').replace(/\s*\/\* VERIFY \*\/\s*/g, '')}\n\n`;
     });
   });
 
