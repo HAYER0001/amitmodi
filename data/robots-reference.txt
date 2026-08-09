@@ -1,0 +1,84 @@
+# robots.txt — static reference copy (Phase 17 implements this in app/robots.ts)
+#
+# Allowing AI crawlers by default is a deliberate decision. Blocking them
+# removes the practice from AI-generated answers entirely, which is the
+# opposite of this project's strategy of being present wherever prospects ask questions.
+
+User-agent: Googlebot
+Disallow:
+
+User-agent: Googlebot-Image
+Disallow:
+
+User-agent: Bingbot
+Disallow:
+
+User-agent: DuckDuckBot
+Disallow:
+
+User-agent: Slurp
+Disallow:
+
+User-agent: Applebot
+Disallow:
+
+User-agent: GPTBot
+Disallow:
+
+User-agent: ChatGPT-User
+Disallow:
+
+User-agent: OAI-SearchBot
+Disallow:
+
+User-agent: ClaudeBot
+Disallow:
+
+User-agent: Claude-User
+Disallow:
+
+User-agent: Claude-SearchBot
+Disallow:
+
+User-agent: PerplexityBot
+Disallow:
+
+User-agent: Perplexity-User
+Disallow:
+
+User-agent: Google-Extended
+Disallow:
+
+User-agent: Applebot-Extended
+Disallow:
+
+User-agent: Amazonbot
+Disallow:
+
+User-agent: meta-externalagent
+Disallow:
+
+User-agent: cohere-ai
+Disallow:
+
+User-agent: Bytespider
+Disallow:
+
+User-agent: CCBot
+Disallow:
+
+User-agent: Diffbot
+Disallow:
+
+User-agent: Timpibot
+Disallow:
+
+# Disallow for all agents
+User-agent: *
+Disallow: /api/
+Disallow: /styleguide
+Disallow: /styleguide/motion
+Disallow: /contact/thank-you
+Disallow: /_next/static/chunks/
+
+Sitemap: <NEXT_PUBLIC_SITE_URL>/sitemap.xml
