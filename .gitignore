@@ -1,0 +1,42 @@
+# Node modules
+node_modules
+
+# Build output
+.next
+out
+build
+
+# System files
+.DS_Store
+
+# Secrets
+*.pem
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+
+# Environment files
+.env
+.env.local
+
+# Vercel
+.vercel
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Next.js env types
+next-env.d.ts
+
+# Coverage
+coverage
+
+# Turbo
+.turbo
+
+# IDE
+.idea
+
+# Never commit secrets — see DEPLOYMENT.md
+.env*.local
