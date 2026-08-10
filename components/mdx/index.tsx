@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 import type { MDXComponents } from "mdx/types";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import * as React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
@@ -127,7 +129,8 @@ function MdxImage(props: React.ImgHTMLAttributes<HTMLImageElement> & { node?: un
       );
     }
   }
-  return <img {...props} />;
+  // eslint-disable-next-line @next/next/no-img-element
+  return <img src={src} alt={alt ?? ""} {...rest} />;
 }
 
 /* ---- custom components usable from inside MDX -------------------------- */

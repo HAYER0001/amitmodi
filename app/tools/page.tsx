@@ -1,6 +1,4 @@
 import PageAtmosphere from "@/components/ui/PageAtmosphere";
-import CutOut from "@/components/ui/CutOut";
-import { ASSETS } from "@/data/assets";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";

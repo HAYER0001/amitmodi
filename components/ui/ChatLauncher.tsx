@@ -24,6 +24,7 @@ import dynamic from "next/dynamic";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useReducedMotion } from "@/lib/motion";
 import ChatPanel from "./ChatPanel";
+import { bootFill, notifyKnightReady } from "@/lib/boot";
 
 /* three.js stays out of the first-paint bundle: this is the one dynamic,
    ssr:false entry point, exactly as the hero used it. */
@@ -117,12 +118,19 @@ export default function ChatLauncher() {
           >
             {/* No fallbackImage: Model3D renders its shimmer while the .glb
             loads — the seal never appears here and nothing ever takes the
-            knight's place. */}
+            knight's place.
+
+            fill: this is the ONE knight, and during boot it fills itself with
+            brass from the feet up (see lib/boot.ts). onReady: the boot screen
+            holds until this knight's first rendered frame so the reveal never
+            catches a shimmer. */}
             <Knight
               src="/models/knight-brass.glb"
               rotationSpeed={0.12}
               spinDriver={spin}
               driverTurns={1}
+              fill={bootFill}
+              onReady={notifyKnightReady}
               className="relative h-full w-full"
             />
           </button>

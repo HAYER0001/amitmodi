@@ -43,6 +43,11 @@ type Model3DProps = {
       catches a shimmer or a pop-in. Not fired when the device gate or an
       error substitutes the fallback. */
   onReady?: () => void;
+  /** Boot-fill driver in 0..1. When provided the model is rendered as a faint
+      ghost plus a solid copy clipped at a rising plane, so the piece appears to
+      fill itself from the feet up. Reads the MotionValue inside useFrame — no
+      re-renders. Omit for a plain static/spinning model. */
+  fill?: MotionValue<number>;
   className?: string;
 };
 
@@ -107,12 +112,14 @@ function Model({
   spinDriver,
   driverTurns,
   onReady,
+  fill,
 }: {
   src: string;
   rotationSpeed: number;
   spinDriver?: MotionValue<number>;
   driverTurns?: number;
   onReady?: () => void;
+  fill?: MotionValue<number>;
 }) {
   /*
    * CRITICAL — useGLTF(src, false, true)
@@ -140,6 +147,74 @@ function Model({
   const onReadyRef = useRef(onReady);
   onReadyRef.current = onReady;
 
+  /* ── boot-fill layers ─────────────────────────────────────────────────────
+   * With a `fill` driver the model is built twice from the same geometry: a
+   * faint frosted "ghost" of the whole knight, plus a solid brass copy clipped
+   * at a horizontal plane that rises from the feet. The clip plane lives in the
+   * mesh's local space and is updated per-frame from the MotionValue, so the
+   * fill is a pure GPU effect — no per-frame React work, no animation library.
+   * When the fill hits 1 the ghost hides and the result is pixel-identical to
+   * the un-filled path. */
+  const ghostLayer = useRef<THREE.Group>(null);
+  const fillLayer = useRef<THREE.Group>(null);
+  const clipPlane = useRef(new THREE.Plane(new THREE.Vector3(0, -1, 0), 0));
+  const bounds = useRef<{ minY: number; height: number } | null>(null);
+  const layersBuilt = useRef(false);
+
+  useEffect(() => {
+    if (
+      !fill ||
+      layersBuilt.current ||
+      !ghostLayer.current ||
+      !fillLayer.current
+    )
+      return;
+    layersBuilt.current = true;
+
+    const box = new THREE.Box3().setFromObject(scene);
+    bounds.current = {
+      minY: box.min.y,
+      height: Math.max(box.max.y - box.min.y, 1e-6),
+    };
+
+    /* Clones share the GLB's geometries (never re-uploaded) but get their own
+       material instances — one frosted ghost, one clipped brass. */
+    const makeLayer = (ghost: boolean) => {
+      const layer = scene.clone(true);
+      layer.traverse((obj: THREE.Object3D) => {
+        const mesh = obj as THREE.Mesh;
+        if (!mesh.isMesh) return;
+        const srcMat = Array.isArray(mesh.material)
+          ? mesh.material[0]
+          : mesh.material;
+        if (!srcMat) return;
+        const mat = srcMat.clone();
+        if (ghost) {
+          mat.transparent = true;
+          mat.opacity = 0.09;
+          mat.depthWrite = false;
+          mesh.renderOrder = 2;
+        } else {
+          mat.clippingPlanes = [clipPlane.current];
+          mesh.renderOrder = 1;
+        }
+        mesh.material = mat;
+      });
+      return layer;
+    };
+
+    ghostLayer.current.add(makeLayer(true));
+    fillLayer.current.add(makeLayer(false));
+
+    /* Seed the plane from the driver so an instant fill (reduced motion) never
+       leaves the knight empty on its first frame. */
+    const seed = Math.min(1, Math.max(0, fill.get()));
+    clipPlane.current.constant =
+      bounds.current.minY + seed * bounds.current.height;
+    if (ghostLayer.current)
+      ghostLayer.current.visible = seed < 0.999;
+  }, [scene, fill]);
+
   /*
    * Pointer tracked at WINDOW level, not via R3F's state.pointer.
    *
@@ -163,7 +238,18 @@ function Model({
   }, [reducedMotion]);
 
   useFrame((state, delta) => {
-    if (!ready.current) {
+    /* Fill and readiness run even under reduced motion: the knight must exist
+       and (with a driver) must be visible before the boot overlay clears. */
+    if (fill && fillLayer.current && bounds.current) {
+      const f = Math.min(1, Math.max(0, fill.get()));
+      clipPlane.current.constant =
+        bounds.current.minY + f * bounds.current.height;
+      if (ghostLayer.current) ghostLayer.current.visible = f < 0.999;
+    }
+    if (
+      !ready.current &&
+      (!fill || (fillLayer.current && fillLayer.current.children.length > 0))
+    ) {
       ready.current = true;
       onReadyRef.current?.();
     }
@@ -245,7 +331,22 @@ function Model({
 
   /* Dispose GPU resources when this Hero model unmounts. */
   useEffect(() => {
+    const ghost = ghostLayer.current;
+    const fill = fillLayer.current;
     return () => {
+      /* Clone layers (fill mode) share geometry but own their materials. */
+      for (const layer of [ghost, fill]) {
+        if (!layer) continue;
+        layer.traverse((obj: THREE.Object3D) => {
+          const mesh = obj as THREE.Mesh;
+          if (mesh.isMesh && mesh.material) {
+            const material = Array.isArray(mesh.material)
+              ? mesh.material[0]
+              : mesh.material;
+            material?.dispose?.();
+          }
+        });
+      }
       scene.traverse((obj: THREE.Object3D) => {
         const mesh = obj as THREE.Mesh;
         if (mesh.isMesh) {
@@ -271,7 +372,14 @@ function Model({
     <group ref={leanRef}>
       <group ref={group}>
         <Center>
-          <primitive object={scene} />
+          {fill ? (
+            <>
+              <group ref={ghostLayer} />
+              <group ref={fillLayer} />
+            </>
+          ) : (
+            <primitive object={scene} />
+          )}
         </Center>
       </group>
     </group>
@@ -305,6 +413,7 @@ export default function Model3D({
   spinDriver,
   driverTurns = 1,
   onReady,
+  fill,
   className,
 }: Model3DProps) {
   const gate = useModelGating();
@@ -372,6 +481,9 @@ export default function Model3D({
               dpr={[1, 1.75]}
               camera={{ position: [0, 0, 2.7], fov: 35 }}
               gl={{ antialias: true, alpha: true }}
+              onCreated={({ gl }) => {
+                gl.localClippingEnabled = true;
+              }}
               style={{ position: "absolute", inset: 0 }}
             >
               {/* Brass is a METAL. A metallic PBR surface is almost entirely
@@ -412,6 +524,7 @@ export default function Model3D({
                 spinDriver={spinDriver}
                 driverTurns={driverTurns}
                 onReady={onReady}
+                fill={fill}
               />
             </Canvas>
           </Suspense>

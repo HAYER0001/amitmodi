@@ -24,7 +24,7 @@ export function DocumentChecklist({ serviceSlug, documents }: DocumentChecklistP
       if (stored) {
         setCheckedItems(JSON.parse(stored));
       }
-    } catch (e) {
+    } catch {
       console.warn('Failed to load checklist state from localStorage');
     }
   }, [serviceSlug]);
@@ -34,7 +34,7 @@ export function DocumentChecklist({ serviceSlug, documents }: DocumentChecklistP
     setCheckedItems(newState);
     try {
       localStorage.setItem(`checklist_${serviceSlug}`, JSON.stringify(newState));
-    } catch (e) {
+    } catch {
       console.warn('Failed to save checklist state to localStorage');
     }
   };

@@ -20,7 +20,7 @@
  *    scroll listener attached at all.
  */
 
-import { useRef, type ReactNode } from "react";
+import { useRef } from "react";
 import {
   motion,
   useReducedMotion,

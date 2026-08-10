@@ -210,7 +210,7 @@ export function ArticleSchema({ post, domain }: { post: ArticleLike, domain: str
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />;
 }
 
-export function PersonSchema({ domain }: { domain: string }) {
+export function PersonSchema({ domain: _domain }: { domain?: string }) {
   const schema: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "Person",

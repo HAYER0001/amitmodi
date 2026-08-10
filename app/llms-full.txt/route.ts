@@ -45,7 +45,7 @@ export async function GET() {
       const body = text.replace(/---[\\s\\S]*?---/, '').trim();
       content += `### ${f.replace('.mdx', '').toUpperCase()}\n${body}\n\n`;
     });
-  } catch (e) {
+  } catch {
     // Fail gracefully if directory not found
   }
 
