@@ -38,6 +38,11 @@ type Model3DProps = {
   spinDriver?: MotionValue<number>;
   /** Full turns the spinDriver covers over its 0..1 range. */
   driverTurns?: number;
+  /** Fired once the model has actually rendered its first frame. Lets a boot
+      sequence hold until the knight is really there — so the reveal never
+      catches a shimmer or a pop-in. Not fired when the device gate or an
+      error substitutes the fallback. */
+  onReady?: () => void;
   className?: string;
 };
 
@@ -101,11 +106,13 @@ function Model({
   rotationSpeed,
   spinDriver,
   driverTurns,
+  onReady,
 }: {
   src: string;
   rotationSpeed: number;
   spinDriver?: MotionValue<number>;
   driverTurns?: number;
+  onReady?: () => void;
 }) {
   /*
    * CRITICAL — useGLTF(src, false, true)
@@ -127,6 +134,11 @@ function Model({
   const pointerX = useRef(0);
   const spinOffset = useRef(0);
   const lastDriver = useRef(0);
+  /* One-shot readiness: fires on the model's first rendered frame, even under
+     reduced motion (the useFrame bails early there but the model is up). */
+  const ready = useRef(false);
+  const onReadyRef = useRef(onReady);
+  onReadyRef.current = onReady;
 
   /*
    * Pointer tracked at WINDOW level, not via R3F's state.pointer.
@@ -151,6 +163,10 @@ function Model({
   }, [reducedMotion]);
 
   useFrame((state, delta) => {
+    if (!ready.current) {
+      ready.current = true;
+      onReadyRef.current?.();
+    }
     const g = group.current;
     if (!g || reducedMotion) return;
 
@@ -187,13 +203,14 @@ function Model({
      *
      * Adapted, not copied: the brief this came from wanted a drone "menacingly
      * tracking" the visitor. A tax practice wants the opposite feeling, so the
-     * knight only leans ~14° toward the pointer — enough that the piece feels
-     * aware of you, not enough to feel watched.
+     * knight only leans ~4.5° toward the pointer — below the threshold where a
+     * yaw reads as the knight turning profile-on (and therefore "shrinking");
+     * just enough that the piece feels aware of you, not watched.
      *
      * Damped with a frame-rate-independent exponential (1 - e^-kt). Lerping by
      * a fixed fraction per frame ties the speed to refresh rate: identical code
      * moves twice as fast on a 120Hz display. */
-    const target = pointerX.current * 0.25;
+    const target = pointerX.current * 0.08;
     const k = 1 - Math.exp(-3.5 * delta);
     drift.current += (target - drift.current) * k;
 
@@ -287,11 +304,23 @@ export default function Model3D({
   rotationSpeed = 0.4,
   spinDriver,
   driverTurns = 1,
+  onReady,
   className,
 }: Model3DProps) {
   const gate = useModelGating();
   const [inView, setInView] = useState(false);
   const container = useRef<HTMLDivElement>(null);
+  const onReadyRef = useRef(onReady);
+  useEffect(() => {
+    onReadyRef.current = onReady;
+  });
+
+  /* When the device gate switches this instance off, there is nothing more
+     coming: report ready immediately so a boot sequence tied to `onReady`
+     can proceed instead of waiting on a model that will never render. */
+  useEffect(() => {
+    if (gate === "fallback") onReadyRef.current?.();
+  }, [gate]);
 
   /* Mount the canvas only when the model is within 200px of the viewport. */
   useEffect(() => {
@@ -382,6 +411,7 @@ export default function Model3D({
                 rotationSpeed={rotationSpeed}
                 spinDriver={spinDriver}
                 driverTurns={driverTurns}
+                onReady={onReady}
               />
             </Canvas>
           </Suspense>
