@@ -13,6 +13,7 @@ import ScrollRail from "@/components/ui/ScrollRail";
 import CursorField from "@/components/ui/CursorField";
 import SmoothScroll from "@/components/ui/SmoothScroll";
 import ChatLauncher from "@/components/ui/ChatLauncher";
+import LoadingScreen from "@/components/ui/LoadingScreen";
 import { WebSiteSchema, OrganizationSchema, LocalBusinessSchema } from "@/components/seo/SchemaEmitters";
 import { Analytics } from "@vercel/analytics/next";
 
@@ -82,7 +83,7 @@ export default function RootLayout({
         <LocalBusinessSchema domain={SITE_URL} />
       </head>
       <body
-        className={`${display.variable} ${body.variable} ${label.variable} ${margin.variable} antialiased`}
+        className={`${display.variable} ${body.variable} ${label.variable} ${margin.variable} overflow-x-hidden antialiased`}
       >
         {/* first focusable element: skip to the real content landmark */}
         <a
@@ -112,6 +113,7 @@ export default function RootLayout({
           <ScrollRail />
           <CursorField />
           <ChatLauncher />
+          <LoadingScreen />
         </ThemeProvider>
         <Analytics />
       </body>
