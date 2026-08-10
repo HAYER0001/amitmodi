@@ -45,6 +45,16 @@ export const metadata: Metadata = {
   title: "Amit Modi & Co.",
   description:
     "Tax and compliance guidance for Indian businesses — registration, filing, and appeals.",
+  metadataBase: new URL(SITE_URL),
+  icons: {
+    icon: [
+      { url: '/favicon.ico' },
+      { url: '/icon.png', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/apple-icon.png' },
+    ],
+  },
 };
 
 export default function RootLayout({
