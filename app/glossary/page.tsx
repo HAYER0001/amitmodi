@@ -1,3 +1,4 @@
+import PageAtmosphere from "@/components/ui/PageAtmosphere";
 import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { getPublishedTerms } from "@/lib/glossary";
@@ -23,7 +24,9 @@ export const metadata: Metadata = buildMetadata({
 export default function GlossaryPage() {
   const terms = getPublishedTerms();
   return (
-    <div className="bg-paper-deep">
+    <div className="relative bg-paper-deep">
+      <PageAtmosphere density="utility" seed={19} object="tex-ink-blot" objectClassName="right-[7%] top-[8%] hidden w-20 -rotate-3 lg:block xl:w-24" />
+
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
         <Breadcrumbs />
         <header className="max-w-2xl pb-10 pt-4">

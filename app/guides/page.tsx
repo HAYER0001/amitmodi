@@ -1,3 +1,4 @@
+import PageAtmosphere from "@/components/ui/PageAtmosphere";
 import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { GuideCard } from "./_components";
@@ -20,7 +21,9 @@ export const metadata: Metadata = buildMetadata({
 export default function GuidesPage() {
   const guides = getPublishedPosts().filter((post) => post.category === "guide");
   return (
-    <div className="bg-paper-deep">
+    <div className="relative bg-paper-deep">
+      <PageAtmosphere density="interior" seed={13} object="cut-ledger-book" objectClassName="right-[5%] top-[12%] hidden w-24 -rotate-6 lg:block xl:w-32" />
+
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
         <Breadcrumbs />
         <header className="max-w-2xl pb-10 pt-4">

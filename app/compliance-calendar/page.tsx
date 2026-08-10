@@ -1,3 +1,4 @@
+import PageAtmosphere from "@/components/ui/PageAtmosphere";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
@@ -69,7 +70,9 @@ export default function ComplianceCalendarPage() {
 
   return (
     <>
-      <div className="bg-paper-deep">
+      <div className="relative bg-paper-deep">
+        <PageAtmosphere density="utility" seed={31} object="cut-revenue-stamp" objectClassName="right-[5%] top-[7%] hidden w-20 rotate-6 lg:block xl:w-28" />
+
         <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
           <Breadcrumbs />
           <header className="max-w-2xl pb-10 pt-4">

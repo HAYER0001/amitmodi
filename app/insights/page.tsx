@@ -1,3 +1,4 @@
+import PageAtmosphere from "@/components/ui/PageAtmosphere";
 import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { PostCard, TagFilter, Pagination } from "./_components";
@@ -28,7 +29,9 @@ export default async function InsightsIndex({
   const page = paginate(posts, 1);
 
   return (
-    <div className="bg-paper-deep">
+    <div className="relative bg-paper-deep">
+      <PageAtmosphere density="interior" seed={17} object="cut-paperclip" objectClassName="right-[6%] top-[9%] hidden w-20 rotate-12 lg:block xl:w-28" />
+
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
         <Breadcrumbs />
         <header className="max-w-2xl pb-10 pt-4">

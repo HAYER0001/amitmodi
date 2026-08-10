@@ -1,3 +1,4 @@
+import PageAtmosphere from "@/components/ui/PageAtmosphere";
 import CutOut from "@/components/ui/CutOut";
 import { ASSETS } from "@/data/assets";
 import type { Metadata } from "next";
@@ -63,18 +64,8 @@ export const metadata: Metadata = buildMetadata({
 export default function ToolsPage() {
   return (
     <>
-      {/* The calculator cut-out, on the page about calculators. */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        <div className="cut-out-drift absolute right-[4%] top-[6%] hidden w-24 rotate-6 lg:block xl:w-32">
-          <CutOut
-            src={ASSETS["cut-calculator"].src}
-            alt=""
-            width={ASSETS["cut-calculator"].width}
-            height={ASSETS["cut-calculator"].height}
-          />
-        </div>
-      </div>
-
+      <div className="relative">
+      <PageAtmosphere density="utility" seed={11} object="cut-calculator" objectClassName="right-[4%] top-[6%] hidden w-24 rotate-6 lg:block xl:w-32" />
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6">
         <Breadcrumbs />
         <section className="py-10">
@@ -124,6 +115,7 @@ export default function ToolsPage() {
       </div>
 
       <ClosingCTA />
+      </div>
     </>
   );
 }

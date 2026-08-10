@@ -1,3 +1,4 @@
+import PageAtmosphere from "@/components/ui/PageAtmosphere";
 import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import ConsultationForm from "@/components/forms/ConsultationForm";
@@ -32,8 +33,9 @@ function ErrorBanner({ error }: { error: string | undefined }) {
   return (
     <div
       role="alert"
-      className="mb-8 rounded-md border border-stamp bg-paper-deep px-4 py-3 font-body text-sm leading-relaxed text-ink"
+      className="relative mb-8 rounded-md border border-stamp bg-paper-deep px-4 py-3 font-body text-sm leading-relaxed text-ink"
     >
+
       {message}
     </div>
   );
@@ -58,7 +60,8 @@ export default async function ContactPage({
 
   return (
     <>
-      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
+        <PageAtmosphere density="utility" seed={29} object="cut-rubber-stamp" objectClassName="right-[6%] top-[8%] hidden w-20 -rotate-6 lg:block xl:w-28" />
         <Breadcrumbs />
         <section className="py-10">
           <p className="font-label text-xs uppercase tracking-[0.14em] text-seal">Contact</p>

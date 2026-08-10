@@ -1,3 +1,4 @@
+import PageAtmosphere from "@/components/ui/PageAtmosphere";
 import CutOut from "@/components/ui/CutOut";
 import { ASSETS } from "@/data/assets";
 import type { Metadata } from "next";
@@ -29,7 +30,9 @@ export default function PracticePage() {
   const principalName: string | null = brand.principal?.name as string | null;
 
   return (
-    <div className="bg-paper-deep">
+    <div className="relative bg-paper-deep">
+      <PageAtmosphere density="interior" seed={23} object="cut-brass-seal" objectClassName="right-[5%] top-[10%] hidden w-24 rotate-3 lg:block xl:w-32" />
+
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
         <Breadcrumbs />
         <header className="max-w-2xl pb-12 pt-4">
