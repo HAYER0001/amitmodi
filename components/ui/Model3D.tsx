@@ -72,9 +72,20 @@ function useModelGating(): "loading" | "fallback" | "ok" {
     const evaluate = () => {
       const cores = navigator.hardwareConcurrency ?? 8;
       if (cores > 0 && cores < 4) return setState("fallback");
-      const coarsePointer =
-        window.matchMedia?.("(pointer: coarse)").matches ?? false;
-      if (coarsePointer && window.innerWidth < 768) return setState("fallback");
+      /*
+       * Phones DO get the knight.
+       *
+       * This used to bail out on any coarse pointer under 768px, which switched
+       * the model off for every phone on earth — and the knight is now the boot
+       * screen's centrepiece and the chat button, so the whole opening sequence
+       * silently did not exist on mobile. A 673 KB Meshopt model at 97k tris is
+       * within reach of any phone that can run a modern browser; what it cannot
+       * afford is the desktop pixel budget, so Model3D drops dpr instead of
+       * dropping the model (see the Canvas dpr below).
+       *
+       * The only remaining bail-out is genuine hardware weakness — under four
+       * cores — which the cores check above already covers.
+       */
       return setState("ok");
     };
 
@@ -439,6 +450,16 @@ export default function Model3D({
   className,
 }: Model3DProps) {
   const gate = useModelGating();
+  /* Coarse pointer or a narrow viewport = phone-class pixel budget. Read once
+     on mount; a resize past this boundary is not worth remounting the canvas. */
+  const [isCompact, setIsCompact] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(pointer: coarse), (max-width: 767px)");
+    const sync = () => setIsCompact(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
   const [inView, setInView] = useState(false);
   const container = useRef<HTMLDivElement>(null);
   const onReadyRef = useRef(onReady);
@@ -500,7 +521,11 @@ export default function Model3D({
         <ModelBoundary fallback={fallback()}>
           <Suspense fallback={fallback()}>
             <Canvas
-              dpr={[1, 1.75]}
+              /* Phones render the same model at a lower pixel budget rather
+                 than not at all. A 3x-DPR phone painting 97k triangles at full
+                 device resolution is the actual cost — not the geometry — so
+                 cap it there and keep the knight on every device. */
+              dpr={[1, isCompact ? 1.25 : 1.75]}
               camera={{ position: [0, 0, 2.7], fov: 35 }}
               gl={{ antialias: true, alpha: true }}
               onCreated={({ gl }) => {
