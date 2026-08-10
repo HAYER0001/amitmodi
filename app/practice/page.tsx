@@ -1,3 +1,5 @@
+import CutOut from "@/components/ui/CutOut";
+import { ASSETS } from "@/data/assets";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
@@ -45,7 +47,18 @@ export default function PracticePage() {
 
       <CredentialBar />
 
-      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+        <div className="cut-out-drift absolute right-[5%] top-[8%] hidden w-28 -rotate-6 lg:block xl:w-36">
+          <CutOut
+            src={ASSETS["cut-ledger-book"].src}
+            alt=""
+            width={ASSETS["cut-ledger-book"].width}
+            height={ASSETS["cut-ledger-book"].height}
+          />
+        </div>
+      </div>
+
+      <div className="relative z-10 mx-auto max-w-7xl px-4 py-16 sm:px-6">
         <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
           <section aria-labelledby="approach-title">
             <h2

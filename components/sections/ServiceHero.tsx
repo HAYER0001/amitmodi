@@ -19,13 +19,13 @@ import type { Service } from "@/types/content";
  */
 
 const FIGURE_BY_SLUG: Record<string, AssetKey> = {
-  "pan-card-services": "fig-couple-shop",
+  "pan-card-services": "fig-consultant",
   "gst-registration": "fig-shopkeeper",
   "entity-formation": "fig-founder",
   "income-tax-tds-returns": "fig-accountant-desk",
-  "gst-returns-filing": "fig-textile-trader",
+  "gst-returns-filing": "fig-couple-shop",
   "income-tax-appeals": "fig-worried",
-  "gst-appeals": "fig-worried",
+  "gst-appeals": "fig-restaurateur",
   "import-export-licence": "fig-exporter",
 };
 

@@ -58,6 +58,7 @@ export async function generateMetadata({
   if (!service) return {};
   const content = getContent(slug);
   return buildMetadata({
+    image: "/images/og-service.jpg",
     title: withSiteName(content?.metaTitle ?? service.name),
     description: fitDescription(content?.metaDescription ?? service.oneLiner),
     path: `/services/${slug}`,

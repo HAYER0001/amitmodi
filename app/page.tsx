@@ -1,3 +1,4 @@
+import TornDivider from "@/components/ui/TornDivider";
 import type { Metadata } from "next";
 import Hero from "@/components/sections/Hero";
 import HeroBridge from "@/components/sections/HeroBridge";
@@ -45,6 +46,7 @@ export default function Home() {
       <TheProblem />
       <TheServices />
       <TheProcess />
+      <TornDivider />
       <TheProof />
       <CredentialBar />
       <TestimonialCarousel />

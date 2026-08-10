@@ -181,7 +181,11 @@ export const ASSETS = {
     decorative: false, key: 'none',
   },
 
-  // ── Social and icons — decorative ────────────────────────────────────────────
+  // ── Social and icons ────────────────────────────────────────────────────────
+  // favicon-src and apple-touch are BUILD SOURCES, not shipped assets. Next.js
+  // serves the icons from app/icon.png and app/apple-icon.png, which were
+  // generated from favicon-src. They will never appear in a component, and an
+  // "unused asset" audit should not flag them.
   'og-default':  { src: '/images/og-default.jpg',  width: 1200, height: 630,  ratio: '16:9', alt: '', decorative: true, key: 'none' },
   'og-service':  { src: '/images/og-service.jpg',  width: 1200, height: 630,  ratio: '16:9', alt: '', decorative: true, key: 'none' },
   'favicon-src': { src: '/images/favicon-src.png', width: 1024, height: 1024, ratio: '1:1',  alt: '', decorative: true, key: 'none' },

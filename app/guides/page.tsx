@@ -39,8 +39,8 @@ export default function GuidesPage() {
 
         {guides.length > 0 ? (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {guides.map((guide) => (
-              <GuideCard key={guide.slug} guide={guide} />
+            {guides.map((guide, index) => (
+              <GuideCard key={guide.slug} guide={guide} index={index} />
             ))}
           </div>
         ) : (

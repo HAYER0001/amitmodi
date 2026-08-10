@@ -1,5 +1,7 @@
 "use client";
 
+import CutOut from "@/components/ui/CutOut";
+import { ASSETS } from "@/data/assets";
 import Link from "next/link";
 import Magnetic from "@/components/ui/Magnetic";
 import { CTA } from "@/data/navigation";
@@ -22,9 +24,22 @@ export default function ClosingCTA() {
     <section
       id="contact-cta"
       aria-labelledby="closing-title"
-      className="bg-seal text-paper"
+      className="relative overflow-hidden bg-seal text-paper"
     >
-      <div className="mx-auto max-w-7xl px-4 py-24 text-center sm:px-6 lg:py-32">
+      {/* Low opacity: this sits on the seal fill, so it reads as texture
+          rather than as an object competing with the closing line. */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-25">
+        <div className="cut-out-drift absolute bottom-[8%] right-[6%] hidden w-32 rotate-6 lg:block">
+          <CutOut
+            src={ASSETS["cut-rupee-crumpled"].src}
+            alt=""
+            width={ASSETS["cut-rupee-crumpled"].width}
+            height={ASSETS["cut-rupee-crumpled"].height}
+          />
+        </div>
+      </div>
+
+      <div className="relative z-10 mx-auto max-w-7xl px-4 py-24 text-center sm:px-6 lg:py-32">
         <p className="font-label text-xs uppercase tracking-[0.14em] text-paper/70">
           The ask
         </p>

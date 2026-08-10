@@ -1,3 +1,5 @@
+import CutOut from "@/components/ui/CutOut";
+import { ASSETS } from "@/data/assets";
 import type { CSSProperties } from "react";
 import Link from "next/link";
 import type { Metadata } from "next";
@@ -63,7 +65,18 @@ export default function ServicesIndex() {
 
   return (
     <div className="bg-paper-deep">
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
+            <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+        <div className="cut-out-drift absolute right-[6%] top-[10%] hidden w-24 -rotate-3 lg:block xl:w-32">
+          <CutOut
+            src={ASSETS["fig-textile-trader"].src}
+            alt=""
+            width={ASSETS["fig-textile-trader"].width}
+            height={ASSETS["fig-textile-trader"].height}
+          />
+        </div>
+      </div>
+
+<div className="relative z-10 mx-auto max-w-7xl px-4 py-12 sm:px-6">
         <Breadcrumbs />
         <header className="max-w-2xl pb-10 pt-4">
           <p className="font-label text-xs uppercase tracking-[0.14em] text-seal">

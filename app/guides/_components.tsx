@@ -1,3 +1,5 @@
+import Image from "next/image";
+import { ASSETS } from "@/data/assets";
 import Link from "next/link";
 import type { Post } from "@/lib/mdx";
 import type { LeadMagnetAsset } from "@/lib/schemas";
@@ -56,9 +58,46 @@ export function magnetForGuide(slug: string): GuideMagnet {
   return { slug: asset, ...MAGNET_COPY[asset] };
 }
 
-export function GuideCard({ guide }: { guide: Post }) {
+/*
+ * The four generated covers, matched to the guides they were drawn for. A guide
+ * without an entry falls back by index rather than rendering nothing, so adding
+ * a fifth guide degrades to a reused cover instead of a hole in the grid.
+ */
+const COVER_BY_SLUG: Record<string, string> = {
+  "entity-formation": "cover-entity-formation",
+  "gst-compliance": "cover-gst-compliance",
+  "tax-notices": "cover-tax-notices",
+  "exporter": "cover-exporter",
+};
+const COVER_FALLBACKS = [
+  "cover-entity-formation",
+  "cover-gst-compliance",
+  "cover-tax-notices",
+  "cover-exporter",
+];
+
+function coverFor(slug: string, index: number): string {
+  const exact = Object.keys(COVER_BY_SLUG).find((k) => slug.includes(k));
+  return exact ? COVER_BY_SLUG[exact] : COVER_FALLBACKS[index % COVER_FALLBACKS.length];
+}
+
+export function GuideCard({ guide, index = 0 }: { guide: Post; index?: number }) {
+  const cover = ASSETS[coverFor(guide.slug, index) as keyof typeof ASSETS];
   return (
-    <article className="flex h-full flex-col rounded-md border border-rule bg-paper p-6 shadow-cut">
+    <article className="flex h-full flex-col overflow-hidden rounded-md border border-rule bg-paper shadow-cut">
+      {cover && (
+        <Link href={`/guides/${guide.slug}`} className="relative block aspect-[4/3] overflow-hidden border-b border-rule">
+          <Image
+            src={cover.src}
+            alt=""
+            aria-hidden="true"
+            fill
+            sizes="(min-width: 1024px) 30vw, 100vw"
+            className="object-cover transition-transform duration-700 hover:scale-[1.03]"
+          />
+        </Link>
+      )}
+      <div className="flex flex-1 flex-col p-6">
       <div className="flex items-center justify-between gap-4">
         <p className="font-label text-xs uppercase tracking-[0.14em] text-brass">
           Guide
@@ -87,6 +126,7 @@ export function GuideCard({ guide }: { guide: Post }) {
             Structural sample — not published
           </p>
         )}
+      </div>
       </div>
     </article>
   );
