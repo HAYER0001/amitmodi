@@ -15,7 +15,15 @@ import Magnetic from "@/components/ui/Magnetic";
    component itself then gates on device capability and viewport proximity. */
 const Model3D = dynamic(() => import("@/components/ui/Model3D"), {
   ssr: false,
-  loading: () => null,
+  /* A soft paper-toned shimmer at the model's exact size, so the knight fades
+     into a reserved box instead of popping into an empty one. Sized by the
+     parent's aspect-square, so it can never cause layout shift. */
+  loading: () => (
+    <div
+      aria-hidden="true"
+      className="h-full w-full animate-pulse rounded-full bg-[radial-gradient(circle_at_50%_45%,var(--rule),transparent_62%)] opacity-50"
+    />
+  ),
 });
 
 /*

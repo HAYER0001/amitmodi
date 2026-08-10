@@ -103,10 +103,73 @@ function Model({ src, rotationSpeed }: { src: string; rotationSpeed: number }) {
   const { scene } = useGLTF(src, false, true);
   const reducedMotion = useReducedMotion();
   const group = useRef<THREE.Group>(null);
+  const drift = useRef(0);
+  const leanRef = useRef<THREE.Group>(null);
+  const pointerX = useRef(0);
 
-  useFrame((_, delta) => {
-    if (reducedMotion || rotationSpeed === 0) return;
-    if (group.current) group.current.rotation.y += delta * rotationSpeed;
+  /*
+   * Pointer tracked at WINDOW level, not via R3F's state.pointer.
+   *
+   * The hero wrapper is pointer-events-none — it has to be, or the knight would
+   * swallow clicks meant for the headline and CTA behind it. But that also means
+   * the canvas never receives pointermove, so state.pointer would sit frozen at
+   * 0 forever and the lean would never move. Listening on window sidesteps that
+   * entirely and costs one passive listener.
+   *
+   * Only a ref is written — never state — so moving the mouse does not trigger a
+   * single React re-render. The value is read inside useFrame, which is already
+   * running every frame.
+   */
+  useEffect(() => {
+    if (reducedMotion) return;
+    const onMove = (e: PointerEvent) => {
+      pointerX.current = (e.clientX / window.innerWidth) * 2 - 1;
+    };
+    window.addEventListener("pointermove", onMove, { passive: true });
+    return () => window.removeEventListener("pointermove", onMove);
+  }, [reducedMotion]);
+
+  useFrame((state, delta) => {
+    const g = group.current;
+    if (!g || reducedMotion) return;
+
+    /* ── Anti-gravity float ────────────────────────────────────────────────
+     * A sine on Y plus two much slower sines on X/Z tilt. Different periods
+     * (1.1 / 0.7 / 0.9) so the axes never sync into an obvious loop — matched
+     * periods are what make "floating" read as "bobbing on a spring".
+     * Amplitudes are deliberately tiny: this should register as the object
+     * being alive, not as an animation playing. */
+    const t = state.clock.elapsedTime;
+    g.position.y = Math.sin(t * 1.1) * 0.035;
+    g.rotation.x = Math.sin(t * 0.7) * 0.045;
+    g.rotation.z = Math.sin(t * 0.9) * 0.03;
+
+    /* ── Cursor lean ───────────────────────────────────────────────────────
+     * state.pointer is already normalised to -1..1 across the canvas, so no
+     * manual coordinate maths and no resize listener.
+     *
+     * Adapted, not copied: the brief this came from wanted a drone "menacingly
+     * tracking" the visitor. A tax practice wants the opposite feeling, so the
+     * knight only leans ~14° toward the pointer — enough that the piece feels
+     * aware of you, not enough to feel watched.
+     *
+     * Damped with a frame-rate-independent exponential (1 - e^-kt). Lerping by
+     * a fixed fraction per frame ties the speed to refresh rate: identical code
+     * moves twice as fast on a 120Hz display. */
+    const target = pointerX.current * 0.25;
+    const k = 1 - Math.exp(-3.5 * delta);
+    drift.current += (target - drift.current) * k;
+
+    /* Idle rotation continues underneath, so the piece still turns when the
+       pointer is still or absent — touch devices never fire pointer moves at
+       all, and there the float plus idle spin carry the whole effect. */
+    g.rotation.y += delta * rotationSpeed;
+
+    /* The lean is applied to the PARENT group, not here. Both want rotation.y,
+       and writing to one channel from two places means the last writer wins —
+       the spin would erase the lean every frame. Parent holds the lean, child
+       holds the spin, and the transforms compose. */
+    if (leanRef.current) leanRef.current.rotation.y = drift.current;
   });
 
   /* Dispose GPU resources when this Hero model unmounts. */
@@ -134,10 +197,12 @@ function Model({ src, rotationSpeed }: { src: string; rotationSpeed: number }) {
      than orbiting. Tripo exports sit on the ground plane (y: 0 → ~0.98), so
      without this the knight swings around a point beneath its feet. */
   return (
-    <group ref={group}>
-      <Center>
-        <primitive object={scene} />
-      </Center>
+    <group ref={leanRef}>
+      <group ref={group}>
+        <Center>
+          <primitive object={scene} />
+        </Center>
+      </group>
     </group>
   );
 }
