@@ -16,8 +16,15 @@ import CutOut from "@/components/ui/CutOut";
  * scale and colour are animated, and only while it is on screen.
  */
 
+/*
+ * [[fig-name]] tokens render as small inline ink drawings, sitting between the
+ * words as characters rather than as pictures beside the paragraph. Placement
+ * is deliberate: the worried figure lands on "notices", the relieved one on
+ * the resolution — the drawing carries the sentence's turn, which is exactly
+ * what the reference does with its walking man and its pile of dirt.
+ */
 const BRIDGE_COPY =
-  "We map your obligations, file the returns, and keep the authorities satisfied before the notices arrive.";
+  "Most businesses meet the tax system [[fig-worried]] only when something has already gone wrong \u2014 a notice, a mismatch, a deadline that passed while nobody was counting. We map the obligations, file the returns, and keep the department satisfied [[fig-relieved]] long before any of that arrives.";
 
 export default function HeroBridge() {
   const ref = useRef<HTMLElement>(null);

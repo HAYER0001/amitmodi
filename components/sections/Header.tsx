@@ -260,11 +260,13 @@ export default function Header() {
             </ul>
           </nav>
 
-          {/* right: CTA pill + theme toggle */}
+          {/* right: CTA + theme toggle. Underlined text, not a filled pill — the pill
+              was the single element most responsible for this reading as a SaaS
+              template rather than an editorial cover. */}
           <div className="hidden items-center gap-3 lg:flex">
             <Link
               href={CTA.href}
-              className="inline-flex min-h-11 items-center rounded-full bg-seal px-6 font-label text-xs uppercase tracking-[0.1em] text-paper transition-colors hover:bg-seal-deep"
+              className="inline-flex min-h-11 items-center border-b-2 border-seal px-1 font-label text-xs uppercase tracking-[0.1em] text-ink transition-colors hover:text-seal"
             >
               {CTA.label}
             </Link>

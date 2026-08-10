@@ -28,6 +28,43 @@ import {
   useTransform,
   type MotionValue,
 } from "framer-motion";
+import { ASSETS } from "@/data/assets";
+
+/**
+ * Inline ink figure — the reference's signature move.
+ *
+ * Small drawn figures sit BETWEEN words, treated as characters in the sentence
+ * rather than as illustrations placed beside it. That is most of why the
+ * reference reads as a printed page instead of a web layout.
+ *
+ * Written into copy as [[fig-worried]]. Sized in `em` so it scales with the
+ * type it sits in, and nudged onto the baseline so it never pushes line height
+ * around. Always aria-hidden — a screen reader announcing "image" mid-sentence
+ * would wreck the reading.
+ */
+function InlineFigure({
+  name,
+  progress,
+  range,
+}: {
+  name: string;
+  progress: MotionValue<number>;
+  range: [number, number];
+}) {
+  const opacity = useTransform(progress, range, [0.18, 1]);
+  const asset = (ASSETS as Record<string, { src: string } | undefined>)[name];
+  if (!asset) return null;
+  return (
+    <motion.span
+      style={{ opacity }}
+      aria-hidden="true"
+      className="mx-[0.18em] inline-block h-[1.1em] w-[0.75em] translate-y-[0.14em]"
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={asset.src} alt="" className="h-full w-full object-contain object-bottom" />
+    </motion.span>
+  );
+}
 
 /** One word. Its own transform maps a slice of the parent's scroll progress. */
 function Word({
@@ -88,6 +125,17 @@ export default function ScrollText({
         {words.map((word, i) => {
           const start = i / words.length;
           const end = (i + 1) / words.length;
+          const fig = word.match(/^\[\[([\w-]+)\]\]$/);
+          if (fig) {
+            return (
+              <InlineFigure
+                key={`${word}-${i}`}
+                name={fig[1]}
+                progress={scrollYProgress}
+                range={[start, end]}
+              />
+            );
+          }
           return (
             <Word key={`${word}-${i}`} progress={scrollYProgress} range={[start, end]}>
               {word}
