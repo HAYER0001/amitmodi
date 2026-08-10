@@ -103,12 +103,54 @@ html {
   background-color: var(--paper);
 }
 
+/*
+ * ONE fixed paper surface for the whole document.
+ *
+ * Previously every section carried its own solid background, so each scrolled
+ * as a block and the eye read "the page is moving". Pinning the paper and the
+ * ledger grid to the viewport instead means the surface stays still and the
+ * TEXT travels across it — which is the illusion the reference creates, and the
+ * reason its scroll feels like reading a page rather than dragging a document.
+ *
+ * background-attachment: fixed is compositor-friendly here because it is a
+ * gradient, not an image: nothing is decoded or re-rastered per frame.
+ */
 body {
   background-color: var(--paper);
+  background-image:
+    repeating-linear-gradient(to right, var(--rule) 0 1px, transparent 1px 96px),
+    repeating-linear-gradient(to bottom, var(--rule) 0 1px, transparent 1px 96px),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  background-attachment: fixed, fixed, fixed;
   color: var(--ink);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+/*
+ * iOS Safari does not support background-attachment: fixed — it silently falls
+ * back to scroll, and on some versions it kills the paint entirely. Repeat the
+ * surface unfixed there so the texture is still present, just travelling.
+ */
+@supports (-webkit-touch-callout: none) {
+  body {
+    background-attachment: scroll, scroll, scroll;
+  }
+}
+
+/*
+ * Sections are now TRANSPARENT so the fixed surface shows through. The tinted
+ * band keeps the rhythm of alternating sections without becoming an opaque
+ * block that hides the grid — the tint sits ON the paper rather than replacing
+ * it.
+ */
+.bg-paper {
+  background-color: transparent !important;
+}
+
+.bg-paper-deep {
+  background-color: color-mix(in srgb, var(--paper-deep) 72%, transparent) !important;
 }
 
 /* ---- signature surfaces ---- */
@@ -176,27 +218,27 @@ body {
  * durations, and staggered so nothing pulses in unison. Compositor-only work,
  * so it costs nothing on the main thread and cannot affect INP.
  */
-@keyframes marginalia-drift {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0);
+/*
+ * Marginalia drift now lives in JS (components/ui/Marginalia.tsx), not here.
+ *
+ * The notes react to the cursor, which means JS writes their transform every
+ * frame. A CSS keyframe animation on the same property fights that — last
+ * writer wins and the result stutters visibly. The sine drift moved into the
+ * same rAF loop so one owner controls one property.
+ *
+ * Touch devices skip the JS loop entirely (no hovering pointer to react to),
+ * so they keep a CSS-only drift below.
+ */
+@media (pointer: coarse) and (prefers-reduced-motion: no-preference) {
+  @keyframes marginalia-drift-touch {
+    0%, 100% { transform: translate3d(0, 0, 0); }
+    50% { transform: translate3d(0.3rem, -0.45rem, 0); }
   }
-  50% {
-    transform: translate3d(0.35rem, -0.5rem, 0);
+  .marginalia {
+    animation: marginalia-drift-touch 16s ease-in-out infinite;
   }
-}
-
-.marginalia {
-  will-change: transform;
-  animation: marginalia-drift 14s ease-in-out infinite;
-}
-.marginalia:nth-child(3n) {
-  animation-duration: 19s;
-  animation-delay: -4s;
-}
-.marginalia:nth-child(5n) {
-  animation-duration: 23s;
-  animation-delay: -9s;
+  .marginalia:nth-child(3n) { animation-duration: 21s; animation-delay: -5s; }
+  .marginalia:nth-child(5n) { animation-duration: 25s; animation-delay: -11s; }
 }
 
 /* Floating collage objects drift too, slower and further. */

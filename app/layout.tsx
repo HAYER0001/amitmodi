@@ -80,7 +80,7 @@ export default function RootLayout({
         <LocalBusinessSchema domain={SITE_URL} />
       </head>
       <body
-        className={`${display.variable} ${body.variable} ${label.variable} ${margin.variable} paper ledger-grid antialiased`}
+        className={`${display.variable} ${body.variable} ${label.variable} ${margin.variable} antialiased`}
       >
         {/* first focusable element: skip to the real content landmark */}
         <a

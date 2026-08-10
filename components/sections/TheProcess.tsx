@@ -1,5 +1,6 @@
 "use client";
 
+import AmbientVideo from "@/components/ui/AmbientVideo";
 import { Fragment, useRef } from "react";
 import { motion, useInView, useReducedMotion } from "framer-motion";
 import type { ProcessStep } from "@/types/content";
@@ -207,6 +208,15 @@ export default function TheProcess() {
             </Fragment>
           ))}
         </ol>
+
+        {/* The looping ink-line clip — below the fold, muted, and loaded only
+            when it is near the viewport. It sits with the process because that
+            is what it draws: a single line finding its way through the steps. */}
+        <AmbientVideo
+          src="/video/vid-process-loop.mp4"
+          transcript="A single ink line draws itself left to right, pausing at five points along the way — the same five steps set out above, from first consultation to ongoing compliance."
+          className="mt-16 max-w-3xl lg:mt-20"
+        />
       </div>
     </section>
   );

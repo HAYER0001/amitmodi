@@ -47,7 +47,7 @@ export default function ServiceHero({ service }: { service: Service }) {
   return (
     <section
       aria-labelledby="service-hero-title"
-      className="paper ledger-grid relative overflow-hidden border-b border-rule"
+      className="relative overflow-hidden border-b border-rule"
     >
       {/* Statute notes + one collage object. Without these a service page read
           as a different, cheaper website than the homepage — which is the single

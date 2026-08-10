@@ -90,7 +90,7 @@ export default function Hero() {
   return (
     <section
       aria-label="Introduction"
-      className="paper ledger-grid relative flex min-h-[100svh] flex-col overflow-hidden"
+      className="relative flex min-h-[100svh] flex-col overflow-hidden"
     >
       {/* decorative collage — never part of the LCP.
           Dimensions come from data/assets.ts, which mirrors the real files on
