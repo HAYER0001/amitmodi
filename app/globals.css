@@ -265,6 +265,33 @@ body {
   }
 }
 
+/*
+ * Touch target floor — WCAG 2.5.8 (Target Size, Minimum) asks for 24px; the
+ * platform guidance from both Apple and Google is 44–48px, and that is the
+ * number that actually matters for someone tapping a form on a phone while
+ * standing in a queue.
+ *
+ * Applied as a floor on real controls rather than chased element by element:
+ * a form built later inherits it automatically instead of regressing quietly.
+ * `min-height` only — never a fixed height — so multi-line labels and textareas
+ * still grow with their content.
+ */
+input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+select,
+textarea,
+button:not([data-compact]) {
+  min-height: 2.75rem; /* 44px */
+}
+
+/* Checkboxes and radios stay visually small, but the LABEL wrapping them is the
+   real hit area, so give that the floor instead of inflating the box itself. */
+label:has(input[type="checkbox"]),
+label:has(input[type="radio"]) {
+  min-height: 2.75rem;
+  display: flex;
+  align-items: center;
+}
+
 /* ---- scrollbar (thin, --rule track, --ink-soft thumb) ---- */
 * {
   scrollbar-width: thin;

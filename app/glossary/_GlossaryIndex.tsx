@@ -75,7 +75,7 @@ export default function GlossaryIndex({ terms }: { terms: GlossaryTerm[] }) {
               <a
                 key={letter}
                 href={`#letter-${letter}`}
-                className="inline-flex h-9 w-9 items-center justify-center rounded-pill border border-rule font-label text-sm text-ink-soft transition-colors hover:border-seal hover:text-seal"
+                className="inline-flex h-11 w-11 items-center justify-center rounded-pill border border-rule font-label text-sm text-ink-soft transition-colors hover:border-seal hover:text-seal"
               >
                 {letter}
               </a>

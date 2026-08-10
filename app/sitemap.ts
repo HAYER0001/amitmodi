@@ -11,6 +11,7 @@
  */
 
 import type { MetadataRoute } from "next";
+import { getConsentedCaseStudies } from "@/lib/case-studies";
 import { SITE_URL } from "@/lib/seo";
 import { getAllServices } from "@/lib/content";
 import {
@@ -58,8 +59,17 @@ const STATIC: Entry[] = [
   { path: "/contact", changeFrequency: "monthly", priority: 0.5 },
   { path: "/practice", changeFrequency: "monthly", priority: 0.5 },
   { path: "/practice/principal", changeFrequency: "monthly", priority: 0.5 },
-  { path: "/case-studies", changeFrequency: "monthly", priority: 0.5 },
 ];
+
+/*
+ * /case-studies only exists while at least one client has consented to publish.
+ * Until then the route 404s, so listing it here would advertise a dead URL to
+ * every crawler — a sitemap full of 404s is a trust signal you spend once.
+ * It reappears automatically the moment a study is consented.
+ */
+const CONDITIONAL: Entry[] = getConsentedCaseStudies().length
+  ? [{ path: "/case-studies", changeFrequency: "monthly", priority: 0.5 }]
+  : [];
 
 /** The five calculator routes (the same list app/tools/page.tsx renders). */
 const TOOLS: Entry[] = [
@@ -74,6 +84,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const map: MetadataRoute.Sitemap = [];
 
   for (const item of STATIC) map.push(entry(item));
+  for (const item of CONDITIONAL) map.push(entry(item));
 
   for (const service of getAllServices()) {
     map.push(

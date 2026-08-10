@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import ClosingCTA from "@/components/sections/ClosingCTA";
 import {
@@ -26,7 +27,17 @@ export const metadata: Metadata = buildMetadata({
 
 export default function CaseStudiesIndex() {
   const studies = getConsentedCaseStudies();
-  if (studies.length === 0) return null;
+
+  /*
+   * No consented case studies yet, so there is nothing to show.
+   *
+   * Returning null served a 200 with an empty body — a live, linked, sitemapped
+   * URL rendering literally nothing. Search engines classify that as a soft 404
+   * and it drags on sitewide quality; a visitor who clicks it sees a blank page.
+   * A real 404 is the honest answer until a client gives written consent to
+   * publish their matter. The page returns on its own the moment one does.
+   */
+  if (studies.length === 0) notFound();
 
   return (
     <div className="bg-paper-deep">
