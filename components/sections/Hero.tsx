@@ -2,29 +2,12 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import dynamic from "next/dynamic";
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import { HERO_VARIANTS, CORNER_LABELS } from "@/data/hero-copy";
 import { ASSETS } from "@/data/assets";
 import Marginalia from "@/components/ui/Marginalia";
 import CutOut from "@/components/ui/CutOut";
 import Magnetic from "@/components/ui/Magnetic";
-
-/* three.js is ~150 KB gzipped. It must never be in the first-paint bundle, so
-   Model3D is only ever reached through this dynamic, ssr:false import. The
-   component itself then gates on device capability and viewport proximity. */
-const Model3D = dynamic(() => import("@/components/ui/Model3D"), {
-  ssr: false,
-  /* A soft paper-toned shimmer at the model's exact size, so the knight fades
-     into a reserved box instead of popping into an empty one. Sized by the
-     parent's aspect-square, so it can never cause layout shift. */
-  loading: () => (
-    <div
-      aria-hidden="true"
-      className="h-full w-full animate-pulse rounded-full bg-[radial-gradient(circle_at_50%_45%,var(--rule),transparent_62%)] opacity-50"
-    />
-  ),
-});
 
 /*
  * Hero.tsx — the full-viewport opening section.
@@ -39,11 +22,10 @@ const Model3D = dynamic(() => import("@/components/ui/Model3D"), {
  *  - No image becomes the LCP element: the cut-outs are absolutely positioned
  *    and hidden from the accessibility tree.
  *
- * The phase-7 plan calls for the 3D brass knight (knight-brass.glb) to
- * overlap the type. The model ships in public/models but has no static PNG
- * fallback, so this build leans on the cut-out collage instead; swapping
- * Model3D back in is a one-component change guarded by its IntersectionObserver
- * gate and dynamic ssr:false import.
+ * The 3D brass knight (knight-brass.glb) overlaps the type — it is the
+ * site-wide chat launcher now. It starts in this exact spot, rotates on all
+ * axes and shrinks into the bottom-right corner as the visitor scrolls
+ * (ChatLauncher owns it), so the hero itself renders no model and no fallback.
  */
 
 const SELECTED = HERO_VARIANTS.find((v) => v.selected) ?? HERO_VARIANTS[0];
@@ -71,13 +53,14 @@ export default function Hero() {
   const reduced = useReducedMotion();
   const { scrollYProgress } = useScroll();
 
-  /* Parallax: three depth planes moving at different rates as the hero leaves.
-     The collage drifts fastest (it is "nearest"), the knight slower, the
-     headline slowest of all — the same cue the eye uses to read depth out of a
-     moving scene. Transform only, so this costs nothing on the main thread.
-     Reduced motion collapses every plane to 0. */
+  /* Parallax: two depth planes moving at different rates as the hero leaves.
+     The collage drifts fastest (it is "nearest"), the headline slowest — the
+     same cue the eye uses to read depth out of a moving scene. The brass
+     knight is NOT here: it is the chat launcher now (ChatLauncher), fixed on
+     the page, which is why the hero no longer owns it. Transform only, so
+     this costs nothing on the main thread. Reduced motion collapses every
+     plane to 0. */
   const collageY = useTransform(scrollYProgress, [0, 0.25], [0, reduced ? 0 : -90]);
-  const knightY = useTransform(scrollYProgress, [0, 0.25], [0, reduced ? 0 : -50]);
   const headlineY = useTransform(scrollYProgress, [0, 0.25], [0, reduced ? 0 : -22]);
 
   const [now, setNow] = useState<string | null>(null);
@@ -134,26 +117,10 @@ export default function Hero() {
         </div>
       </motion.div>
 
-      {/* The knight sits ABOVE the headline in z-order and overlaps its right
-          end, exactly as the chess piece breaks "MONEY" in the reference.
-
-          aspect-square MUST be on this wrapper, not passed down as Model3D's
-          className. Passed down, this box collapsed to height 0 — so the
-          IntersectionObserver inside Model3D was observing a zero-height
-          element, never fired, and the canvas never mounted at all. The model
-          was correct the whole time; the box around it had no height. */}
-      <motion.div
-        style={{ y: knightY }}
-        aria-hidden="true"
-        className="pointer-events-none absolute left-1/2 top-1/2 z-20 aspect-square w-[56vw] max-w-[540px] -translate-x-1/2 -translate-y-[56%] sm:w-[42vw] lg:w-[34vw]"
-      >
-        <Model3D
-          src="/models/knight-brass.glb"
-          fallbackImage={ASSETS["cut-brass-seal"].src}
-          rotationSpeed={0.12}
-          className="relative h-full w-full"
-        />
-      </motion.div>
+      {/* The knight previously stood here, overlapping the headline. It now
+          lives in ChatLauncher as the site-wide chat button: it starts in this
+          exact spot, rotates on all its axes as the visitor scrolls, and
+          shrinks into the bottom-right corner. One instance, one job. */}
 
       {/* A single small ink figure standing at the headline's baseline — the
           reference puts a tiny observer against the huge type, and that contrast

@@ -1,47 +1,82 @@
 "use client";
 
 /*
- * ChatLauncher.tsx — the scroll-driven chat launcher.
+ * ChatLauncher.tsx — the brass knight IS the chat button.
  *
- * At the top of the page it hangs as a full paper slip on the right edge,
- * slightly rotated, inviting a question. As the visitor scrolls, the slip
- * rotates upright, shrinks, and settles into the bottom-right corner as a
- * compact stamp — the FAB. Clicking it at any size opens the tax assistant
- * (ChatPanel), which talks to /api/ask.
+ * One instance of the 3D knight, mounted once on every page, starts in the
+ * exact hero position (dead centre, overlapping the headline). The moment the
+ * visitor scrolls it detaches: it rotates on all three axes, shrinks, and
+ * settles into the bottom-right corner where it stays as the chat stamp.
+ * Clicking it — at any size, in the hero or in the corner — opens the tax
+ * assistant (ChatPanel → /api/ask).
  *
- * The whole journey is transform/opacity only (INP-safe), uses the one
- * project easing curve, and collapses to the corner stamp immediately under
- * prefers-reduced-motion. The scroll hooks still run unconditionally, mirror
- * ScrollScale: returning the static branch without the motion values would
- * leave Framer's listeners attached to a node that never exists.
+ * Motion rules: transform/opacity only, the project easing, and the corner
+ * stamp (no knight, no travel) under prefers-reduced-motion. The hero no
+ * longer renders its own knight — there is exactly one instance.
  */
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useReducedMotion } from "@/lib/motion";
+import { ASSETS } from "@/data/assets";
 import ChatPanel from "./ChatPanel";
+
+/* three.js stays out of the first-paint bundle: this is the one dynamic,
+   ssr:false entry point, exactly as the hero used it. */
+const Knight = dynamic(() => import("@/components/ui/Model3D"), {
+  ssr: false,
+  loading: () => (
+    <div
+      aria-hidden="true"
+      className="h-full w-full animate-pulse rounded-full bg-[radial-gradient(circle_at_50%_45%,var(--rule),transparent_62%)] opacity-50"
+    />
+  ),
+});
+
+/* Distance from the viewport centre to where the corner stamp rests, in px.
+   Measured, not guessed in CSS units, so the knight lands inside the corner
+   on every screen shape. Recomputed on resize. */
+function useCornerOffset() {
+  const [offset, setOffset] = useState({ x: 320, y: 320 });
+  useEffect(() => {
+    const measure = () =>
+      setOffset({
+        x: window.innerWidth / 2 - 96,
+        y: window.innerHeight / 2 - 88,
+      });
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
+  return offset;
+}
 
 export default function ChatLauncher() {
   const reduced = useReducedMotion();
   const [open, setOpen] = useState(false);
+  const corner = useCornerOffset();
 
-  /* Progress 0 → 0.12 of the page brings the slip home to the corner. Past
-     that it stays put — no further motion, nothing loops. */
+  /* Progress 0 → 0.12 of the page carries the knight from the centre of the
+     hero to the corner. Past that point it stays put — nothing loops. */
   const { scrollYProgress } = useScroll();
-  const y = useTransform(scrollYProgress, [0, 0.12], ["-44vh", "0vh"]);
-  const rotate = useTransform(scrollYProgress, [0, 0.12], [-7, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.12], [1, 0.6]);
-  const labelOpacity = useTransform(scrollYProgress, [0.03, 0.09], [1, 0]);
+  const x = useTransform(scrollYProgress, [0, 0.12], [0, corner.x]);
+  const y = useTransform(scrollYProgress, [0, 0.12], [0, corner.y]);
+  const scale = useTransform(scrollYProgress, [0, 0.12], [1, 0.2]);
+  const rotateX = useTransform(scrollYProgress, [0, 0.12], [0, -35]);
+  const rotateY = useTransform(scrollYProgress, [0, 0.12], [0, 200]);
+  const rotateZ = useTransform(scrollYProgress, [0, 0.12], [0, -18]);
+  const badgeOpacity = useTransform(scrollYProgress, [0.07, 0.12], [0, 1]);
 
   if (reduced) {
-    /* Reduced motion: the corner stamp, static. */
+    /* Reduced motion: no knight, no travel — just the corner stamp. */
     return (
       <>
         <button
           type="button"
           onClick={() => setOpen(true)}
-          aria-label="Open the tax assistant"
-          className="fixed bottom-24 right-4 z-40 inline-flex h-14 w-14 lg:bottom-5 items-center justify-center rounded-full bg-seal text-paper shadow-cut transition-colors hover:bg-seal-deep"
+          aria-label="Ask the tax assistant"
+          className="fixed bottom-24 right-4 z-40 inline-flex h-14 w-14 items-center justify-center rounded-full bg-seal p-3 text-paper shadow-cut transition-colors hover:bg-seal-deep lg:bottom-5"
         >
           <ChatGlyph />
         </button>
@@ -52,34 +87,47 @@ export default function ChatLauncher() {
 
   return (
     <>
-      <motion.button
-        type="button"
-        onClick={() => setOpen(true)}
-        aria-label="Ask the tax assistant"
-        style={{
-          y,
-          rotate,
-          scale,
-          transformOrigin: "bottom right",
-        }}
-        initial={false}
-        className="fixed bottom-24 right-4 z-40 flex items-center gap-3 lg:bottom-5 will-change-transform"
-      >
-        <motion.span
-          style={{ opacity: labelOpacity }}
-          className="rounded-md border border-rule bg-paper px-4 py-2.5 text-left shadow-cut"
+      <div className="pointer-events-none fixed inset-0 z-40">
+        <motion.div
+          style={{
+            x,
+            y,
+            scale,
+            rotateX,
+            rotateY,
+            rotateZ,
+            transformOrigin: "center bottom",
+            transformPerspective: 1000,
+          }}
+          initial={false}
+          className="pointer-events-auto absolute left-1/2 top-1/2 aspect-square w-[56vw] max-w-[540px] sm:w-[42vw] lg:w-[34vw]"
         >
-          <span className="block font-label text-xs uppercase tracking-[0.14em] text-seal">
-            Tax question?
-          </span>
-          <span className="block font-margin text-base text-ink">
-            ask me — it answers
-          </span>
-        </motion.span>
-        <span className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-seal text-paper shadow-cut transition-colors hover:bg-seal-deep">
+          <button
+            type="button"
+            onClick={() => setOpen(true)}
+            aria-label="Ask the tax assistant"
+            className="block h-full w-full"
+            style={{ transform: "translate(-50%, -56%)" }}
+          >
+            <Knight
+              src="/models/knight-brass.glb"
+              fallbackImage={ASSETS["cut-brass-seal"].src}
+              rotationSpeed={0.12}
+              className="relative h-full w-full"
+            />
+          </button>
+        </motion.div>
+
+        {/* Chat badge — visible only once the knight has shrunk to the corner,
+        where the small brass figure alone does not read as chat. */}
+        <motion.div
+          style={{ opacity: badgeOpacity }}
+          aria-hidden="true"
+          className="pointer-events-none fixed bottom-9 right-8 grid h-12 w-12 place-items-center rounded-full bg-seal text-paper shadow-cut lg:bottom-6"
+        >
           <ChatGlyph />
-        </span>
-      </motion.button>
+        </motion.div>
+      </div>
       <ChatPanel open={open} onClose={() => setOpen(false)} />
     </>
   );
