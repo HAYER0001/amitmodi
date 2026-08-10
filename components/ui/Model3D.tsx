@@ -150,15 +150,19 @@ function Model({
   /* ── boot-fill layers ─────────────────────────────────────────────────────
    * With a `fill` driver the model is built twice from the same geometry: a
    * faint frosted "ghost" of the whole knight, plus a solid brass copy clipped
-   * at a horizontal plane that rises from the feet. The clip plane lives in the
-   * mesh's local space and is updated per-frame from the MotionValue, so the
-   * fill is a pure GPU effect — no per-frame React work, no animation library.
-   * When the fill hits 1 the ghost hides and the result is pixel-identical to
-   * the un-filled path. */
+   * at a horizontal plane that rises from the feet. The clip planes are LOCAL
+   * (renderer.localClippingEnabled) and per-mesh, expressed in each mesh's own
+   * geometry space — so the level is always "feet + f × height" no matter what
+   * node translations the GLB carries, and it follows the model through the
+   * centering offset, float, lean and spin. Updated per-frame from the
+   * MotionValue: a pure GPU effect, no per-frame React work. When the fill
+   * hits 1 the ghost hides and the result is pixel-identical to the un-filled
+   * path. */
   const ghostLayer = useRef<THREE.Group>(null);
   const fillLayer = useRef<THREE.Group>(null);
-  const clipPlane = useRef(new THREE.Plane(new THREE.Vector3(0, -1, 0), 0));
-  const bounds = useRef<{ minY: number; height: number } | null>(null);
+  const meshPlanes = useRef<{ plane: THREE.Plane; min: number; height: number }[]>(
+    [],
+  );
   const layersBuilt = useRef(false);
 
   useEffect(() => {
@@ -172,10 +176,9 @@ function Model({
     layersBuilt.current = true;
 
     const box = new THREE.Box3().setFromObject(scene);
-    bounds.current = {
-      minY: box.min.y,
-      height: Math.max(box.max.y - box.min.y, 1e-6),
-    };
+    const center = new THREE.Vector3()
+      .addVectors(box.min, box.max)
+      .multiplyScalar(0.5);
 
     /* Clones share the GLB's geometries (never re-uploaded) but get their own
        material instances — one frosted ghost, one clipped brass. */
@@ -195,7 +198,15 @@ function Model({
           mat.depthWrite = false;
           mesh.renderOrder = 2;
         } else {
-          mat.clippingPlanes = [clipPlane.current];
+          mesh.geometry.computeBoundingBox();
+          const gb = mesh.geometry.boundingBox;
+          const plane = new THREE.Plane(new THREE.Vector3(0, -1, 0), 0);
+          meshPlanes.current.push({
+            plane,
+            min: gb ? gb.min.y : 0,
+            height: gb ? Math.max(gb.max.y - gb.min.y, 1e-6) : 1,
+          });
+          mat.clippingPlanes = [plane];
           mesh.renderOrder = 1;
         }
         mesh.material = mat;
@@ -206,13 +217,21 @@ function Model({
     ghostLayer.current.add(makeLayer(true));
     fillLayer.current.add(makeLayer(false));
 
-    /* Seed the plane from the driver so an instant fill (reduced motion) never
+    /* Centre the layers on the origin, exactly as drei's <Center> would for
+       React children — but these layers are populated imperatively, so Center
+       never sees them. Without this offset the model sits on its ground plane
+       and swings around a point beneath its feet. Offsetting the WRAPPER group
+       leaves each mesh's local (and clip) space untouched. */
+    ghostLayer.current.position.set(-center.x, -center.y, -center.z);
+    fillLayer.current.position.set(-center.x, -center.y, -center.z);
+
+    /* Seed the planes from the driver so an instant fill (reduced motion) never
        leaves the knight empty on its first frame. */
     const seed = Math.min(1, Math.max(0, fill.get()));
-    clipPlane.current.constant =
-      bounds.current.minY + seed * bounds.current.height;
-    if (ghostLayer.current)
-      ghostLayer.current.visible = seed < 0.999;
+    for (const entry of meshPlanes.current) {
+      entry.plane.constant = entry.min + seed * entry.height;
+    }
+    if (ghostLayer.current) ghostLayer.current.visible = seed < 0.999;
   }, [scene, fill]);
 
   /*
@@ -240,10 +259,11 @@ function Model({
   useFrame((state, delta) => {
     /* Fill and readiness run even under reduced motion: the knight must exist
        and (with a driver) must be visible before the boot overlay clears. */
-    if (fill && fillLayer.current && bounds.current) {
+    if (fill && meshPlanes.current.length > 0) {
       const f = Math.min(1, Math.max(0, fill.get()));
-      clipPlane.current.constant =
-        bounds.current.minY + f * bounds.current.height;
+      for (const entry of meshPlanes.current) {
+        entry.plane.constant = entry.min + f * entry.height;
+      }
       if (ghostLayer.current) ghostLayer.current.visible = f < 0.999;
     }
     if (
@@ -367,20 +387,22 @@ function Model({
 
   /* Centre the model on the origin so it rotates about its own axis rather
      than orbiting. Tripo exports sit on the ground plane (y: 0 → ~0.98), so
-     without this the knight swings around a point beneath its feet. */
+     without this the knight swings around a point beneath its feet. The fill
+     layers are centred imperatively (see the build effect); the plain model
+     goes through drei's <Center>. */
   return (
     <group ref={leanRef}>
       <group ref={group}>
-        <Center>
-          {fill ? (
-            <>
-              <group ref={ghostLayer} />
-              <group ref={fillLayer} />
-            </>
-          ) : (
+        {fill ? (
+          <>
+            <group ref={ghostLayer} />
+            <group ref={fillLayer} />
+          </>
+        ) : (
+          <Center>
             <primitive object={scene} />
-          )}
-        </Center>
+          </Center>
+        )}
       </group>
     </group>
   );
