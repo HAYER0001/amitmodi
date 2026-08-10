@@ -1,5 +1,6 @@
 import Link from "next/link";
 import CutOut from "@/components/ui/CutOut";
+import Marginalia from "@/components/ui/Marginalia";
 import { ASSETS, type AssetKey } from "@/data/assets";
 import { formatINR, formatTurnaround } from "@/lib/content";
 import type { Service } from "@/types/content";
@@ -46,17 +47,32 @@ export default function ServiceHero({ service }: { service: Service }) {
   return (
     <section
       aria-labelledby="service-hero-title"
-      className="border-b border-rule bg-paper"
+      className="paper ledger-grid relative overflow-hidden border-b border-rule"
     >
-      <div className="mx-auto grid max-w-7xl gap-8 px-4 py-12 sm:px-6 lg:grid-cols-[minmax(0,1fr)_200px] lg:items-center lg:py-16">
+      {/* Statute notes + one collage object. Without these a service page read
+          as a different, cheaper website than the homepage — which is the single
+          thing that most made the whole build feel like a veneer. */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+        <Marginalia count={9} seed={7} exclude={{ top: 8, left: 2, right: 74, bottom: 94 }} />
+        <div className="cut-out-drift absolute right-[4%] top-[14%] hidden w-24 rotate-6 lg:block xl:w-32">
+          <CutOut
+            src={ASSETS["cut-rubber-stamp"].src}
+            alt=""
+            width={ASSETS["cut-rubber-stamp"].width}
+            height={ASSETS["cut-rubber-stamp"].height}
+          />
+        </div>
+      </div>
+
+      <div className="relative z-10 mx-auto grid max-w-7xl gap-8 px-4 py-16 sm:px-6 lg:grid-cols-[minmax(0,1fr)_200px] lg:items-center lg:py-24">
         <div>
           <p className="font-label text-xs uppercase tracking-[0.14em] text-seal">
             {category}
           </p>
-          <h1 id="service-hero-title" className="mt-3 font-display text-h1 text-ink">
+          <h1 id="service-hero-title" className="mt-3 max-w-[15ch] font-display text-h1 leading-[0.9] tracking-[-0.02em] text-seal lg:text-display lg:leading-[0.86]">
             {service.name}
           </h1>
-          <p className="mt-4 max-w-2xl font-body text-body leading-relaxed text-ink-soft">
+          <p className="mt-6 max-w-2xl font-body text-body italic leading-relaxed text-ink">
             {service.oneLiner}
           </p>
 

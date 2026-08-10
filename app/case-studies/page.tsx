@@ -47,7 +47,7 @@ export default function CaseStudiesIndex() {
           <p className="font-label text-xs uppercase tracking-[0.14em] text-seal">
             Case studies
           </p>
-          <h1 className="mt-3 font-display text-display text-ink">
+          <h1 className="mt-3 max-w-[16ch] font-display text-display leading-[0.88] tracking-[-0.03em] text-seal">
             How the work actually went.
           </h1>
           <p className="mt-4 font-body text-body leading-relaxed text-ink-soft">

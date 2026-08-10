@@ -81,8 +81,18 @@ export default function Marginalia({ count, seed, exclude, className = "" }: Mar
       const dyBottom = zone.bottom - top;
       const minDx = Math.min(dxLeft, dxRight);
       const minDy = Math.min(dyTop, dyBottom);
+      /*
+       * If the keep-out zone reaches the left edge there IS no room on that
+       * side — pushing "out" to the left just drops the note back on top of the
+       * copy, which is exactly what was happening on the service pages. When
+       * the zone starts within 8% of the edge, always push right.
+       */
+      const leftHasRoom = zone.left > 8;
       if (minDx <= minDy) {
-        left = dxLeft < dxRight ? Math.max(2, zone.left - 3) : Math.min(94, zone.right + 3);
+        left =
+          leftHasRoom && dxLeft < dxRight
+            ? Math.max(2, zone.left - 3)
+            : Math.min(94, zone.right + 3);
       } else {
         top = dyTop < dyBottom ? Math.max(3, zone.top - 4) : Math.min(94, zone.bottom + 4);
       }
