@@ -62,7 +62,7 @@ export default function PrincipalPage() {
       </div>
 
       <div className="mx-auto max-w-7xl px-4 pb-20 sm:px-6">
-        <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,320px)]">
+        <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,400px)]">
           <div>
             <p className="font-label text-xs uppercase tracking-[0.14em] text-seal">
               The principal
@@ -152,9 +152,9 @@ export default function PrincipalPage() {
                 <Image
                   src={photo}
                   alt={`Photograph of ${name ?? "the principal"}`}
-                  width={320}
-                  height={400}
-                  sizes="(max-width: 1024px) 100vw, 320px"
+                  width={400}
+                  height={500}
+                  sizes="(max-width: 1024px) 100vw, 400px"
                   className="aspect-[4/5] w-full object-cover"
                 />
               </div>

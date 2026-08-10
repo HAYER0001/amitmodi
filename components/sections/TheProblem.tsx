@@ -79,7 +79,7 @@ export default function TheProblem() {
           object in the whole set for a section about what non-compliance costs.
           Kept to the right so it never crowds the copy. */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        <div className="cut-out-drift absolute right-[5%] top-[8%] hidden w-28 rotate-6 md:block lg:w-40">
+        <div className="cut-out-drift absolute right-[5%] top-[8%] hidden w-40 rotate-6 md:block lg:w-56">
           <CutOut
             src={ASSETS["cut-rupee-500"].src}
             alt=""
@@ -87,7 +87,7 @@ export default function TheProblem() {
             height={ASSETS["cut-rupee-500"].height}
           />
         </div>
-        <div className="cut-out-drift absolute bottom-[10%] right-[12%] hidden w-24 -rotate-12 lg:block">
+        <div className="cut-out-drift absolute bottom-[10%] right-[12%] hidden w-32 -rotate-12 lg:block lg:w-48">
           <CutOut
             src={ASSETS["cut-revenue-stamp"].src}
             alt=""
@@ -109,7 +109,7 @@ export default function TheProblem() {
           </h2>
         </ScrollScale>
 
-        <div className="mt-12 grid gap-10 lg:grid-cols-[minmax(0,1fr)_240px] lg:items-start">
+        <div className="mt-12 grid gap-10 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-center">
           <Reveal className="max-w-2xl">
             <p className="font-body text-body leading-relaxed text-ink">
               Most businesses treat compliance as a reaction. A deadline
@@ -125,7 +125,7 @@ export default function TheProblem() {
             width={worried.width}
             height={worried.height}
             rotate={-3}
-            className="mx-auto w-32 lg:w-44"
+            className="mx-auto w-48 drop-shadow-md lg:w-64"
           />
         </div>
 

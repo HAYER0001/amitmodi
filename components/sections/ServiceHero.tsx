@@ -64,7 +64,7 @@ export default function ServiceHero({ service }: { service: Service }) {
         </div>
       </div>
 
-      <div className="relative z-10 mx-auto grid max-w-7xl gap-8 px-4 py-16 sm:px-6 lg:grid-cols-[minmax(0,1fr)_200px] lg:items-center lg:py-24">
+      <div className="relative z-10 mx-auto grid max-w-7xl gap-12 px-4 py-16 sm:px-6 lg:grid-cols-[minmax(0,1fr)_280px] xl:grid-cols-[minmax(0,1fr)_320px] lg:items-center lg:py-24">
         <div>
           <p className="font-label text-xs uppercase tracking-[0.14em] text-seal">
             {category}
@@ -105,7 +105,7 @@ export default function ServiceHero({ service }: { service: Service }) {
           width={figure.width}
           height={figure.height}
           rotate={-2}
-          className="mx-auto w-28 lg:w-40"
+          className="mx-auto w-48 drop-shadow-md lg:w-64 xl:w-72"
         />
       </div>
     </section>
