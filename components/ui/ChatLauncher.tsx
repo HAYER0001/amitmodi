@@ -1,25 +1,25 @@
 "use client";
 
 /*
- * ChatLauncher.tsx — the brass knight IS the chat button.
+ * ChatLauncher.tsx — the brass knight IS the chat button, in 3D, end to end.
  *
  * One instance of the 3D knight, mounted once on every page, starts in the
  * exact hero position (dead centre, overlapping the headline). The moment the
- * visitor scrolls it detaches: it rotates on all three axes, shrinks, and
- * settles into the bottom-right corner where it stays as the chat stamp.
- * Clicking it — at any size, in the hero or in the corner — opens the tax
- * assistant (ChatPanel → /api/ask).
+ * visitor scrolls it detaches: it rotates on all three axes — a full 3D turn,
+ * not a 2D slide — shrinks, and settles into the bottom-right corner where it
+ * stays, still 3D and still slowly turning, as the chat stamp. Clicking it at
+ * any size opens the tax assistant (ChatPanel → /api/ask).
  *
- * Motion rules: transform/opacity only, the project easing, and the corner
- * stamp (no knight, no travel) under prefers-reduced-motion. The hero no
- * longer renders its own knight — there is exactly one instance.
+ * The canvas never unmounts and nothing replaces the knight: no fallback
+ * image, no 2D stamp, no badge button. Under prefers-reduced-motion the same
+ * knight sits static in the corner — motion degrades, the object does not.
+ * The hero no longer renders its own knight — there is exactly one instance.
  */
 
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useReducedMotion } from "@/lib/motion";
-import { ASSETS } from "@/data/assets";
 import ChatPanel from "./ChatPanel";
 
 /* three.js stays out of the first-paint bundle: this is the one dynamic,
@@ -58,44 +58,40 @@ export default function ChatLauncher() {
   const corner = useCornerOffset();
 
   /* Progress 0 → 0.12 of the page carries the knight from the centre of the
-     hero to the corner. Past that point it stays put — nothing loops. */
+     hero to the corner. Repeated rotation on ALL axes — rotateY makes a full
+     turn — is the same journey in 3D, never a flattened substitute. Past
+     0.12 it stays put; only the idle spin continues inside the canvas. */
   const { scrollYProgress } = useScroll();
   const x = useTransform(scrollYProgress, [0, 0.12], [0, corner.x]);
   const y = useTransform(scrollYProgress, [0, 0.12], [0, corner.y]);
   const scale = useTransform(scrollYProgress, [0, 0.12], [1, 0.2]);
   const rotateX = useTransform(scrollYProgress, [0, 0.12], [0, -35]);
-  const rotateY = useTransform(scrollYProgress, [0, 0.12], [0, 200]);
+  const rotateY = useTransform(scrollYProgress, [0, 0.12], [0, 360]);
   const rotateZ = useTransform(scrollYProgress, [0, 0.12], [0, -18]);
-  const badgeOpacity = useTransform(scrollYProgress, [0.07, 0.12], [0, 1]);
 
-  if (reduced) {
-    /* Reduced motion: no knight, no travel — just the corner stamp. */
-    return (
-      <>
-        <button
-          type="button"
-          onClick={() => setOpen(true)}
-          aria-label="Ask the tax assistant"
-          className="fixed bottom-24 right-4 z-40 inline-flex h-14 w-14 items-center justify-center rounded-full bg-seal p-3 text-paper shadow-cut transition-colors hover:bg-seal-deep lg:bottom-5"
-        >
-          <ChatGlyph />
-        </button>
-        <ChatPanel open={open} onClose={() => setOpen(false)} />
-      </>
-    );
-  }
+  /* One render path for everyone. Reduced motion keeps the exact same knight
+     and the exact same resting spot — it simply starts there, without the
+     travel. Numbers substitute the motion values; hooks stay unconditional. */
+  const staticStyle = {
+    x: corner.x,
+    y: corner.y,
+    scale: 0.2,
+    rotateX: -35,
+    rotateY: 360,
+    rotateZ: -18,
+  };
 
   return (
     <>
       <div className="pointer-events-none fixed inset-0 z-40">
         <motion.div
           style={{
-            x,
-            y,
-            scale,
-            rotateX,
-            rotateY,
-            rotateZ,
+            x: reduced ? staticStyle.x : x,
+            y: reduced ? staticStyle.y : y,
+            scale: reduced ? staticStyle.scale : scale,
+            rotateX: reduced ? staticStyle.rotateX : rotateX,
+            rotateY: reduced ? staticStyle.rotateY : rotateY,
+            rotateZ: reduced ? staticStyle.rotateZ : rotateZ,
             transformOrigin: "center bottom",
             transformPerspective: 1000,
           }}
@@ -109,45 +105,18 @@ export default function ChatLauncher() {
             className="block h-full w-full"
             style={{ transform: "translate(-50%, -56%)" }}
           >
+            {/* No fallbackImage: Model3D renders its shimmer while the .glb
+            loads — the seal never appears here and nothing ever takes the
+            knight's place. */}
             <Knight
               src="/models/knight-brass.glb"
-              fallbackImage={ASSETS["cut-brass-seal"].src}
               rotationSpeed={0.12}
               className="relative h-full w-full"
             />
           </button>
         </motion.div>
-
-        {/* Chat badge — visible only once the knight has shrunk to the corner,
-        where the small brass figure alone does not read as chat. */}
-        <motion.div
-          style={{ opacity: badgeOpacity }}
-          aria-hidden="true"
-          className="pointer-events-none fixed bottom-9 right-8 grid h-12 w-12 place-items-center rounded-full bg-seal text-paper shadow-cut lg:bottom-6"
-        >
-          <ChatGlyph />
-        </motion.div>
       </div>
       <ChatPanel open={open} onClose={() => setOpen(false)} />
     </>
-  );
-}
-
-function ChatGlyph() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="h-6 w-6"
-      aria-hidden="true"
-    >
-      <path d="M21 12a8 8 0 0 1-8 8H4l2.3-3.5A8 8 0 1 1 21 12Z" />
-      <path d="M8.5 10.5h7" />
-      <path d="M8.5 13.5h4.5" />
-    </svg>
   );
 }

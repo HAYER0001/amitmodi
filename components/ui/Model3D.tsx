@@ -25,8 +25,9 @@ import * as THREE from "three";
 type Model3DProps = {
   /** Path to a self-hosted, Meshopt-compressed .glb. */
   src: string;
-  /** Static PNG shown while loading / when the model is unavailable. */
-  fallbackImage: string;
+  /** Static PNG shown while loading / when the model is unavailable. Omit to
+      show the placeholder shimmer instead — never a stand-in object. */
+  fallbackImage?: string;
   /** Radians per second of idle rotation. 0 for a static exhibit. */
   rotationSpeed?: number;
   className?: string;
@@ -255,15 +256,28 @@ export default function Model3D({
   }, [gate]);
 
   const showModel = gate === "ok" && inView;
-  const fallback = () => (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img
-      src={fallbackImage}
-      alt=""
-      aria-hidden
-      className="h-full w-full object-contain"
+
+  /* Never substitute a different object while the model loads or when the
+     device gate decides against WebGL: an empty reserved box (or shimmer)
+     keeps the knight the only thing that lives in this space. */
+  const shimmer = () => (
+    <div
+      aria-hidden="true"
+      className="h-full w-full animate-pulse rounded-full bg-[radial-gradient(circle_at_50%_45%,var(--rule),transparent_62%)] opacity-50"
     />
   );
+  const fallback = () =>
+    fallbackImage ? (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={fallbackImage}
+        alt=""
+        aria-hidden
+        className="h-full w-full object-contain"
+      />
+    ) : (
+      shimmer()
+    );
 
   return (
     <div ref={container} className={className ?? "relative h-full w-full"}>
