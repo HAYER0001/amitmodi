@@ -10,6 +10,7 @@ import "./globals.css";
 import Header from "@/components/sections/Header";
 import Footer from "@/components/sections/Footer";
 import ScrollRail from "@/components/ui/ScrollRail";
+import CursorField from "@/components/ui/CursorField";
 import SmoothScroll from "@/components/ui/SmoothScroll";
 import { WebSiteSchema, OrganizationSchema, LocalBusinessSchema } from "@/components/seo/SchemaEmitters";
 import { Analytics } from "@vercel/analytics/next";
@@ -108,6 +109,7 @@ export default function RootLayout({
             <Footer />
           </SmoothScroll>
           <ScrollRail />
+          <CursorField />
         </ThemeProvider>
         <Analytics />
       </body>
