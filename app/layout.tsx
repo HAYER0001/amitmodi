@@ -12,6 +12,7 @@ import Footer from "@/components/sections/Footer";
 import ScrollRail from "@/components/ui/ScrollRail";
 import CursorField from "@/components/ui/CursorField";
 import SmoothScroll from "@/components/ui/SmoothScroll";
+import ChatLauncher from "@/components/ui/ChatLauncher";
 import { WebSiteSchema, OrganizationSchema, LocalBusinessSchema } from "@/components/seo/SchemaEmitters";
 import { Analytics } from "@vercel/analytics/next";
 
@@ -110,6 +111,7 @@ export default function RootLayout({
           </SmoothScroll>
           <ScrollRail />
           <CursorField />
+          <ChatLauncher />
         </ThemeProvider>
         <Analytics />
       </body>
