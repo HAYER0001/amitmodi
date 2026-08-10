@@ -1,6 +1,8 @@
 import type { CSSProperties } from "react";
 import Link from "next/link";
 import HorizontalScroll from "@/components/ui/HorizontalScroll";
+import Image from "next/image";
+import { ASSETS } from "@/data/assets";
 import { SERVICES } from "@/data/services";
 
 /*
@@ -34,6 +36,7 @@ const WHO_FOR: Record<string, string> = {
 };
 
 function ServicePanel({
+  spread,
   index,
   name,
   shortName,
@@ -49,6 +52,7 @@ function ServicePanel({
   oneLiner: string;
   statute: string;
   whoFor: string;
+  spread: string;
 }) {
   const marginal = { "--rot": "3deg" } as CSSProperties;
   return (
@@ -81,6 +85,22 @@ function ServicePanel({
         </span>
       </p>
 
+      {/* The printed spread — the panel's lower half. Decorative here: the
+          service is already named in the heading above, so a screen reader
+          reading the image too would just repeat it. */}
+      {ASSETS[spread as keyof typeof ASSETS] && (
+        <div className="relative mt-8 hidden overflow-hidden rounded-sm border border-rule/70 lg:block lg:h-[38%]">
+          <Image
+            src={ASSETS[spread as keyof typeof ASSETS].src}
+            alt=""
+            aria-hidden="true"
+            fill
+            sizes="(min-width: 1024px) 44vw, 82vw"
+            className="object-cover object-top opacity-90"
+          />
+        </div>
+      )}
+
       <Link
         href={`/services/${slug}`}
         className="mt-auto inline-flex min-h-11 items-center gap-2 pt-8 font-label text-sm uppercase tracking-[0.14em] text-seal transition-colors hover:text-seal-deep"
@@ -93,6 +113,20 @@ function ServicePanel({
     </article>
   );
 }
+
+/*
+ * The six document spreads, one per panel (cycling). These were generated for
+ * exactly this section — the reference's horizontal book-spread gallery — and
+ * were sitting unused on disk while the panels rendered as plain text cards.
+ */
+const SPREADS = [
+  "spread-gst-flow",
+  "spread-filing-calendar",
+  "spread-itr-forms",
+  "spread-penalty-table",
+  "spread-appeal-process",
+  "spread-iec-checklist",
+] as const;
 
 export default function TheServices() {
   return (
@@ -126,6 +160,7 @@ export default function TheServices() {
             oneLiner={service.oneLiner}
             statute={service.statuteRefs[0] ?? "Sec 1"}
             whoFor={WHO_FOR[service.slug] ?? "Businesses facing this compliance."}
+            spread={SPREADS[index % SPREADS.length]}
           />
         ))}
       </HorizontalScroll>

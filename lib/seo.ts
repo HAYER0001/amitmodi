@@ -18,7 +18,17 @@
 import type { Metadata } from "next";
 
 export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.complianceincheck.com";
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://amitmodi-one.vercel.app";
+/* The fallback is the CURRENT live host, not an aspirational one. It was
+   pointing at complianceincheck.com — the design codename — so every canonical,
+   every sitemap entry and every share card advertised a domain the practice does
+   not own. Set NEXT_PUBLIC_SITE_URL in Vercel to amitmodi.co.in the day the
+   domain resolves; until then this keeps the URLs honest. */
+
+/* The generated share card. Without this, every link shared to WhatsApp —
+   which is how an Indian small-business client actually forwards a
+   recommendation — renders as a bare grey rectangle. */
+export const DEFAULT_OG_IMAGE = "/images/og-default.jpg";
 
 export const SITE_NAME = "Amit Modi & Co.";
 
@@ -32,7 +42,6 @@ export const DESCRIPTION_LIMIT = 155;
  * The generated default social card (app/opengraph-image.tsx). Pages with a
  * real cover pass their own `image` instead.
  */
-export const DEFAULT_OG_IMAGE = "/opengraph-image";
 
 /* ---- fitting helpers --------------------------------------------------- */
 

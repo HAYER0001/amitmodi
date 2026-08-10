@@ -35,6 +35,7 @@ export default function Header() {
   menuOpenRef.current = menuOpen;
   const prevY = useRef(0);
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const menuWrapRef = useRef<HTMLLIElement>(null);
   const itemRefs = useRef<(HTMLAnchorElement | null)[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -66,7 +67,15 @@ export default function Header() {
     if (!servicesOpen) return;
     const onPointer = (e: PointerEvent) => {
       const t = e.target as Node;
-      if (triggerRef.current?.contains(t)) return;
+      /*
+       * Guard the WHOLE dropdown, not just the trigger.
+       *
+       * pointerdown fires before click. Guarding only the trigger meant that
+       * pressing a service link inside the menu ran this handler, closed the
+       * menu, unmounted the link — and the click then landed on nothing. The
+       * dropdown looked fine and simply never navigated.
+       */
+      if (menuWrapRef.current?.contains(t)) return;
       setServicesOpen(false);
     };
     document.addEventListener("pointerdown", onPointer);
@@ -168,7 +177,7 @@ export default function Header() {
                     (c) => pathname === c.href,
                   );
                   return (
-                    <li key={item.label} className="relative">
+                    <li key={item.label} ref={menuWrapRef} className="relative">
                       <button
                         ref={triggerRef}
                         type="button"
@@ -208,7 +217,10 @@ export default function Header() {
                           aria-label="Services"
                           onKeyDown={onMenuKeyDown}
                           onBlur={(e) => {
-                            if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+                            /* Only close when focus leaves the entire dropdown,
+                               trigger included — otherwise tabbing from the
+                               trigger into the first item closed the menu. */
+                            if (!menuWrapRef.current?.contains(e.relatedTarget as Node)) {
                               setServicesOpen(false);
                             }
                           }}
@@ -226,6 +238,7 @@ export default function Header() {
                                   pathname === child.href ? "page" : undefined
                                 }
                                 onMouseEnter={() => setActiveIndex(index)}
+                                onClick={() => setServicesOpen(false)}
                                 className={cn(
                                   "block min-h-11 rounded-md px-3 py-2.5 text-sm text-ink transition-colors hover:bg-paper-deep hover:text-seal",
                                   pathname === child.href &&

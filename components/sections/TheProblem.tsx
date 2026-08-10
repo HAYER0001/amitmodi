@@ -74,7 +74,30 @@ export default function TheProblem() {
       aria-labelledby="problem-title"
       className="relative overflow-hidden bg-paper-deep"
     >
-      <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:py-28">
+      {/* Collage. These assets were generated for the site and were sitting
+          unused on disk — the rupee note especially, which is the most on-theme
+          object in the whole set for a section about what non-compliance costs.
+          Kept to the right so it never crowds the copy. */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+        <div className="cut-out-drift absolute right-[5%] top-[8%] hidden w-28 rotate-6 md:block lg:w-40">
+          <CutOut
+            src={ASSETS["cut-rupee-500"].src}
+            alt=""
+            width={ASSETS["cut-rupee-500"].width}
+            height={ASSETS["cut-rupee-500"].height}
+          />
+        </div>
+        <div className="cut-out-drift absolute bottom-[10%] right-[12%] hidden w-24 -rotate-12 lg:block">
+          <CutOut
+            src={ASSETS["cut-revenue-stamp"].src}
+            alt=""
+            width={ASSETS["cut-revenue-stamp"].width}
+            height={ASSETS["cut-revenue-stamp"].height}
+          />
+        </div>
+      </div>
+
+      <div className="relative z-10 mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:py-28">
         <ScrollScale className="max-w-4xl">
           <h2
             id="problem-title"

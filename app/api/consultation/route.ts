@@ -18,6 +18,7 @@
  * to the client.
  */
 import { NextRequest, NextResponse } from "next/server";
+import { appendLeadToSheet } from "@/lib/sheets";
 import { Resend } from "resend";
 import { consultationSchema, type ConsultationOutput } from "@/lib/schemas";
 import { SERVICES } from "@/data/services";
@@ -285,6 +286,25 @@ export async function POST(request: NextRequest) {
       },
     );
   }
+
+  /*
+   * Mirror the lead into the Google Sheet.
+   *
+   * Deliberately AFTER the email and deliberately awaited-but-ignored: the
+   * practice's inbox is the product, the spreadsheet is a convenience. If the
+   * sheet is down the enquiry must still have been sent and the visitor must
+   * still see success. appendLeadToSheet never throws.
+   */
+  await appendLeadToSheet({
+    name: input.name,
+    phone: input.phone,
+    email: input.email,
+    service: input.service,
+    situation: input.situation,
+    urgency: input.urgency,
+    message: input.message,
+    source: request.headers.get("referer") ?? "direct",
+  });
 
   if (isForm) {
     return NextResponse.redirect(

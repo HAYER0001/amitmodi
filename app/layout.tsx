@@ -14,7 +14,7 @@ import SmoothScroll from "@/components/ui/SmoothScroll";
 import { WebSiteSchema, OrganizationSchema, LocalBusinessSchema } from "@/components/seo/SchemaEmitters";
 import { Analytics } from "@vercel/analytics/next";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://amitmodi.com";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://amitmodi-one.vercel.app";
 const display = Instrument_Serif({
   variable: "--font-display",
   display: "swap",
