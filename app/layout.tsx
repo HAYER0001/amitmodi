@@ -12,6 +12,7 @@ import Footer from "@/components/sections/Footer";
 import ScrollRail from "@/components/ui/ScrollRail";
 import SmoothScroll from "@/components/ui/SmoothScroll";
 import { WebSiteSchema, OrganizationSchema, LocalBusinessSchema } from "@/components/seo/SchemaEmitters";
+import { Analytics } from "@vercel/analytics/next";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://amitmodi.com";
 const display = Instrument_Serif({
@@ -78,7 +79,19 @@ export default function RootLayout({
         >
           Skip to content
         </a>
-        <ThemeProvider attribute="data-theme" defaultTheme="light">
+        {/* enableSystem makes next-themes read
+            window.matchMedia('(prefers-color-scheme: dark)') and follow the
+            operating system until the visitor explicitly picks a theme. Without
+            it, someone whose phone has been in dark mode all evening gets a
+            full-brightness page — and defaultTheme="light" meant that was
+            everyone. defaultTheme="system" is what makes the toggle a
+            *preference* rather than the only way to get dark mode. */}
+        <ThemeProvider
+          attribute="data-theme"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange={false}
+        >
           <SmoothScroll>
             <Header />
             <main id="main">{children}</main>
@@ -86,6 +99,7 @@ export default function RootLayout({
           </SmoothScroll>
           <ScrollRail />
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );

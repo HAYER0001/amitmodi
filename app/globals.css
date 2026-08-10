@@ -266,6 +266,58 @@ body {
 }
 
 /*
+ * Theme fade.
+ *
+ * Flipping data-theme repaints every surface at once. Without a transition that
+ * lands as a hard flash — the harshest single moment on the site, and the one
+ * people judge a theme toggle by.
+ *
+ * Scoped to the four properties that actually change, never `all`: transitioning
+ * `all` would also animate transforms and opacity, which fights every Framer
+ * Motion animation on the page and makes the ambient drift stutter.
+ *
+ * Excluded from anything already animating, and skipped entirely under
+ * reduced-motion.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  body,
+  header,
+  footer,
+  section,
+  article,
+  aside,
+  input,
+  select,
+  textarea,
+  button,
+  .paper,
+  .ledger-grid {
+    transition:
+      background-color 0.3s ease,
+      border-color 0.3s ease,
+      color 0.3s ease,
+      fill 0.3s ease;
+  }
+}
+
+/*
+ * Form focus.
+ *
+ * A visible focus ring is not decoration — it is the only way a keyboard user
+ * knows where they are, and on a form asking for a phone number and a tax
+ * problem that matters more than anywhere else on the site. Two rings: the seal
+ * border for colour, plus an offset halo so it stays visible against both the
+ * paper and paper-deep surfaces.
+ */
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  border-color: var(--seal);
+  outline: 2px solid color-mix(in srgb, var(--seal) 45%, transparent);
+  outline-offset: 2px;
+}
+
+/*
  * Touch target floor — WCAG 2.5.8 (Target Size, Minimum) asks for 24px; the
  * platform guidance from both Apple and Google is 44–48px, and that is the
  * number that actually matters for someone tapping a form on a phone while

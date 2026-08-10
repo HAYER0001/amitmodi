@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import { HERO_VARIANTS, CORNER_LABELS } from "@/data/hero-copy";
 import { ASSETS } from "@/data/assets";
 import Marginalia from "@/components/ui/Marginalia";
@@ -63,6 +63,18 @@ function formatIndianDate(d: Date): string {
 }
 
 export default function Hero() {
+  const reduced = useReducedMotion();
+  const { scrollYProgress } = useScroll();
+
+  /* Parallax: three depth planes moving at different rates as the hero leaves.
+     The collage drifts fastest (it is "nearest"), the knight slower, the
+     headline slowest of all — the same cue the eye uses to read depth out of a
+     moving scene. Transform only, so this costs nothing on the main thread.
+     Reduced motion collapses every plane to 0. */
+  const collageY = useTransform(scrollYProgress, [0, 0.25], [0, reduced ? 0 : -90]);
+  const knightY = useTransform(scrollYProgress, [0, 0.25], [0, reduced ? 0 : -50]);
+  const headlineY = useTransform(scrollYProgress, [0, 0.25], [0, reduced ? 0 : -22]);
+
   const [now, setNow] = useState<string | null>(null);
   useEffect(() => {
     setNow(formatIndianDate(new Date()));
@@ -79,7 +91,7 @@ export default function Hero() {
           Dimensions come from data/assets.ts, which mirrors the real files on
           disk. Hardcoding them here squashes every image the moment an asset is
           regenerated at a different size. */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+      <motion.div style={{ y: collageY }} aria-hidden="true" className="pointer-events-none absolute inset-0">
         {/* Dense statute marginalia, scattered across the WHOLE frame including
             behind the headline. In the reference the chess notation is the
             texture of the page, not a decoration parked in the margins — there
@@ -115,7 +127,7 @@ export default function Hero() {
             height={ASSETS["cut-paperclip"].height}
           />
         </div>
-      </div>
+      </motion.div>
 
       {/* The knight sits ABOVE the headline in z-order and overlaps its right
           end, exactly as the chess piece breaks "MONEY" in the reference.
@@ -125,7 +137,8 @@ export default function Hero() {
           IntersectionObserver inside Model3D was observing a zero-height
           element, never fired, and the canvas never mounted at all. The model
           was correct the whole time; the box around it had no height. */}
-      <div
+      <motion.div
+        style={{ y: knightY }}
         aria-hidden="true"
         className="pointer-events-none absolute right-[4%] top-[44%] z-20 hidden aspect-square w-[30vw] max-w-[440px] -translate-y-1/2 md:block"
       >
@@ -135,7 +148,7 @@ export default function Hero() {
           rotationSpeed={0.12}
           className="relative h-full w-full"
         />
-      </div>
+      </motion.div>
 
       {/* A single small ink figure standing at the headline's baseline — the
           reference puts a tiny observer against the huge type, and that contrast
@@ -167,7 +180,7 @@ export default function Hero() {
         </p>
       </div>
 
-      <div className="relative z-10 flex flex-1 flex-col items-start justify-center px-5 sm:px-8">
+      <motion.div style={{ y: headlineY }} className="relative z-10 flex flex-1 flex-col items-start justify-center px-5 sm:px-8">
         {/* max-w in ch, not px — the headline must break to two lines and fill
             the measure at every width. Capping it narrower left the reference's
             defining move (type that fills the screen) on the table. */}
@@ -193,7 +206,7 @@ export default function Hero() {
             {SELECTED.ctaSecondary}
           </Link>
         </div>
-      </div>
+      </motion.div>
 
       {/* lower band: scroll cue + bottom corner labels */}
       <div className="relative z-10 flex items-end justify-between px-5 pb-6 sm:px-8">
