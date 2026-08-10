@@ -48,6 +48,11 @@ const Model3D = dynamic(() => import("@/components/ui/Model3D"), {
 
 const SELECTED = HERO_VARIANTS.find((v) => v.selected) ?? HERO_VARIANTS[0];
 
+/* The small centred caption above the headline — the reference's "The Invisible
+   Rules of Wealth". It states the subject before the headline states the claim,
+   which is what lets the headline be short enough to fill the screen. */
+const HERO_EYEBROW = "The invisible rules of Indian tax compliance";
+
 function formatIndianDate(d: Date): string {
   const date = d.toLocaleDateString("en-IN", {
     day: "2-digit",
@@ -97,13 +102,13 @@ export default function Hero() {
             texture of the page, not a decoration parked in the margins — there
             are a dozen-plus notes and they read as someone's working notes on
             the position. Sparse marginalia just look like stray debris. */}
-        <Marginalia count={18} seed={1} />
+        <Marginalia count={18} seed={1} exclude={{ top: 20, left: 12, right: 88, bottom: 82 }} />
 
         {/* The collage OVERLAPS the type. This is the single biggest difference
             between the reference and a template: the chess piece sits inside the
             word, breaking the letterforms, so the object and the type occupy one
             plane instead of politely sharing a screen. */}
-        <div className="cut-out-drift absolute left-[6%] top-[12%] w-24 -rotate-6 sm:w-32 md:w-40">
+        <div className="cut-out-drift absolute left-[3%] top-[14%] w-20 -rotate-6 sm:w-28 md:w-36">
           <CutOut
             src={ASSETS["cut-file-folder"].src}
             alt=""
@@ -111,7 +116,7 @@ export default function Hero() {
             height={ASSETS["cut-file-folder"].height}
           />
         </div>
-        <div className="cut-out-drift absolute bottom-[12%] left-[4%] w-20 rotate-6 sm:w-28 md:w-32">
+        <div className="cut-out-drift absolute bottom-[10%] left-[6%] w-20 rotate-6 sm:w-28 md:w-32">
           <CutOut
             src={ASSETS["cut-coin-stack"].src}
             alt=""
@@ -119,7 +124,7 @@ export default function Hero() {
             height={ASSETS["cut-coin-stack"].height}
           />
         </div>
-        <div className="cut-out-drift absolute right-[8%] top-[16%] hidden w-24 -rotate-12 lg:block">
+        <div className="cut-out-drift absolute right-[5%] top-[18%] hidden w-24 -rotate-12 lg:block">
           <CutOut
             src={ASSETS["cut-paperclip"].src}
             alt=""
@@ -140,7 +145,7 @@ export default function Hero() {
       <motion.div
         style={{ y: knightY }}
         aria-hidden="true"
-        className="pointer-events-none absolute right-[4%] top-[44%] z-20 hidden aspect-square w-[30vw] max-w-[440px] -translate-y-1/2 md:block"
+        className="pointer-events-none absolute left-1/2 top-1/2 z-20 aspect-square w-[56vw] max-w-[540px] -translate-x-1/2 -translate-y-[56%] sm:w-[42vw] lg:w-[34vw]"
       >
         <Model3D
           src="/models/knight-brass.glb"
@@ -155,7 +160,7 @@ export default function Hero() {
           is what gives the composition its scale. */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute bottom-[19%] left-[46%] z-20 hidden w-14 lg:block xl:w-16"
+        className="pointer-events-none absolute bottom-[24%] left-[22%] z-30 hidden w-12 lg:block xl:w-14"
       >
         <CutOut
           src={ASSETS["fig-worried"].src}
@@ -180,28 +185,51 @@ export default function Hero() {
         </p>
       </div>
 
-      <motion.div style={{ y: headlineY }} className="relative z-10 flex flex-1 flex-col items-start justify-center px-5 sm:px-8">
-        {/* max-w in ch, not px — the headline must break to two lines and fill
-            the measure at every width. Capping it narrower left the reference's
-            defining move (type that fills the screen) on the table. */}
-        <h1 className="max-w-[13ch] font-display text-display leading-[0.88] tracking-[-0.03em] text-seal">
+      {/*
+        POSTER COMPOSITION — not a landing page.
+
+        The reference is centred and symmetrical: a small caption, then type
+        filling 95% of the width, then a small italic byline. The object sits
+        dead centre and cuts THROUGH the letterforms. Left-aligning the headline
+        and parking the object beside it is what made this read as a template
+        while the reference reads as a cover.
+
+        Order matters here: caption → headline → byline, all centred, with the
+        knight absolutely positioned over the middle so it splits the two lines.
+      */}
+      <motion.div
+        style={{ y: headlineY }}
+        className="relative z-10 flex flex-1 flex-col items-center justify-center px-5 text-center sm:px-8"
+      >
+        <p className="font-body text-sm italic text-ink-soft sm:text-base">
+          {HERO_EYEBROW}
+        </p>
+
+        {/* The LCP element. Server-rendered text, never inside an opacity-0
+            wrapper. leading-[0.82] pulls the two lines tight enough that the
+            knight can straddle them the way the piece straddles MONEY/CHECK. */}
+        <h1 className="mt-3 max-w-[14ch] font-display text-display leading-[0.82] tracking-[-0.035em] text-seal sm:mt-4">
           {SELECTED.headline}
         </h1>
-        <p className="mt-6 max-w-md font-body text-body leading-relaxed text-ink">
+
+        <p className="relative z-30 mt-10 max-w-[46ch] font-body text-sm italic text-ink sm:mt-14 sm:text-base">
           {SELECTED.subhead}
         </p>
-        <div className="mt-10 flex flex-wrap items-center gap-6">
+
+        {/* Understated, like the reference's underlined "Buy it now!". A filled
+            pill here would drag the eye off the type and reads as SaaS. */}
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 sm:mt-10">
           <Magnetic>
             <Link
               href="/contact"
-              className="inline-flex min-h-11 items-center rounded-full bg-seal px-6 font-label text-xs uppercase tracking-[0.1em] text-paper transition-colors hover:bg-seal-deep"
+              className="inline-flex min-h-11 items-center font-label text-xs uppercase tracking-[0.14em] text-ink underline decoration-seal decoration-2 underline-offset-[6px] transition-colors hover:text-seal"
             >
               {SELECTED.ctaPrimary}
             </Link>
           </Magnetic>
           <Link
             href="/services"
-            className="inline-flex min-h-11 items-center font-label text-xs uppercase tracking-[0.1em] text-ink underline decoration-seal/40 underline-offset-8 transition-colors hover:text-seal"
+            className="inline-flex min-h-11 items-center font-label text-xs uppercase tracking-[0.14em] text-ink-soft underline decoration-rule underline-offset-[6px] transition-colors hover:text-seal"
           >
             {SELECTED.ctaSecondary}
           </Link>
