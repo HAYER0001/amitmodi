@@ -65,7 +65,7 @@ export default function ToolsPage() {
   return (
     <>
       <div className="relative">
-      <PageAtmosphere density="utility" seed={11} object="cut-calculator" objectClassName="right-[4%] top-[6%] hidden w-24 rotate-6 lg:block xl:w-32" />
+      <PageAtmosphere density="utility" seed={11} object="cut-calculator" objectClassName="right-[4%] top-[6%] hidden w-28 rotate-6 lg:block xl:w-40" />
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6">
         <Breadcrumbs />
         <section className="py-10">

@@ -61,7 +61,7 @@ export default async function ContactPage({
   return (
     <>
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
-        <PageAtmosphere density="utility" seed={29} object="cut-rubber-stamp" objectClassName="right-[6%] top-[8%] hidden w-20 -rotate-6 lg:block xl:w-28" />
+        <PageAtmosphere density="utility" seed={29} object="cut-rubber-stamp" objectClassName="right-[6%] top-[8%] hidden w-24 -rotate-6 lg:block xl:w-36" />
         <Breadcrumbs />
         <section className="py-10">
           <p className="font-label text-xs uppercase tracking-[0.14em] text-seal">Contact</p>

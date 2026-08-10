@@ -29,7 +29,7 @@ export default function ClosingCTA() {
       {/* Low opacity: this sits on the seal fill, so it reads as texture
           rather than as an object competing with the closing line. */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-25">
-        <div className="cut-out-drift absolute bottom-[8%] right-[6%] hidden w-32 rotate-6 lg:block">
+        <div className="cut-out-drift absolute bottom-[8%] right-[6%] hidden w-40 rotate-6 lg:block">
           <CutOut
             src={ASSETS["cut-rupee-crumpled"].src}
             alt=""

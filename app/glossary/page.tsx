@@ -25,7 +25,7 @@ export default function GlossaryPage() {
   const terms = getPublishedTerms();
   return (
     <div className="relative bg-paper-deep">
-      <PageAtmosphere density="utility" seed={19} object="tex-ink-blot" objectClassName="right-[7%] top-[8%] hidden w-20 -rotate-3 lg:block xl:w-24" />
+      <PageAtmosphere density="utility" seed={19} object="tex-ink-blot" objectClassName="right-[7%] top-[8%] hidden w-24 -rotate-3 lg:block xl:w-28" />
 
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
         <Breadcrumbs />

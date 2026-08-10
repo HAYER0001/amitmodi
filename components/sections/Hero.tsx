@@ -91,7 +91,7 @@ export default function Hero() {
             between the reference and a template: the chess piece sits inside the
             word, breaking the letterforms, so the object and the type occupy one
             plane instead of politely sharing a screen. */}
-        <div className="cut-out-drift absolute left-[3%] top-[14%] w-20 -rotate-6 sm:w-28 md:w-36">
+        <div className="cut-out-drift absolute left-[3%] top-[14%] w-24 -rotate-6 sm:w-36 md:w-44">
           <CutOut
             src={ASSETS["cut-file-folder"].src}
             alt=""
@@ -99,7 +99,7 @@ export default function Hero() {
             height={ASSETS["cut-file-folder"].height}
           />
         </div>
-        <div className="cut-out-drift absolute bottom-[10%] left-[6%] w-20 rotate-6 sm:w-28 md:w-32">
+        <div className="cut-out-drift absolute bottom-[10%] left-[6%] w-24 rotate-6 sm:w-36 md:w-40">
           <CutOut
             src={ASSETS["cut-coin-stack"].src}
             alt=""
@@ -107,7 +107,7 @@ export default function Hero() {
             height={ASSETS["cut-coin-stack"].height}
           />
         </div>
-        <div className="cut-out-drift absolute right-[5%] top-[18%] hidden w-24 -rotate-12 lg:block">
+        <div className="cut-out-drift absolute right-[5%] top-[18%] hidden w-28 -rotate-12 lg:block">
           <CutOut
             src={ASSETS["cut-paperclip"].src}
             alt=""

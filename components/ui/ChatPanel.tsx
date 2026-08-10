@@ -138,7 +138,7 @@ export default function ChatPanel({
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 14, scale: 0.98 }}
           transition={{ duration: reduced ? 0 : DUR.fast, ease: EASE }}
-          className="fixed bottom-0 right-0 z-50 flex h-[min(72dvh,34rem)] w-full flex-col rounded-t-2xl border border-rule bg-paper shadow-cut sm:bottom-5 sm:right-4 sm:w-[24rem] sm:rounded-xl"
+          className="fixed bottom-0 right-0 z-50 flex h-[min(72dvh,34rem)] w-full flex-col rounded-t-2xl border border-rule bg-paper/70 shadow-cut backdrop-blur-xl sm:bottom-5 sm:right-4 sm:w-[24rem] sm:rounded-xl"
         >
           <header className="flex items-center justify-between gap-3 border-b border-rule px-4 py-3">
             <div className="min-w-0">
@@ -201,7 +201,7 @@ export default function ChatPanel({
               onKeyDown={onKeyDown}
               placeholder="Ask a tax question… (Enter to send)"
               aria-label="Your tax question"
-              className="max-h-28 min-h-11 flex-1 resize-none rounded-md border border-rule bg-paper-deep px-3 py-2.5 text-sm text-ink placeholder:text-ink-soft focus:outline-none focus:ring-2 focus:ring-seal"
+              className="max-h-28 min-h-11 flex-1 resize-none rounded-md border border-rule bg-paper-deep/80 px-3 py-2.5 text-sm text-ink backdrop-blur-sm placeholder:text-ink-soft focus:outline-none focus:ring-2 focus:ring-seal"
             />
             <button
               type="submit"

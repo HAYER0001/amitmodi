@@ -5,10 +5,13 @@
  *
  * One instance of the 3D knight, mounted once on every page, starts in the
  * exact hero position (dead centre, overlapping the headline). The moment the
- * visitor scrolls it detaches: it rotates on all three axes — a full 3D turn,
- * not a 2D slide — shrinks, and settles into the bottom-right corner where it
- * stays, still 3D and still slowly turning, as the chat stamp. Clicking it at
- * any size opens the tax assistant (ChatPanel → /api/ask).
+ * visitor scrolls it detaches and travels to the bottom-right corner while
+ * TURNING: the turn is driven 1:1 by scroll progress — one full rotation on
+ * the way to the corner, then it keeps advancing as the visitor keeps
+ * scrolling, so the knight is still visibly turning while docked on the right.
+ * Scrolling back turns it back. It is the chat button at any size: clicking
+ * it opens the tax assistant (ChatPanel → /api/ask), the knight steps aside
+ * while the chat is open, and returns the moment it closes.
  *
  * The canvas never unmounts and nothing replaces the knight: no fallback
  * image, no 2D stamp, no badge button. Under prefers-reduced-motion the same
@@ -58,16 +61,19 @@ export default function ChatLauncher() {
   const corner = useCornerOffset();
 
   /* Progress 0 → 0.12 of the page carries the knight from the centre of the
-     hero to the corner. Repeated rotation on ALL axes — rotateY makes a full
-     turn — is the same journey in 3D, never a flattened substitute. Past
-     0.12 it stays put; only the idle spin continues inside the canvas. */
+     hero to the corner. The wrapper only translates + scales — the plane stays
+     face-on. The 3D turn lives INSIDE the canvas: `spin` starts at one full
+     turn for the hero→corner journey and then KEEPS advancing with the scroll
+     for the rest of the page (one turn by the corner, up to five by the
+     bottom), so the knight is still visibly turning every time the visitor
+     scrolls — even docked on the right. Scrolling back reverses it.
+     While the chat is open the knight steps aside (fades out) and returns the
+     moment the chat closes. */
   const { scrollYProgress } = useScroll();
   const x = useTransform(scrollYProgress, [0, 0.12], [0, corner.x]);
   const y = useTransform(scrollYProgress, [0, 0.12], [0, corner.y]);
   const scale = useTransform(scrollYProgress, [0, 0.12], [1, 0.2]);
-  const rotateX = useTransform(scrollYProgress, [0, 0.12], [0, -35]);
-  const rotateY = useTransform(scrollYProgress, [0, 0.12], [0, 360]);
-  const rotateZ = useTransform(scrollYProgress, [0, 0.12], [0, -18]);
+  const spin = useTransform(scrollYProgress, [0, 0.12, 1], [0, 1, 5]);
 
   /* One render path for everyone. Reduced motion keeps the exact same knight
      and the exact same resting spot — it simply starts there, without the
@@ -76,34 +82,38 @@ export default function ChatLauncher() {
     x: corner.x,
     y: corner.y,
     scale: 0.2,
-    rotateX: -35,
-    rotateY: 360,
-    rotateZ: -18,
   };
 
   return (
     <>
-      <div className="pointer-events-none fixed inset-0 z-40">
+      <div className="pointer-events-none fixed inset-0 z-40 flex items-center justify-center">
         <motion.div
           style={{
             x: reduced ? staticStyle.x : x,
             y: reduced ? staticStyle.y : y,
             scale: reduced ? staticStyle.scale : scale,
-            rotateX: reduced ? staticStyle.rotateX : rotateX,
-            rotateY: reduced ? staticStyle.rotateY : rotateY,
-            rotateZ: reduced ? staticStyle.rotateZ : rotateZ,
-            transformOrigin: "center bottom",
-            transformPerspective: 1000,
+            transformOrigin: "center center",
+            /* While the chat is open the knight steps aside so it never
+               overlaps the dialog; it fades back in the moment the chat
+               closes. The canvas stays mounted underneath — no reload, no
+               shimmer, the same object returns. */
+            pointerEvents: open ? "none" : "auto",
           }}
+          animate={{ opacity: open ? 0 : 1 }}
+          transition={{ duration: 0.25, ease: "easeInOut" }}
           initial={false}
-          className="pointer-events-auto absolute left-1/2 top-1/2 aspect-square w-[56vw] max-w-[540px] sm:w-[42vw] lg:w-[34vw]"
+          className="pointer-events-auto aspect-square w-[56vw] max-w-[540px] sm:w-[42vw] lg:w-[34vw]"
         >
           <button
             type="button"
             onClick={() => setOpen(true)}
             aria-label="Ask the tax assistant"
             className="block h-full w-full"
-            style={{ transform: "translate(-50%, -56%)" }}
+            /* The wrapper is already centred by flex, so no horizontal
+               re-centring — that old -50% pushed the knight a half-width
+               left. A gentle lift keeps it overlapping the headline while
+               reading as dead-centre. */
+            style={{ transform: "translateY(-4%)" }}
           >
             {/* No fallbackImage: Model3D renders its shimmer while the .glb
             loads — the seal never appears here and nothing ever takes the
@@ -111,6 +121,8 @@ export default function ChatLauncher() {
             <Knight
               src="/models/knight-brass.glb"
               rotationSpeed={0.12}
+              spinDriver={spin}
+              driverTurns={1}
               className="relative h-full w-full"
             />
           </button>

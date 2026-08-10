@@ -54,7 +54,7 @@ export default function ServiceHero({ service }: { service: Service }) {
           thing that most made the whole build feel like a veneer. */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
         <Marginalia count={9} seed={7} exclude={{ top: 8, left: 2, right: 74, bottom: 94 }} />
-        <div className="cut-out-drift absolute right-[4%] top-[14%] hidden w-24 rotate-6 lg:block xl:w-32">
+        <div className="cut-out-drift absolute right-[4%] top-[14%] hidden w-28 rotate-6 lg:block xl:w-40">
           <CutOut
             src={ASSETS["cut-rubber-stamp"].src}
             alt=""

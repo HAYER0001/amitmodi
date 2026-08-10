@@ -71,7 +71,7 @@ export default function ComplianceCalendarPage() {
   return (
     <>
       <div className="relative bg-paper-deep">
-        <PageAtmosphere density="utility" seed={31} object="cut-revenue-stamp" objectClassName="right-[5%] top-[7%] hidden w-20 rotate-6 lg:block xl:w-28" />
+        <PageAtmosphere density="utility" seed={31} object="cut-revenue-stamp" objectClassName="right-[5%] top-[7%] hidden w-24 rotate-6 lg:block xl:w-36" />
 
         <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
           <Breadcrumbs />

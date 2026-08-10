@@ -19,7 +19,7 @@
 import { Component, Suspense, type ReactNode, useEffect, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useGLTF, Center, Environment, Lightformer } from "@react-three/drei";
-import { useReducedMotion } from "framer-motion";
+import { useReducedMotion, type MotionValue } from "framer-motion";
 import * as THREE from "three";
 
 type Model3DProps = {
@@ -30,6 +30,14 @@ type Model3DProps = {
   fallbackImage?: string;
   /** Radians per second of idle rotation. 0 for a static exhibit. */
   rotationSpeed?: number;
+  /** External driver, usually a scroll-linked MotionValue in 0..1. While
+      provided, the model's Y rotation is owned by it: 0..1 maps to
+      `driverTurns` full turns, so every scroll pixel is a visible turn in
+      true 3D under the perspective camera. Idle rotation continues on top
+      after arrival. */
+  spinDriver?: MotionValue<number>;
+  /** Full turns the spinDriver covers over its 0..1 range. */
+  driverTurns?: number;
   className?: string;
 };
 
@@ -88,7 +96,17 @@ function useModelGating(): "loading" | "fallback" | "ok" {
 
 /* ── the spinning model ───────────────────────────────────────────────────── */
 
-function Model({ src, rotationSpeed }: { src: string; rotationSpeed: number }) {
+function Model({
+  src,
+  rotationSpeed,
+  spinDriver,
+  driverTurns,
+}: {
+  src: string;
+  rotationSpeed: number;
+  spinDriver?: MotionValue<number>;
+  driverTurns?: number;
+}) {
   /*
    * CRITICAL — useGLTF(src, false, true)
    *   1st param: model path.
@@ -107,6 +125,8 @@ function Model({ src, rotationSpeed }: { src: string; rotationSpeed: number }) {
   const drift = useRef(0);
   const leanRef = useRef<THREE.Group>(null);
   const pointerX = useRef(0);
+  const spinOffset = useRef(0);
+  const lastDriver = useRef(0);
 
   /*
    * Pointer tracked at WINDOW level, not via R3F's state.pointer.
@@ -134,16 +154,32 @@ function Model({ src, rotationSpeed }: { src: string; rotationSpeed: number }) {
     const g = group.current;
     if (!g || reducedMotion) return;
 
+    /* Scroll in progress? The pose freezes — no float, no idle spin — so the
+       knight's angle is a pure function of scroll position while it travels.
+       The float and idle turn resume the moment the visitor stops scrolling. */
+    const d = spinDriver?.get() ?? 0;
+    const moving = spinDriver ? Math.abs(d - lastDriver.current) >= 1e-4 : false;
+    if (spinDriver) lastDriver.current = d;
+
     /* ── Anti-gravity float ────────────────────────────────────────────────
      * A sine on Y plus two much slower sines on X/Z tilt. Different periods
      * (1.1 / 0.7 / 0.9) so the axes never sync into an obvious loop — matched
      * periods are what make "floating" read as "bobbing on a spring".
      * Amplitudes are deliberately tiny: this should register as the object
-     * being alive, not as an animation playing. */
-    const t = state.clock.elapsedTime;
-    g.position.y = Math.sin(t * 1.1) * 0.035;
-    g.rotation.x = Math.sin(t * 0.7) * 0.045;
-    g.rotation.z = Math.sin(t * 0.9) * 0.03;
+     * being alive, not as an animation playing. While the visitor scrolls,
+     * the float yields to a calm centred pose so the turn reads purely as a
+     * scroll-driven rotation and the back-swing is exact; the float resumes,
+     * seamlessly, the moment the scroll stops. */
+    if (moving) {
+      g.position.y = 0;
+      g.rotation.x = 0;
+      g.rotation.z = 0;
+    } else {
+      const t = state.clock.elapsedTime;
+      g.position.y = Math.sin(t * 1.1) * 0.035;
+      g.rotation.x = Math.sin(t * 0.7) * 0.045;
+      g.rotation.z = Math.sin(t * 0.9) * 0.03;
+    }
 
     /* ── Cursor lean ───────────────────────────────────────────────────────
      * state.pointer is already normalised to -1..1 across the canvas, so no
@@ -163,8 +199,25 @@ function Model({ src, rotationSpeed }: { src: string; rotationSpeed: number }) {
 
     /* Idle rotation continues underneath, so the piece still turns when the
        pointer is still or absent — touch devices never fire pointer moves at
-       all, and there the float plus idle spin carry the whole effect. */
-    g.rotation.y += delta * rotationSpeed;
+       all, and there the float plus idle spin carry the whole effect.
+
+       With a spinDriver, scroll owns Y rotation (absolute, reversible — scroll
+       up and the knight turns back). A small idle offset spins ON TOP only
+       while the driver is still; the instant the driver moves again the offset
+       decays exponentially, so during scroll the angle is (and returns to) a
+       pure function of scroll position — the knight always lands back exactly
+       where the scroll says, and keeps turning only when parked. */
+    if (spinDriver) {
+      const turns = driverTurns ?? 1;
+      if (Math.abs(d - lastDriver.current) < 1e-4) {
+        spinOffset.current += delta * rotationSpeed;
+      } else {
+        spinOffset.current *= Math.exp(-8 * delta);
+      }
+      g.rotation.y = d * Math.PI * 2 * turns + spinOffset.current;
+    } else {
+      g.rotation.y += delta * rotationSpeed;
+    }
 
     /* The lean is applied to the PARENT group, not here. Both want rotation.y,
        and writing to one channel from two places means the last writer wins —
@@ -232,6 +285,8 @@ export default function Model3D({
   src,
   fallbackImage,
   rotationSpeed = 0.4,
+  spinDriver,
+  driverTurns = 1,
   className,
 }: Model3DProps) {
   const gate = useModelGating();
@@ -322,7 +377,12 @@ export default function Model3D({
               </Environment>
               <ambientLight intensity={0.35} />
               <directionalLight position={[4, 6, 5]} intensity={1.1} />
-              <Model src={src} rotationSpeed={rotationSpeed} />
+              <Model
+                src={src}
+                rotationSpeed={rotationSpeed}
+                spinDriver={spinDriver}
+                driverTurns={driverTurns}
+              />
             </Canvas>
           </Suspense>
         </ModelBoundary>

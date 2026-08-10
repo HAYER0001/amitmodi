@@ -42,7 +42,7 @@ export default function CaseStudiesIndex() {
 
   return (
     <div className="relative bg-paper-deep">
-      <PageAtmosphere density="interior" seed={37} object="cut-file-folder" objectClassName="right-[5%] top-[10%] hidden w-24 -rotate-6 lg:block xl:w-32" />
+      <PageAtmosphere density="interior" seed={37} object="cut-file-folder" objectClassName="right-[5%] top-[10%] hidden w-28 -rotate-6 lg:block xl:w-40" />
 
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
         <Breadcrumbs />

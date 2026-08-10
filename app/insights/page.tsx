@@ -30,7 +30,7 @@ export default async function InsightsIndex({
 
   return (
     <div className="relative bg-paper-deep">
-      <PageAtmosphere density="interior" seed={17} object="cut-paperclip" objectClassName="right-[6%] top-[9%] hidden w-20 rotate-12 lg:block xl:w-28" />
+      <PageAtmosphere density="interior" seed={17} object="cut-paperclip" objectClassName="right-[6%] top-[9%] hidden w-24 rotate-12 lg:block xl:w-36" />
 
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
         <Breadcrumbs />

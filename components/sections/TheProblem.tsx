@@ -79,7 +79,7 @@ export default function TheProblem() {
           object in the whole set for a section about what non-compliance costs.
           Kept to the right so it never crowds the copy. */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        <div className="cut-out-drift absolute right-[5%] top-[8%] hidden w-40 rotate-6 md:block lg:w-56">
+        <div className="cut-out-drift absolute right-[5%] top-[8%] hidden w-48 rotate-6 md:block lg:w-64">
           <CutOut
             src={ASSETS["cut-rupee-500"].src}
             alt=""
@@ -87,7 +87,7 @@ export default function TheProblem() {
             height={ASSETS["cut-rupee-500"].height}
           />
         </div>
-        <div className="cut-out-drift absolute bottom-[10%] right-[12%] hidden w-32 -rotate-12 lg:block lg:w-48">
+        <div className="cut-out-drift absolute bottom-[10%] right-[12%] hidden w-40 -rotate-12 lg:block lg:w-56">
           <CutOut
             src={ASSETS["cut-revenue-stamp"].src}
             alt=""
