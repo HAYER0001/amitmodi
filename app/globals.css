@@ -140,12 +140,23 @@ body {
 }
 
 /*
- * Sections are now TRANSPARENT so the fixed surface shows through. The tinted
- * band keeps the rhythm of alternating sections without becoming an opaque
- * block that hides the grid — the tint sits ON the paper rather than replacing
- * it.
+ * Section BANDS are transparent so the fixed paper surface shows through. The
+ * tinted band keeps the rhythm of alternating sections without becoming an
+ * opaque block that hides the grid — the tint sits ON the paper rather than
+ * replacing it.
+ *
+ * SCOPED TO `section` ON PURPOSE. This used to hit the bare `.bg-paper`
+ * utility, which meant every deliberate background on the site was forced
+ * transparent with !important — 72 of them. The closing "Request an Audit"
+ * pill is bg-paper with text-seal, so it became seal-on-seal: a contrast ratio
+ * of 1.00, text you could only find by selecting it. The FAQ accordion, the
+ * glossary rows, the credential logo chips, the carousel arrows and the table
+ * zebra striping were all silently flattened the same way.
+ *
+ * A utility class means what it says. If a band wants no background, that is a
+ * property of the band, not of every element that ever asks for paper.
  */
-.bg-paper {
+section.bg-paper {
   background-color: transparent !important;
 }
 
