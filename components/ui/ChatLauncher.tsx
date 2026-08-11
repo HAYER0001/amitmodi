@@ -22,12 +22,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
-import {
-  motion,
-  useMotionValueEvent,
-  useScroll,
-  useTransform,
-} from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { useReducedMotion } from "@/lib/motion";
 import ChatPanel from "./ChatPanel";
 import { bootFill, notifyKnightReady } from "@/lib/boot";
@@ -47,24 +42,29 @@ const Knight = dynamic(() => import("@/components/ui/Model3D"), {
 /*
  * Docked size and inset.
  *
- * Bigger and tighter into the corner on a phone, deliberately. On mobile this
- * knight is the ONLY way to reach the assistant — there is no hover, no
- * secondary affordance — so it has to be an obvious, comfortable tap target.
- * On a desktop it can afford to be a quieter mark, because the whole header is
- * also available.
+ * The scroll shrink has to STOP somewhere you can still see the thing. It used
+ * to end at 76px on every device, which on a desktop is a smudge in the corner
+ * — the object the whole page is built around, reduced to something you would
+ * not notice, let alone click. These sizes are the floor of the shrink, and
+ * they are chosen to stay unmistakably legible: the knight is still readable as
+ * a knight when it lands.
  *
- * The inset is smaller on a phone too: 22px of margin on a 390px screen eats a
+ * The inset is tighter on a phone: 22px of margin on a 390px screen eats a
  * visible slice of the corner and made the knight read as floating loose in the
  * page rather than parked in it.
  */
-const DOCK_PX_MOBILE = 104;
-const DOCK_PX_DESKTOP = 84;
+const DOCK_PX_MOBILE = 116;
+const DOCK_PX_DESKTOP = 132;
 const DOCK_INSET_MOBILE = 12;
 const DOCK_INSET_DESKTOP = 22;
 
-/** How long the "ask me anything" note holds after the knight parks. Long
-    enough to read on a phone, short enough that it is never furniture. */
-const NUDGE_MS = 5200;
+/** Resting opacity of the margin note. Quiet enough to read as an annotation
+    rather than a UI chip, strong enough to actually be read. */
+const HINT_OPACITY = 0.72;
+
+/** Scroll progress at which the knight has finished docking. The note appears
+    at the same instant, so the two always agree about where the knight is. */
+const DOCK_AT = 0.17;
 
 /*
  * Where the knight rests when docked, and how far it must shrink to get there.
@@ -188,28 +188,55 @@ export default function ChatLauncher() {
    * marginalia — a handwritten note in the margin, with a rule pointing at the
    * thing it annotates.
    *
-   * It shows itself once the knight reaches the corner, holds long enough to
-   * read, then gets out of the way. On a desktop it comes back on hover, so the
-   * answer is always one gesture away; on a phone (no hover) the opening
-   * appearance is the whole cue, which is why it holds longer than a tooltip
-   * would.
+   * It is simply THERE, quietly, the whole time the knight is parked — and it
+   * is driven by EXACTLY the same motion value as the knight itself.
+   *
+   * Two earlier versions used React state (a timed nudge, then a `docked`
+   * boolean fed by a scroll listener) and both drifted out of sync with the
+   * knight: the knight would be sitting in the corner with no label beside it,
+   * because a listener only fires when scroll *changes* and state updates land
+   * a frame late. Deriving the opacity from scrollYProgress the same way the
+   * knight's scale is derived makes desync structurally impossible — one
+   * source, one pipeline, no state to fall behind.
+   *
+   * It fades in over the last stretch of the dock so it arrives with the
+   * knight rather than blinking on. On an inner page the knight is already
+   * parked, so it is simply on.
+   */
+  /*
+   * The note is driven by a PLAIN scroll listener, not by framer.
+   *
+   * Three framer-based versions of this failed, each for a different reason:
+   * a useTransform range that would not clamp, a `cond ? motionValue : 0`
+   * style that bound the element to the static 0 it saw on the first render,
+   * and a transform callback that captured `dock.ready === false` in its
+   * closure and never saw it flip. The knight needs framer because it is
+   * animating continuously; a label that is either shown or not does not, and
+   * every attempt to route it through the same machinery bought a new bug.
+   *
+   * A native listener with an immediate first read has neither problem: it is
+   * correct on mount (so a visitor arriving mid-page via a hash link or a
+   * restored scroll position sees the cue), correct after every scroll, and
+   * correct after a resize.
    */
   const [docked, setDocked] = useState(!isHome);
-  const [nudge, setNudge] = useState(false);
-  const [hovered, setHovered] = useState(false);
-
-  useMotionValueEvent(scrollYProgress, "change", (v) => {
-    if (isHome) setDocked(v >= 0.17);
-  });
 
   useEffect(() => {
-    if (!docked || !dock.ready) return;
-    setNudge(true);
-    const t = setTimeout(() => setNudge(false), NUDGE_MS);
-    return () => clearTimeout(t);
-  }, [docked, dock.ready]);
+    if (!isHome) return;
+    const read = () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      setDocked(max > 0 && window.scrollY / max >= DOCK_AT);
+    };
+    read();
+    window.addEventListener("scroll", read, { passive: true });
+    window.addEventListener("resize", read);
+    return () => {
+      window.removeEventListener("scroll", read);
+      window.removeEventListener("resize", read);
+    };
+  }, [isHome]);
 
-  const showHint = dock.ready && docked && !open && (nudge || hovered);
+  const showHint = dock.ready && docked && !open;
 
   return (
     <>
@@ -219,15 +246,17 @@ export default function ChatLauncher() {
           measured dock box so it always sits beside the knight, at any size. */}
       <div
         aria-hidden="true"
-        className="pointer-events-none fixed z-40 flex items-center gap-1.5"
+        /* Frosted, like the menus. The note is fixed, so whatever the visitor
+           scrolls past ends up behind it — including 60px headlines, where
+           plain text on text read as a rendering fault rather than an
+           annotation. A soft paper wash lifts it off the page just enough to
+           stay legible over anything, without becoming a tooltip. */
+        className="pointer-events-none fixed z-40 flex items-center gap-1.5 rounded-full bg-paper/70 py-1 pl-3 pr-2.5 backdrop-blur-sm"
         style={{
-          right: dock.inset + dock.size + 6,
-          bottom: dock.inset + dock.size / 2 - 14,
-          opacity: showHint ? 1 : 0,
-          transform: showHint ? "translateX(0)" : "translateX(6px)",
-          transition: reduced
-            ? "none"
-            : "opacity 420ms cubic-bezier(0.16,1,0.3,1), transform 420ms cubic-bezier(0.16,1,0.3,1)",
+          right: dock.inset + dock.size + 2,
+          bottom: dock.inset + dock.size / 2 - 16,
+          opacity: showHint ? HINT_OPACITY : 0,
+          transition: reduced ? "none" : "opacity 360ms cubic-bezier(0.16,1,0.3,1)",
         }}
       >
         <span className="whitespace-nowrap font-margin text-[1.05rem] leading-none text-ink-soft">
@@ -262,8 +291,6 @@ export default function ChatLauncher() {
           animate={{ opacity: open ? 0 : 1 }}
           transition={{ duration: 0.25, ease: "easeInOut" }}
           initial={false}
-          onHoverStart={() => setHovered(true)}
-          onHoverEnd={() => setHovered(false)}
           className="pointer-events-auto aspect-square w-[56vw] max-w-[540px] sm:w-[42vw] lg:w-[34vw]"
         >
           <button

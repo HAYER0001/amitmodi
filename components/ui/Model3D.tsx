@@ -147,9 +147,6 @@ function Model({
   const { scene } = useGLTF(src, false, true);
   const reducedMotion = useReducedMotion();
   const group = useRef<THREE.Group>(null);
-  const drift = useRef(0);
-  const leanRef = useRef<THREE.Group>(null);
-  const pointerX = useRef(0);
   const lastDriver = useRef(0);
   /* One-shot readiness: fires on the model's first rendered frame, even under
      reduced motion (the useFrame bails early there but the model is up). */
@@ -250,26 +247,20 @@ function Model({
   }, [scene, fill]);
 
   /*
-   * Pointer tracked at WINDOW level, not via R3F's state.pointer.
+   * NO POINTER COUPLING. Deliberately, and permanently.
    *
-   * The hero wrapper is pointer-events-none — it has to be, or the knight would
-   * swallow clicks meant for the headline and CTA behind it. But that also means
-   * the canvas never receives pointermove, so state.pointer would sit frozen at
-   * 0 forever and the lean would never move. Listening on window sidesteps that
-   * entirely and costs one passive listener.
+   * The knight used to lean toward the cursor. It was a yaw, and a chess knight
+   * is a profile carving - broad face-on, thin edge-on - so moving the mouse
+   * toward it turned it fractionally away and the silhouette narrowed. It read
+   * as the knight physically shrinking under the pointer. Changing the lean to
+   * a Z sway kept the width constant in theory, but it still leaves the piece's
+   * appearance wired to the mouse, and the one thing this object must never do
+   * is change size when you go to click it.
    *
-   * Only a ref is written — never state — so moving the mouse does not trigger a
-   * single React re-render. The value is read inside useFrame, which is already
-   * running every frame.
+   * So the pointer now does nothing to the knight at all. Its size is a pure
+   * function of scroll position and nothing else. The float below keeps it
+   * alive - that is driven by the clock, not by you.
    */
-  useEffect(() => {
-    if (reducedMotion) return;
-    const onMove = (e: PointerEvent) => {
-      pointerX.current = (e.clientX / window.innerWidth) * 2 - 1;
-    };
-    window.addEventListener("pointermove", onMove, { passive: true });
-    return () => window.removeEventListener("pointermove", onMove);
-  }, [reducedMotion]);
 
   useFrame((state, delta) => {
     /* Fill and readiness run even under reduced motion: the knight must exist
@@ -318,29 +309,6 @@ function Model({
       g.rotation.z = Math.sin(t * 0.9) * 0.03;
     }
 
-    /* ── Cursor lean ───────────────────────────────────────────────────────
-     * The piece acknowledges the pointer — but as a SWAY, not a turn.
-     *
-     * This used to yaw toward the cursor (rotation.y, ±0.08rad). A chess knight
-     * is a profile carving: it is broad seen face-on and thin seen edge-on, so
-     * ANY yaw changes how wide it looks. Moving the mouse toward it turned it
-     * fractionally away, the silhouette narrowed, and the knight read as
-     * physically shrinking under the cursor — the exact thing it was reported
-     * for. The old comment here claimed 4.5° was "below the threshold" where
-     * that happens. It is not: on this model the silhouette is narrowing from
-     * the very first degree.
-     *
-     * Leaning on Z instead rocks the piece toward the pointer without ever
-     * rotating it away from the viewer, so its width on screen is constant. The
-     * knight still feels aware of you; it no longer appears to change size.
-     *
-     * Damped with a frame-rate-independent exponential (1 - e^-kt). Lerping by
-     * a fixed fraction per frame ties the speed to refresh rate: identical code
-     * moves twice as fast on a 120Hz display. */
-    const target = pointerX.current * 0.05;
-    const k = 1 - Math.exp(-3.5 * delta);
-    drift.current += (target - drift.current) * k;
-
     /*
      * With a spinDriver, SCROLL OWNS Y ROTATION — absolutely and exclusively.
      * The angle is a pure function of scroll position: scroll down and the
@@ -366,13 +334,6 @@ function Model({
       g.rotation.y += delta * rotationSpeed;
     }
 
-    /* The lean is applied to the PARENT group, not here: the child's rotation
-       is owned outright by the scroll driver, and a second writer on the same
-       object would just be overwritten every frame. Parent holds the lean,
-       child holds the spin, and the transforms compose. */
-    /* Z, never Y: see the cursor-lean note above. Negated so the piece leans
-       INTO the pointer rather than away from it. */
-    if (leanRef.current) leanRef.current.rotation.z = -drift.current;
   });
 
   /* Dispose GPU resources when this Hero model unmounts. */
@@ -417,19 +378,17 @@ function Model({
      layers are centred imperatively (see the build effect); the plain model
      goes through drei's <Center>. */
   return (
-    <group ref={leanRef}>
-      <group ref={group}>
-        {fill ? (
-          <>
-            <group ref={ghostLayer} />
-            <group ref={fillLayer} />
-          </>
-        ) : (
-          <Center>
-            <primitive object={scene} />
-          </Center>
-        )}
-      </group>
+    <group ref={group}>
+      {fill ? (
+        <>
+          <group ref={ghostLayer} />
+          <group ref={fillLayer} />
+        </>
+      ) : (
+        <Center>
+          <primitive object={scene} />
+        </Center>
+      )}
     </group>
   );
 }
