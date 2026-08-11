@@ -49,15 +49,18 @@ export const metadata: Metadata = {
   description:
     "Tax and compliance guidance for Indian businesses — registration, filing, and appeals.",
   metadataBase: new URL(SITE_URL),
-  icons: {
-    icon: [
-      { url: '/favicon.ico' },
-      { url: '/icon.png', type: 'image/png' },
-    ],
-    apple: [
-      { url: '/apple-icon.png' },
-    ],
-  },
+  /*
+   * No `icons` block on purpose. app/favicon.ico, app/icon.png and
+   * app/apple-icon.png are App Router file conventions — Next finds them and
+   * emits the <link> tags itself, with cache-busting hashes.
+   *
+   * Declaring them by hand pointed at /favicon.ico etc. in public/, and those
+   * duplicates ALSO shadowed the convention: every request for /favicon.ico
+   * returned 500 ("A conflicting public file and page file was found"). The
+   * public/ copies were three renamed copies of the same JPEG — a JPEG called
+   * .ico and a JPEG called .png — so the tab icon was broken everywhere it was
+   * not silently ignored.
+   */
 };
 
 export default function RootLayout({
@@ -71,17 +74,6 @@ export default function RootLayout({
       suppressHydrationWarning
       data-motion="full"
     >
-      <head>
-        {/* set data-motion before paint so CSS can respond pre-hydration */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `document.documentElement.dataset.motion=window.matchMedia("(prefers-reduced-motion: reduce)").matches?"reduced":"full"`,
-          }}
-        />
-        <WebSiteSchema domain={SITE_URL} />
-        <OrganizationSchema domain={SITE_URL} />
-        <LocalBusinessSchema domain={SITE_URL} />
-      </head>
       <body
         className={`${display.variable} ${body.variable} ${label.variable} ${margin.variable} overflow-x-hidden antialiased`}
       >
@@ -99,6 +91,18 @@ export default function RootLayout({
             full-brightness page — and defaultTheme="light" meant that was
             everyone. defaultTheme="system" is what makes the toggle a
             *preference* rather than the only way to get dark mode. */}
+        {/* The knight IS the loading screen, so its download must start with
+            the document — not after the JS bundle parses and the dynamic import
+            resolves. React 19 hoists this <link> into <head> automatically.
+            An explicit <head> element in an App Router layout is dropped, which
+            is why the first attempt at this never reached the HTML. */}
+        <link
+          rel="preload"
+          as="fetch"
+          href="/models/knight-brass.glb"
+          type="model/gltf-binary"
+          crossOrigin="anonymous"
+        />
         <ThemeProvider
           attribute="data-theme"
           defaultTheme="system"
@@ -115,6 +119,18 @@ export default function RootLayout({
           <ChatLauncher />
           <LoadingScreen />
         </ThemeProvider>
+        {/* Structured data. These were imported here but never rendered, so the
+            site was shipping no schema.org markup at all — for a practice whose
+            visitors search "GST advisor Suratgarh", LocalBusiness is the single
+            most valuable tag on the page.
+
+            Each emitter is self-suppressing: LocalBusinessSchema returns null
+            until real coordinates exist, and the hours/telephone fields are
+            filtered through hasFact(). Nothing here can publish a detail the
+            practice has not supplied. */}
+        <WebSiteSchema domain={SITE_URL} />
+        <OrganizationSchema domain={SITE_URL} />
+        <LocalBusinessSchema domain={SITE_URL} />
         <Analytics />
       </body>
     </html>
