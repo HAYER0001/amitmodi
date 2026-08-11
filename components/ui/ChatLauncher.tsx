@@ -82,6 +82,14 @@ const HINT_OPACITY = 0.72;
 const TRAVEL_VH = 0.7;
 const TRAVEL_MIN_PX = 320;
 
+/** Rotation allowed AFTER docking, in turns. 0.07 ≈ 25°, where the knight's
+    silhouette is still ~91% of its face-on width — visibly responsive to
+    scrolling, never thin enough to read as having shrunk. */
+const DOCK_SWAY_TURNS = 0.07;
+
+/** Scroll distance, in pixels, over which that sway plays out. */
+const SWAY_OVER_PX = 2600;
+
 /*
  * Where the knight rests when docked, and how far it must shrink to get there.
  *
@@ -164,7 +172,10 @@ export default function ChatLauncher() {
      the visitor scrolls, even docked on the right; scrolling back turns it
      back. While the chat is open the knight steps aside (fades out) and returns
      the moment the chat closes. */
-  const { scrollY, scrollYProgress } = useScroll();
+  /* Absolute pixels only. Nothing here reads scroll PROGRESS any more —
+     that fraction moves whenever the page height does, and every symptom of
+     the knight resizing or turning on its own traced back to it. */
+  const { scrollY } = useScroll();
 
   /* WHERE and HOW BIG ride absolute scroll distance (dock.travel, in pixels),
      so nothing the page does to its own height can move or resize the parked
@@ -174,13 +185,32 @@ export default function ChatLauncher() {
   const y = useTransform(scrollY, [0, dock.travel], [0, dock.y]);
   const scale = useTransform(scrollY, [0, dock.travel], [1, dock.scale]);
 
-  /* The TURN, by contrast, is deliberately proportional to the page: a long
-     page should turn the knight further than a short one. Nothing about the
-     rotation affects its size, so page-height drift is harmless here. */
+  /*
+   * THE TURN — and why it is capped once the knight has docked.
+   *
+   * This model is a profile carving. Face-on it is broad; edge-on it is a
+   * sliver. Turning it 90 degrees drops its silhouette to a fraction of its
+   * width, and that reads as the knight SHRINKING even though its scale has not
+   * moved a pixel. The docked knight used to keep spinning - up to five full
+   * turns down the page, driven by scroll PROGRESS, which drifts on its own
+   * whenever the page height settles. So it would swing towards edge-on with
+   * nobody scrolling, and go visibly thin in the corner.
+   *
+   * Two changes. It rides absolute pixels like everything else here, so it
+   * cannot drift. And past the dock it is limited to DOCK_SWAY_TURNS - about
+   * 25 degrees off face-on, where the silhouette is still ~91% of full width.
+   * It still answers to scrolling, as it should; it can simply no longer turn
+   * far enough to look like it shrank.
+   *
+   * The big hero-to-corner turn is untouched: the knight is large through that
+   * whole journey, and the rotation there is the point of it.
+   */
   const spin = useTransform(
-    scrollYProgress,
-    isHome ? [0, 0.18, 1] : [0, 1],
-    isHome ? [0, 1, 5] : [0, 4],
+    scrollY,
+    isHome
+      ? [0, dock.travel, dock.travel + SWAY_OVER_PX]
+      : [0, SWAY_OVER_PX],
+    isHome ? [0, 1, 1 + DOCK_SWAY_TURNS] : [0, DOCK_SWAY_TURNS],
   );
 
   /* One render path for everyone. An inner page — or reduced motion anywhere —
