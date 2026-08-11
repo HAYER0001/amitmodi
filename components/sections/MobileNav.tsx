@@ -97,7 +97,7 @@ export default function MobileNav({ open, onClose }: MobileNavProps) {
           aria-modal="true"
           aria-label="Site navigation"
           ref={panelRef}
-          className="fixed inset-0 z-[60] flex flex-col bg-paper lg:hidden"
+          className="fixed inset-0 z-[60] flex flex-col bg-paper/80 backdrop-blur-xl backdrop-saturate-150 lg:hidden"
         >
           <div className="flex h-18 shrink-0 items-center justify-between gap-3 border-b border-rule px-4 sm:px-6">
             <span className="font-display text-2xl leading-none text-ink">

@@ -224,7 +224,7 @@ export default function Header() {
                               setServicesOpen(false);
                             }
                           }}
-                          className="absolute left-0 top-full z-50 mt-1 w-80 rounded-md border border-rule bg-paper p-1.5 shadow-cut"
+                          className="absolute left-0 top-full z-50 mt-1 w-80 rounded-md border border-rule bg-paper/80 p-1.5 shadow-cut backdrop-blur-xl backdrop-saturate-150"
                         >
                           {item.children.map((child, index) => (
                             <li key={child.href} role="none">

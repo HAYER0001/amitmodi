@@ -29,110 +29,100 @@
 
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { animate } from "framer-motion";
-import { DUR, EASE, useReducedMotion } from "@/lib/motion";
+import { EASE, useReducedMotion } from "@/lib/motion";
 import { bootFill, setBootReadyHandler } from "@/lib/boot";
 
-/** Shortest acceptable boot, so a warm cache still reads as a deliberate beat. */
-const MIN_BOOT_MS = 1100;
+/** How long the brass takes to climb the knight. Long enough to watch, short
+    enough that nobody waits for it. This is the whole point of the boot. */
+const FILL_MS = 1500;
+
+/** A beat on the completed knight before the veil lifts. */
+const SETTLE_MS = 380;
 
 /** Nothing reported? Clear the veil anyway. A broken model must never leave the
     page veiled. */
-const SAFETY_MS = 5000;
+const SAFETY_MS = 6000;
 
 /** Must match the CSS transition duration below. */
 const FADE_MS = 700;
 
 export default function LoadingScreen() {
   const reduced = useReducedMotion();
-  const [target, setTarget] = useState(8);
   const [knightReady, setKnightReady] = useState(false);
+  const [filled, setFilled] = useState(false);
   const [fading, setFading] = useState(false);
   const [gone, setGone] = useState(false);
-  const bootStart = useRef(0);
 
-  /* Drive the knight's fill. `animate` writes the MotionValue directly, so the
-     model never causes a React render. */
+  /*
+   * THE ORDER MATTERS, and it was wrong before.
+   *
+   * The fill used to be driven by loading milestones (first paint, DOM ready,
+   * .glb seen, window load). On any warm load those all fire within a few
+   * hundred milliseconds — while the knight's canvas has not mounted yet. So
+   * the fill animated a model that did not exist, finished before it appeared,
+   * and the visitor saw exactly what you described: a blurred page, then a
+   * fully-formed knight popping in, then the blur leaving. No filling.
+   *
+   * Now the sequence is explicit:
+   *   1. veil up, page blurred, fill pinned at 0
+   *   2. wait for the knight's first REAL rendered frame
+   *   3. only then animate the fill 0 → 1 over FILL_MS, so it is always seen
+   *   4. fill complete → lift the veil
+   *
+   * The fill is no longer a progress bar. It is the boot.
+   */
   useEffect(() => {
-    const controls = animate(bootFill, target / 100, {
-      duration: reduced ? 0 : DUR.base,
-      ease: EASE,
-    });
-    return controls.stop;
-  }, [target, reduced]);
-
-  /* Boot milestones — the fill is the story of the page coming up. */
-  useEffect(() => {
-    bootStart.current = performance.now();
     bootFill.set(0);
-
-    const raf = requestAnimationFrame(() => setTarget((t) => Math.max(t, 12)));
-
-    const onReady = () => setTarget((t) => Math.max(t, 42));
-    if (document.readyState !== "loading") onReady();
-    else document.addEventListener("readystatechange", onReady);
-
-    const glb = setInterval(() => {
-      const hit = performance
-        .getEntriesByType("resource")
-        .some((r) => r.name.includes("knight-brass.glb"));
-      if (hit) {
-        setTarget((t) => Math.max(t, 68));
-        clearInterval(glb);
-      }
-    }, 150);
-
-    const onLoad = () => setTarget(100);
-    if (document.readyState === "complete") onLoad();
-    else window.addEventListener("load", onLoad);
-
-    const safety = setTimeout(() => {
-      setKnightReady(true);
-      setTarget(100);
-    }, SAFETY_MS);
-
-    return () => {
-      cancelAnimationFrame(raf);
-      clearInterval(glb);
-      clearTimeout(safety);
-      document.removeEventListener("readystatechange", onReady);
-      window.removeEventListener("load", onLoad);
-    };
-  }, []);
-
-  /* The knight's first rendered frame is the last thing worth waiting on. */
-  useEffect(() => {
-    setBootReadyHandler(() => {
-      setKnightReady(true);
-      setTarget(100);
-    });
+    setBootReadyHandler(() => setKnightReady(true));
     return () => setBootReadyHandler(null);
   }, []);
 
-  /* Fill complete AND knight real → hold the minimum beat → start the fade. */
+  /* The knight is real — now fill it, at a pace a person can watch. */
   useEffect(() => {
-    if (target < 100 || !knightReady || fading) return;
-    const hold = Math.max(0, MIN_BOOT_MS - (performance.now() - bootStart.current));
-    const t = setTimeout(() => setFading(true), hold);
-    return () => clearTimeout(t);
-  }, [target, knightReady, fading]);
+    if (!knightReady) return;
+    if (reduced) {
+      bootFill.set(1);
+      setFilled(true);
+      return;
+    }
+    const controls = animate(bootFill, 1, {
+      duration: FILL_MS / 1000,
+      ease: EASE,
+      onComplete: () => setFilled(true),
+    });
+    return controls.stop;
+  }, [knightReady, reduced]);
 
-  /* Removal, belt and braces. Whichever fires first wins; the others no-op. */
+  /* Filled → hold a beat so the completed knight registers → lift the veil. */
+  useEffect(() => {
+    if (!filled) return;
+    const t = setTimeout(() => setFading(true), reduced ? 0 : SETTLE_MS);
+    return () => clearTimeout(t);
+  }, [filled, reduced]);
+
   useEffect(() => {
     if (!fading) return;
     const t = setTimeout(() => setGone(true), reduced ? 0 : FADE_MS + 120);
     return () => clearTimeout(t);
   }, [fading, reduced]);
 
-  /* Hard floor: no matter what the state machine does, the veil is gone by
-     SAFETY_MS + the fade. This is the guarantee the previous version lacked. */
+  /* Hard floor. A .glb that never loads must never leave the page veiled —
+     fill it anyway and get out of the way. */
   useEffect(() => {
-    const t = setTimeout(() => setGone(true), SAFETY_MS + FADE_MS + 400);
-    return () => clearTimeout(t);
+    const t = setTimeout(() => {
+      bootFill.set(1);
+      setFading(true);
+    }, SAFETY_MS);
+    const hard = setTimeout(() => setGone(true), SAFETY_MS + FADE_MS + 400);
+    return () => {
+      clearTimeout(t);
+      clearTimeout(hard);
+    };
   }, []);
 
-  /* Hold the page still behind the veil, and release the moment it lifts. */
+  /* Hold the page still behind the veil; release the moment it lifts. */
   useEffect(() => {
     if (gone) return;
     const html = document.documentElement;

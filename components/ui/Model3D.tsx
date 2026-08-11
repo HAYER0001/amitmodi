@@ -150,7 +150,6 @@ function Model({
   const drift = useRef(0);
   const leanRef = useRef<THREE.Group>(null);
   const pointerX = useRef(0);
-  const spinOffset = useRef(0);
   const lastDriver = useRef(0);
   /* One-shot readiness: fires on the model's first rendered frame, even under
      reduced motion (the useFrame bails early there but the model is up). */
@@ -205,7 +204,12 @@ function Model({
         const mat = srcMat.clone();
         if (ghost) {
           mat.transparent = true;
-          mat.opacity = 0.09;
+          /* The ghost is the EMPTY VESSEL the brass climbs into — the visitor
+             has to be able to see it, or the boot reads as "nothing, then a
+             knight appears". At 0.09 it was invisible against paper. 0.26 reads
+             as a faint pencil outline of the piece without competing with the
+             brass rising inside it. */
+          mat.opacity = 0.26;
           mat.depthWrite = false;
           mesh.renderOrder = 2;
         } else {
@@ -315,49 +319,60 @@ function Model({
     }
 
     /* ── Cursor lean ───────────────────────────────────────────────────────
-     * state.pointer is already normalised to -1..1 across the canvas, so no
-     * manual coordinate maths and no resize listener.
+     * The piece acknowledges the pointer — but as a SWAY, not a turn.
      *
-     * Adapted, not copied: the brief this came from wanted a drone "menacingly
-     * tracking" the visitor. A tax practice wants the opposite feeling, so the
-     * knight only leans ~4.5° toward the pointer — below the threshold where a
-     * yaw reads as the knight turning profile-on (and therefore "shrinking");
-     * just enough that the piece feels aware of you, not watched.
+     * This used to yaw toward the cursor (rotation.y, ±0.08rad). A chess knight
+     * is a profile carving: it is broad seen face-on and thin seen edge-on, so
+     * ANY yaw changes how wide it looks. Moving the mouse toward it turned it
+     * fractionally away, the silhouette narrowed, and the knight read as
+     * physically shrinking under the cursor — the exact thing it was reported
+     * for. The old comment here claimed 4.5° was "below the threshold" where
+     * that happens. It is not: on this model the silhouette is narrowing from
+     * the very first degree.
+     *
+     * Leaning on Z instead rocks the piece toward the pointer without ever
+     * rotating it away from the viewer, so its width on screen is constant. The
+     * knight still feels aware of you; it no longer appears to change size.
      *
      * Damped with a frame-rate-independent exponential (1 - e^-kt). Lerping by
      * a fixed fraction per frame ties the speed to refresh rate: identical code
      * moves twice as fast on a 120Hz display. */
-    const target = pointerX.current * 0.08;
+    const target = pointerX.current * 0.05;
     const k = 1 - Math.exp(-3.5 * delta);
     drift.current += (target - drift.current) * k;
 
-    /* Idle rotation continues underneath, so the piece still turns when the
-       pointer is still or absent — touch devices never fire pointer moves at
-       all, and there the float plus idle spin carry the whole effect.
-
-       With a spinDriver, scroll owns Y rotation (absolute, reversible — scroll
-       up and the knight turns back). A small idle offset spins ON TOP only
-       while the driver is still; the instant the driver moves again the offset
-       decays exponentially, so during scroll the angle is (and returns to) a
-       pure function of scroll position — the knight always lands back exactly
-       where the scroll says, and keeps turning only when parked. */
+    /*
+     * With a spinDriver, SCROLL OWNS Y ROTATION — absolutely and exclusively.
+     * The angle is a pure function of scroll position: scroll down and the
+     * knight turns, scroll up and it turns back to exactly where it was.
+     *
+     * There used to be an idle offset that kept creeping the yaw forward
+     * whenever the driver was still. It meant a parked knight slowly rotated
+     * itself to profile with nobody touching the page — and side-on, this model
+     * is a fraction of its face-on width, so it simply looked like it had
+     * shrunk into the corner. Motion for its own sake is not worth a chat
+     * button that keeps changing size.
+     *
+     * The piece is still alive when parked: the float and the cursor sway below
+     * both keep running. They move it without ever changing how wide it is.
+     *
+     * With no driver (any other Model3D on the site) the idle turn is the whole
+     * effect, so it stays.
+     */
     if (spinDriver) {
       const turns = driverTurns ?? 1;
-      if (Math.abs(d - lastDriver.current) < 1e-4) {
-        spinOffset.current += delta * rotationSpeed;
-      } else {
-        spinOffset.current *= Math.exp(-8 * delta);
-      }
-      g.rotation.y = d * Math.PI * 2 * turns + spinOffset.current;
+      g.rotation.y = d * Math.PI * 2 * turns;
     } else {
       g.rotation.y += delta * rotationSpeed;
     }
 
-    /* The lean is applied to the PARENT group, not here. Both want rotation.y,
-       and writing to one channel from two places means the last writer wins —
-       the spin would erase the lean every frame. Parent holds the lean, child
-       holds the spin, and the transforms compose. */
-    if (leanRef.current) leanRef.current.rotation.y = drift.current;
+    /* The lean is applied to the PARENT group, not here: the child's rotation
+       is owned outright by the scroll driver, and a second writer on the same
+       object would just be overwritten every frame. Parent holds the lean,
+       child holds the spin, and the transforms compose. */
+    /* Z, never Y: see the cursor-lean note above. Negated so the piece leans
+       INTO the pointer rather than away from it. */
+    if (leanRef.current) leanRef.current.rotation.z = -drift.current;
   });
 
   /* Dispose GPU resources when this Hero model unmounts. */
