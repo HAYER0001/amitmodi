@@ -500,7 +500,15 @@ export default function Model3D({
                  device resolution is the actual cost — not the geometry — so
                  cap it there and keep the knight on every device. */
               dpr={[1, isCompact ? 1.25 : 1.75]}
-              camera={{ position: [0, 0, 2.7], fov: 35 }}
+              /* Dollied in from z=2.7. At 2.7 the knight sat in the middle of
+                 a mostly empty frame: docked at 132px it rendered just 39px
+                 wide with 46px of dead margin either side, so enlarging the
+                 dock box did almost nothing — the BOX grew, the horse did not.
+                 Framing it tightly is what actually makes it bigger on screen.
+                 The wrapper in ChatLauncher was scaled down by the same factor,
+                 so the hero knight is unchanged; only the wasted margin is
+                 gone. */
+              camera={{ position: [0, 0, 1.9], fov: 35 }}
               gl={{ antialias: true, alpha: true }}
               onCreated={({ gl }) => {
                 gl.localClippingEnabled = true;

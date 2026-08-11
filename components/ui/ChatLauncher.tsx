@@ -254,7 +254,10 @@ export default function ChatLauncher() {
            stay legible over anything, without becoming a tooltip. */
         className="pointer-events-none fixed z-40 flex items-center gap-1.5 rounded-full bg-paper/70 py-1 pl-3 pr-2.5 backdrop-blur-sm"
         style={{
-          right: dock.inset + dock.size + 2,
+          /* Anchored to the HORSE, not to the box. The canvas keeps a margin
+             of empty space around the model, so measuring off the box edge left
+             the note floating a long way from the thing it points at. */
+          right: dock.inset + dock.size - 26,
           bottom: dock.inset + dock.size / 2 - 16,
           opacity: showHint ? HINT_OPACITY : 0,
           transition: reduced ? "none" : "opacity 360ms cubic-bezier(0.16,1,0.3,1)",
@@ -292,7 +295,7 @@ export default function ChatLauncher() {
           animate={{ opacity: open ? 0 : 1 }}
           transition={{ duration: 0.25, ease: "easeInOut" }}
           initial={false}
-          className="pointer-events-auto aspect-square w-[56vw] max-w-[540px] sm:w-[42vw] lg:w-[34vw]"
+          className="pointer-events-auto aspect-square w-[40vw] max-w-[380px] sm:w-[30vw] lg:w-[24vw]"
         >
           <button
             type="button"
