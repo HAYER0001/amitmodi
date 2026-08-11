@@ -255,9 +255,24 @@ export default function ChatLauncher() {
    */
   const [docked, setDocked] = useState(!isHome);
 
+  /*
+   * Recomputed on EVERY route change, not just on mount.
+   *
+   * ChatLauncher lives in the root layout, so it never unmounts as the visitor
+   * moves around the site — which meant `useState(!isHome)` ran exactly once,
+   * on the first page they happened to land on, and then went stale. The old
+   * effect made it worse by returning early on inner pages, so it could not
+   * correct itself either: go from the home page to any inner page and the
+   * knight parked in the corner with no note beside it, because `docked` was
+   * still holding the answer for a page the visitor had already left.
+   *
+   * Now it is a plain function of (which page, where we are on it), read on
+   * mount, on navigation, on scroll and on resize. The state and the knight
+   * cannot disagree about where the knight is.
+   */
   useEffect(() => {
-    if (!isHome) return;
-    const read = () => setDocked(window.scrollY >= dock.travel * 0.96);
+    const read = () =>
+      setDocked(!isHome || window.scrollY >= dock.travel * 0.96);
     read();
     window.addEventListener("scroll", read, { passive: true });
     window.addEventListener("resize", read);
