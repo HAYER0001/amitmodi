@@ -164,7 +164,9 @@ export default function CursorField() {
         it.x += (tx - it.x) * it.ease;
         it.y += (ty - it.y) * it.ease;
 
-        it.el.style.transform = `translate3d(${it.x.toFixed(2)}px, ${it.y.toFixed(2)}px, 0)`;
+        const isAsset = it.el.classList.contains("cut-out-drift");
+        const scale = isAsset ? " scale(1.2)" : "";
+        it.el.style.transform = `translate3d(${it.x.toFixed(2)}px, ${it.y.toFixed(2)}px, 0)${scale}`;
       }
     };
     raf = requestAnimationFrame(tick);

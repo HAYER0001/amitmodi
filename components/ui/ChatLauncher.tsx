@@ -220,23 +220,21 @@ export default function ChatLauncher() {
    * correct after a resize.
    */
   const [docked, setDocked] = useState(!isHome);
+  const [nudge, setNudge] = useState(false);
+  const [hovered, setHovered] = useState(false);
+
+  useMotionValueEvent(scrollYProgress, "change", (v) => {
+    if (isHome) setDocked(v >= 0.17);
+  });
 
   useEffect(() => {
-    if (!isHome) return;
-    const read = () => {
-      const max = document.documentElement.scrollHeight - window.innerHeight;
-      setDocked(max > 0 && window.scrollY / max >= DOCK_AT);
-    };
-    read();
-    window.addEventListener("scroll", read, { passive: true });
-    window.addEventListener("resize", read);
-    return () => {
-      window.removeEventListener("scroll", read);
-      window.removeEventListener("resize", read);
-    };
-  }, [isHome]);
+    if (!docked || !dock.ready) return;
+    setNudge(true);
+    const t = setTimeout(() => setNudge(false), 3000);
+    return () => clearTimeout(t);
+  }, [docked, dock.ready]);
 
-  const showHint = dock.ready && docked && !open;
+  const showHint = dock.ready && docked && !open && (nudge || hovered);
 
   return (
     <>
@@ -291,6 +289,8 @@ export default function ChatLauncher() {
           animate={{ opacity: open ? 0 : 1 }}
           transition={{ duration: 0.25, ease: "easeInOut" }}
           initial={false}
+          onHoverStart={() => setHovered(true)}
+          onHoverEnd={() => setHovered(false)}
           className="pointer-events-auto aspect-square w-[56vw] max-w-[540px] sm:w-[42vw] lg:w-[34vw]"
         >
           <button
