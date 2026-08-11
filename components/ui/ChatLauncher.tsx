@@ -62,9 +62,25 @@ const DOCK_INSET_DESKTOP = 22;
     rather than a UI chip, strong enough to actually be read. */
 const HINT_OPACITY = 0.72;
 
-/** Scroll progress at which the knight has finished docking. The note appears
-    at the same instant, so the two always agree about where the knight is. */
-const DOCK_AT = 0.17;
+/*
+ * How far the visitor scrolls, IN PIXELS, to carry the knight from the hero to
+ * the corner.
+ *
+ * This used to be a fraction of scroll PROGRESS (0 → 0.18 of the page). That is
+ * what made the docked knight change size on its own. Progress is
+ * scrollY / (pageHeight - viewport), so it moves whenever the PAGE moves — a
+ * lazy image landing, a font settling, the pinned horizontal section resolving,
+ * the browser's own scroll anchoring. The knight would be parked in the corner,
+ * nobody touching the page, and its scale would be silently re-derived from a
+ * denominator that had shifted underneath it: it grew and shrank on its own,
+ * which is exactly what "it gets smaller when I hover over it" looked like.
+ *
+ * Pixels cannot drift. Seven tenths of a viewport is the same distance whether
+ * the page is a short contact form or the long home page, so the knight also
+ * now docks after the same amount of scrolling on every route.
+ */
+const TRAVEL_VH = 0.7;
+const TRAVEL_MIN_PX = 320;
 
 /*
  * Where the knight rests when docked, and how far it must shrink to get there.
@@ -86,6 +102,7 @@ function useDock(wrapperRef: React.RefObject<HTMLDivElement | null>) {
     x: 0,
     y: 0,
     scale: 0.2,
+    travel: TRAVEL_MIN_PX,
     size: DOCK_PX_DESKTOP,
     inset: DOCK_INSET_DESKTOP,
     ready: false,
@@ -100,6 +117,7 @@ function useDock(wrapperRef: React.RefObject<HTMLDivElement | null>) {
       const inset = mobile ? DOCK_INSET_MOBILE : DOCK_INSET_DESKTOP;
       const half = size / 2;
       setDock({
+        travel: Math.max(TRAVEL_MIN_PX, window.innerHeight * TRAVEL_VH),
         x: window.innerWidth / 2 - inset - half,
         y: window.innerHeight / 2 - inset - half,
         scale: size / w,
@@ -141,24 +159,24 @@ export default function ChatLauncher() {
   const pathname = usePathname();
   const isHome = pathname === "/";
 
-  /* Progress 0 → 0.12 of the page carries the knight from the centre of the
-     hero to the corner. The wrapper only translates + scales — the plane stays
-     face-on. The 3D turn lives INSIDE the canvas: `spin` starts at one full
-     turn for the hero→corner journey and then KEEPS advancing with the scroll
-     for the rest of the page (one turn by the corner, up to five by the
-     bottom), so the knight is still visibly turning every time the visitor
-     scrolls — even docked on the right. Scrolling back reverses it.
-     While the chat is open the knight steps aside (fades out) and returns the
-     moment the chat closes. */
-  const { scrollYProgress } = useScroll();
-  /* 0 → 0.18 of the page carries the knight from the hero centre to the corner.
-     Widened from 0.12: over 12% the shrink was abrupt enough to read as a snap,
-     and mid-journey the knight sat squarely on the body copy. */
-  const x = useTransform(scrollYProgress, [0, 0.18], [0, dock.x]);
-  const y = useTransform(scrollYProgress, [0, 0.18], [0, dock.y]);
-  const scale = useTransform(scrollYProgress, [0, 0.18], [1, dock.scale]);
-  /* Docked from the first frame on inner pages, so the turn is spread across
-     the whole page instead of being crammed into the first 18%. */
+  /* The wrapper only translates + scales — the plane stays face-on. The 3D turn
+     lives INSIDE the canvas, so the knight is still visibly turning every time
+     the visitor scrolls, even docked on the right; scrolling back turns it
+     back. While the chat is open the knight steps aside (fades out) and returns
+     the moment the chat closes. */
+  const { scrollY, scrollYProgress } = useScroll();
+
+  /* WHERE and HOW BIG ride absolute scroll distance (dock.travel, in pixels),
+     so nothing the page does to its own height can move or resize the parked
+     knight. See the TRAVEL_VH note above — this is the fix for the knight
+     changing size on its own while sitting in the corner. */
+  const x = useTransform(scrollY, [0, dock.travel], [0, dock.x]);
+  const y = useTransform(scrollY, [0, dock.travel], [0, dock.y]);
+  const scale = useTransform(scrollY, [0, dock.travel], [1, dock.scale]);
+
+  /* The TURN, by contrast, is deliberately proportional to the page: a long
+     page should turn the knight further than a short one. Nothing about the
+     rotation affects its size, so page-height drift is harmless here. */
   const spin = useTransform(
     scrollYProgress,
     isHome ? [0, 0.18, 1] : [0, 1],
@@ -188,53 +206,38 @@ export default function ChatLauncher() {
    * marginalia — a handwritten note in the margin, with a rule pointing at the
    * thing it annotates.
    *
-   * It is simply THERE, quietly, the whole time the knight is parked — and it
-   * is driven by EXACTLY the same motion value as the knight itself.
+   * It is simply THERE, quietly, the whole time the knight is parked, and it is
+   * driven by a PLAIN scroll listener rather than by framer.
    *
-   * Two earlier versions used React state (a timed nudge, then a `docked`
-   * boolean fed by a scroll listener) and both drifted out of sync with the
-   * knight: the knight would be sitting in the corner with no label beside it,
-   * because a listener only fires when scroll *changes* and state updates land
-   * a frame late. Deriving the opacity from scrollYProgress the same way the
-   * knight's scale is derived makes desync structurally impossible — one
-   * source, one pipeline, no state to fall behind.
+   * Four framer-based versions of this failed, each differently: a timed nudge
+   * that raced the dock measurement, a useTransform range that would not clamp,
+   * a `cond ? motionValue : 0` style that bound the element to the static 0 it
+   * saw on its first render, and a transform callback that captured
+   * `dock.ready === false` in its closure and never saw it flip. The knight
+   * needs framer because it animates continuously; a label that is either shown
+   * or not does not, and every attempt to route it through the same machinery
+   * bought a new bug.
    *
-   * It fades in over the last stretch of the dock so it arrives with the
-   * knight rather than blinking on. On an inner page the knight is already
-   * parked, so it is simply on.
-   */
-  /*
-   * The note is driven by a PLAIN scroll listener, not by framer.
-   *
-   * Three framer-based versions of this failed, each for a different reason:
-   * a useTransform range that would not clamp, a `cond ? motionValue : 0`
-   * style that bound the element to the static 0 it saw on the first render,
-   * and a transform callback that captured `dock.ready === false` in its
-   * closure and never saw it flip. The knight needs framer because it is
-   * animating continuously; a label that is either shown or not does not, and
-   * every attempt to route it through the same machinery bought a new bug.
-   *
-   * A native listener with an immediate first read has neither problem: it is
-   * correct on mount (so a visitor arriving mid-page via a hash link or a
-   * restored scroll position sees the cue), correct after every scroll, and
-   * correct after a resize.
+   * A native listener with an immediate first read has none of those problems.
+   * It is correct on mount — so someone arriving mid-page from a hash link or a
+   * restored scroll position still gets the cue — correct after every scroll,
+   * and correct after a resize.
    */
   const [docked, setDocked] = useState(!isHome);
-  const [nudge, setNudge] = useState(false);
-  const [hovered, setHovered] = useState(false);
-
-  useMotionValueEvent(scrollYProgress, "change", (v) => {
-    if (isHome) setDocked(v >= 0.17);
-  });
 
   useEffect(() => {
-    if (!docked || !dock.ready) return;
-    setNudge(true);
-    const t = setTimeout(() => setNudge(false), 3000);
-    return () => clearTimeout(t);
-  }, [docked, dock.ready]);
+    if (!isHome) return;
+    const read = () => setDocked(window.scrollY >= dock.travel * 0.96);
+    read();
+    window.addEventListener("scroll", read, { passive: true });
+    window.addEventListener("resize", read);
+    return () => {
+      window.removeEventListener("scroll", read);
+      window.removeEventListener("resize", read);
+    };
+  }, [isHome, dock.travel]);
 
-  const showHint = dock.ready && docked && !open && (nudge || hovered);
+  const showHint = dock.ready && docked && !open;
 
   return (
     <>
@@ -289,8 +292,6 @@ export default function ChatLauncher() {
           animate={{ opacity: open ? 0 : 1 }}
           transition={{ duration: 0.25, ease: "easeInOut" }}
           initial={false}
-          onHoverStart={() => setHovered(true)}
-          onHoverEnd={() => setHovered(false)}
           className="pointer-events-auto aspect-square w-[56vw] max-w-[540px] sm:w-[42vw] lg:w-[34vw]"
         >
           <button
