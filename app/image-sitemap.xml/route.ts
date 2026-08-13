@@ -1,6 +1,5 @@
 import { IMAGE_CAPTIONS } from '@/data/image-seo';
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.complianceincheck.com';
+import { SITE_URL } from '@/lib/seo';
 
 export async function GET() {
   const images = Object.entries(IMAGE_CAPTIONS).map(([key, caption]) => {

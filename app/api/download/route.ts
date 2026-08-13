@@ -21,6 +21,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { downloadSchema, type DownloadOutput } from "@/lib/schemas";
+import { SITE_URL } from "@/lib/seo";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -29,7 +30,6 @@ const WINDOW_MS = 60 * 60 * 1000; // 1 hour
 const MAX_HITS = 4;
 const hits = new Map<string, { count: number; resetAt: number }>();
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.complianceincheck.com";
 const CONTACT_TO = process.env.CONTACT_TO_EMAIL;
 const RESEND_FROM =
   process.env.RESEND_FROM || "Amit Modi & Co. <onboarding@resend.dev>";

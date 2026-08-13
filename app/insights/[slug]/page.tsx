@@ -5,6 +5,7 @@ import { compileMDX } from "next-mdx-remote/rsc";
 import { mdxComponents } from "@/components/mdx";
 import ReadingProgress from "@/components/mdx/ReadingProgress";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
+import { ArticleSchema, FAQPageSchema } from "@/components/seo/SchemaEmitters";
 import ClosingCTA from "@/components/sections/ClosingCTA";
 import {
   getPublishedPosts,
@@ -17,7 +18,7 @@ import {
 } from "@/lib/mdx";
 import { getAllServices } from "@/lib/content";
 import { formatPostDate } from "../_components";
-import { buildMetadata, withSiteName, fitDescription } from "@/lib/seo";
+import { buildMetadata, withSiteName, fitDescription, SITE_URL } from "@/lib/seo";
 
 /*
  * app/insights/[slug]/page.tsx — the article template (Phase 14, Agent A).
@@ -40,8 +41,6 @@ export const dynamicParams = false;
 export function generateStaticParams() {
   return getPublishedPosts().map((post) => ({ slug: post.slug }));
 }
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "";
 
 export async function generateMetadata({
   params,
@@ -197,6 +196,7 @@ export default async function ArticlePage({
 
   const { content } = await compileMDX({
     source: post.source,
+    options: { blockJS: false },
     components: mdxComponents,
   });
 
@@ -205,6 +205,8 @@ export default async function ArticlePage({
 
   return (
     <>
+      <ArticleSchema post={post} domain={SITE_URL} />
+      {post.faqs.length > 0 && <FAQPageSchema faqs={post.faqs} />}
       <ReadingProgress />
 
       <article className="bg-paper-deep">

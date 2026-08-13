@@ -188,4 +188,293 @@ export const SERVICES = [
     process: [],
     faqs: [],
   },
+  {
+    slug: 'gst-notice-response',
+    name: 'GST Notice Response & Representation',
+    shortName: 'GST Notice Response',
+    category: 'litigation',
+    oneLiner:
+      'An evidence-backed reply to a GST query or show-cause notice, filed before the deadline and represented through adjudication.',
+    primaryKeyword: 'GST notice response',
+    secondaryKeywords: [
+      'GST show cause notice reply',
+      'DRC-01 response',
+      'GST notice representation',
+      'Section 73 74 CGST reply',
+    ],
+    intentStage: 'problem-aware',
+    statuteRefs: ['Sec 73 CGST Act', 'Sec 74 CGST Act', 'Form DRC-01'],
+    relatedSlugs: ['gst-appeals', 'gst-returns-filing', 'pre-notice-health-check'],
+    pricing: { govtFee: null, professionalFee: 'on-request', currency: 'INR' },
+    turnaround: { minDays: 0, maxDays: 0, note: 'VERIFY — pending BRAND-FACTS.md' },
+    documents: [],
+    process: [
+      {
+        order: 1,
+        title: 'Notice review',
+        description: 'We read the section code, the demand, and the reply window, and confirm the served date.',
+        owner: 'firm',
+        durationDays: 1,
+      },
+      {
+        order: 2,
+        title: 'Evidence assembly',
+        description: 'Invoices, returns, and reconciliations for the period in question are gathered from you.',
+        owner: 'client',
+        durationDays: 2,
+      },
+      {
+        order: 3,
+        title: 'Reply drafting',
+        description: 'Each allegation is mapped to a document and the written reply is drafted.',
+        owner: 'firm',
+        durationDays: 2,
+      },
+      {
+        order: 4,
+        title: 'Filing',
+        description: 'The reply is filed on the GST portal before the deadline and the acknowledgment preserved.',
+        owner: 'firm',
+        durationDays: 1,
+      },
+      {
+        order: 5,
+        title: 'Representation',
+        description: 'We follow the matter through adjudication, answer further queries, and attend hearings.',
+        owner: 'firm',
+        durationDays: 0,
+      },
+    ],
+    faqs: [
+      {
+        id: 'faq-notice-window',
+        question: 'How much time do I have to reply to a GST notice?',
+        answer:
+          'The response window runs from the date the notice is served and is fixed by the statute under which it is issued. We treat the served date as the only date that matters and build the reply to be filed well before it.',
+        verified: true,
+      },
+      {
+        id: 'faq-notice-demand-correct',
+        question: 'Do I need to reply even if the demand is correct?',
+        answer:
+          'A reply is still worth filing: it lets you explain the facts, correct the computation, and preserve your position. Where the notice is under Section 74, a written reply that addresses the framing can be the difference between a demand and a far larger penalty.',
+        verified: true,
+      },
+      {
+        id: 'faq-notice-missed-deadline',
+        question: 'What happens if the reply deadline passes?',
+        answer:
+          'The department can confirm the demand as proposed and interest keeps running. A late reply is possible in some circumstances, but your position is far stronger when the response is on record before the deadline.',
+        verified: true,
+      },
+    ],
+  },
+  {
+    slug: 'global-trader-onboarding',
+    name: 'Global Trader Onboarding',
+    shortName: 'Global Trader Onboarding',
+    category: 'trade',
+    oneLiner:
+      'IEC, GST LUT, RCMC and the export compliance sequence, set up end to end for a business taking its first cross-border order.',
+    primaryKeyword: 'export compliance India',
+    secondaryKeywords: [
+      'IEC LUT RCMC sequence',
+      'first time exporter compliance',
+      'export without IGST',
+      'gst lut filing',
+    ],
+    intentStage: 'solution-aware',
+    statuteRefs: ['Foreign Trade (Development and Regulation) Act, 1992', 'Rule 96A CGST Rules', 'RCMC'],
+    relatedSlugs: ['import-export-licence', 'gst-registration', 'gst-returns-filing'],
+    pricing: { govtFee: null, professionalFee: 'on-request', currency: 'INR' },
+    turnaround: { minDays: 0, maxDays: 0, note: 'VERIFY — pending BRAND-FACTS.md' },
+    documents: [],
+    process: [
+      {
+        order: 1,
+        title: 'Export readiness map',
+        description: 'We confirm which approvals your product or service actually needs — IEC, LUT, RCMC, registrations.',
+        owner: 'firm',
+        durationDays: 1,
+      },
+      {
+        order: 2,
+        title: 'IEC filing',
+        description: 'The DGFT application is prepared and filed with the KYC and bank documents.',
+        owner: 'firm',
+        durationDays: 3,
+      },
+      {
+        order: 3,
+        title: 'GST LUT',
+        description: 'The Letter of Undertaking in Form GST RFD-11 is filed for zero-rated supply without paying IGST.',
+        owner: 'firm',
+        durationDays: 2,
+      },
+      {
+        order: 4,
+        title: 'RCMC and schemes',
+        description: 'Registration with the relevant export promotion council is completed where the product needs it.',
+        owner: 'firm',
+        durationDays: 2,
+      },
+      {
+        order: 5,
+        title: 'First shipment review',
+        description: 'Invoice, shipping bill and e-invoice wiring are verified before the first consignment moves.',
+        owner: 'firm',
+        durationDays: 1,
+      },
+    ],
+    faqs: [
+      {
+        id: 'faq-trader-sequence',
+        question: 'In what order are IEC, LUT and RCMC set up?',
+        answer:
+          'IEC is the foundation and comes first. The GST LUT follows once you are registered under GST and want to export without paying IGST. RCMC depends on your product and the relevant export promotion council. The sequence matters because each step needs the prior document.',
+        verified: true,
+      },
+      {
+        id: 'faq-trader-services',
+        question: 'Can services be exported, or only goods?',
+        answer:
+          'Both are exported, and each has its own compliance path — goods run through customs and shipping bills; services run through foreign remittance evidence and the GST return treatment. We map your specific case rather than applying a single template.',
+        verified: true,
+      },
+    ],
+  },
+  {
+    slug: 'ngo-trust-compliance',
+    name: 'NGO & Trust Compliance',
+    shortName: 'NGO / Trust Compliance',
+    category: 'registration',
+    oneLiner:
+      'Section 12A/12AB registration, 80G approval, and the standing compliance calendar for trusts, societies and non-profits.',
+    primaryKeyword: 'trust 12A 80G registration',
+    secondaryKeywords: [
+      'NGO compliance India',
+      '12A registration',
+      '80G approval',
+      'trust tax compliance',
+    ],
+    intentStage: 'solution-aware',
+    statuteRefs: ['Sec 12A Income-tax Act', 'Sec 12AB Income-tax Act', 'Sec 80G Income-tax Act'],
+    relatedSlugs: ['entity-formation', 'income-tax-tds-returns', 'gst-registration'],
+    pricing: { govtFee: null, professionalFee: 'on-request', currency: 'INR' },
+    turnaround: { minDays: 0, maxDays: 0, note: 'VERIFY — pending BRAND-FACTS.md' },
+    documents: [],
+    process: [
+      {
+        order: 1,
+        title: 'Objects and deed review',
+        description: 'The trust deed or society memorandum is checked to confirm the objects support the application.',
+        owner: 'firm',
+        durationDays: 1,
+      },
+      {
+        order: 2,
+        title: '12A/12AB application',
+        description: 'Form 10A is filed and the registration order is tracked to issue.',
+        owner: 'firm',
+        durationDays: 3,
+      },
+      {
+        order: 3,
+        title: '80G approval',
+        description: 'The donor deduction approval under Section 80G is applied for and followed up.',
+        owner: 'firm',
+        durationDays: 3,
+      },
+      {
+        order: 4,
+        title: 'Compliance calendar',
+        description: 'The annual return, audit and income-utilisation obligations are set up as a standing calendar.',
+        owner: 'firm',
+        durationDays: 1,
+      },
+    ],
+    faqs: [
+      {
+        id: 'faq-trust-12a-80g',
+        question: 'Is 80G approval the same as 12A registration?',
+        answer:
+          'No. Section 12A/12AB registration protects the trust\u2019s own income from tax. Section 80G approval extends a deduction to the donor. Most trusts need both, but they are separate orders from the department.',
+        verified: true,
+      },
+      {
+        id: 'faq-trust-existing',
+        question: 'Can a trust register after it has already started its activities?',
+        answer:
+          'Yes — the application is a fresh filing for an existing trust. The records and the objects must still satisfy the requirements, which is why the deed and the accounts are reviewed before filing.',
+        verified: true,
+      },
+    ],
+  },
+  {
+    slug: 'pre-notice-health-check',
+    name: 'Pre-Notice Compliance Health Check',
+    shortName: 'Pre-Notice Health Check',
+    category: 'filing',
+    oneLiner:
+      'A structured review of your GST and TDS position against your returns and books, so mismatches are fixed before the department finds them.',
+    primaryKeyword: 'GST compliance health check',
+    secondaryKeywords: [
+      'GST notice prevention',
+      'compliance review service',
+      'TDS reconciliation service',
+      'GSTR-2B reconciliation',
+    ],
+    intentStage: 'problem-aware',
+    statuteRefs: ['Sec 73 CGST Act', 'Sec 74 CGST Act', 'Sec 200 Income-tax Act'],
+    relatedSlugs: ['gst-returns-filing', 'income-tax-tds-returns', 'gst-notice-response'],
+    pricing: { govtFee: null, professionalFee: 'on-request', currency: 'INR' },
+    turnaround: { minDays: 0, maxDays: 0, note: 'VERIFY — pending BRAND-FACTS.md' },
+    documents: [],
+    process: [
+      {
+        order: 1,
+        title: 'Data pull',
+        description: 'Returns, GSTR-2B, Form 26AS/AIS, and the purchase and sales registers are collected from you.',
+        owner: 'client',
+        durationDays: 1,
+      },
+      {
+        order: 2,
+        title: 'Reconciliation',
+        description: 'GSTR-2B is matched against the books, 26AS/AIS against TDS records, and GSTR-1 against GSTR-3B.',
+        owner: 'firm',
+        durationDays: 3,
+      },
+      {
+        order: 3,
+        title: 'Exception report',
+        description: 'Every mismatch is listed with the likely departmental trigger and the fix for each.',
+        owner: 'firm',
+        durationDays: 1,
+      },
+      {
+        order: 4,
+        title: 'Remediation',
+        description: 'Corrections are filed, pending queries answered, and a standing monthly check is set up.',
+        owner: 'firm',
+        durationDays: 2,
+      },
+    ],
+    faqs: [
+      {
+        id: 'faq-health-looks-at',
+        question: 'What does the health check actually look at?',
+        answer:
+          'It compares what you filed against what the department\u2019s systems see: GSTR-2B against your purchase records, Form 26AS and AIS against your TDS ledger, and your GSTR-1 against your GSTR-3B. Every difference becomes an item on a report with a fix.',
+        verified: true,
+      },
+      {
+        id: 'faq-health-prevention',
+        question: 'Is a health check only for businesses that have already received a notice?',
+        answer:
+          'No — it is most useful before one arrives. The mismatches that trigger notices are usually visible in the data months earlier, and correcting them on your own terms is far cheaper than answering a notice.',
+        verified: true,
+      },
+    ],
+  },
 ] as const;

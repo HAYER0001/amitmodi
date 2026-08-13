@@ -46,6 +46,15 @@ const postSchema = z.object({
   cover: z.string().optional(),
   status: z.enum(["template", "live"]).default("live"),
   verified: z.boolean().default(false),
+  faqs: z
+    .array(
+      z.object({
+        question: z.string().min(1),
+        answer: z.string().min(1),
+        verified: z.boolean().default(false),
+      }),
+    )
+    .default([]),
 });
 
 export type PostFrontmatter = z.infer<typeof postSchema>;
@@ -83,6 +92,7 @@ function normalizeFrontmatter(
     cover: data.cover,
     status: data.status,
     verified: data.verified,
+    faqs: data.faqs,
   };
 }
 
@@ -104,6 +114,8 @@ export type Post = {
   cover: string | null;
   status: "template" | "live";
   verified: boolean;
+  /** Verified Q&A for FAQPageSchema — only `verified: true` entries render. */
+  faqs: PostFaq[];
   /** "4 min read" — from the reading-time package. */
   readingTime: string;
   toc: TocItem[];
@@ -111,6 +123,12 @@ export type Post = {
   excerpt: string;
   /** The markdown body (frontmatter stripped) — for compileMDX. */
   source: string;
+};
+
+export type PostFaq = {
+  question: string;
+  answer: string;
+  verified: boolean;
 };
 
 /* ---- parsing helpers -------------------------------------------------- */
@@ -178,6 +196,7 @@ function readPost(dir: string, file: string): Post {
     cover: fm.cover ?? null,
     status: fm.status,
     verified: fm.verified,
+    faqs: fm.faqs,
     readingTime: readingTime(content).text,
     toc: extractToc(content),
     excerpt: extractExcerpt(content),

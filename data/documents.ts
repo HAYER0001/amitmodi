@@ -410,4 +410,161 @@ export const DOCUMENTS_BY_SERVICE: Record<
       mandatory: true,
     },
   ],
+
+  'gst-notice-response': [
+    {
+      id: 'doc-notice',
+      label: 'Copy of the GST notice (DRC-01 or query)',
+      appliesTo: ['Individual'],
+      mandatory: true,
+    },
+    {
+      id: 'doc-returns',
+      label: 'Relevant GST returns for the period in question',
+      appliesTo: ['Individual'],
+      mandatory: true,
+    },
+    {
+      id: 'doc-invoices',
+      label: 'Invoices and registers covering the disputed supplies',
+      appliesTo: ['Individual'],
+      mandatory: true,
+    },
+    {
+      id: 'doc-reconciliation',
+      label: 'ITC and sales reconciliations for the period',
+      appliesTo: ['Individual'],
+      mandatory: true,
+    },
+    {
+      id: 'doc-authorisation',
+      label: 'Authorisation in favour of the representative',
+      appliesTo: ['Individual'],
+      mandatory: true,
+    },
+  ],
+
+  'global-trader-onboarding': [
+    {
+      id: 'doc-pan',
+      label: 'PAN of the applicant entity',
+      appliesTo: ['Company', 'Partnership Firm'],
+      mandatory: true,
+    },
+    {
+      id: 'doc-aadhaar',
+      label: 'Aadhaar of the signatory',
+      appliesTo: ['Individual'],
+      mandatory: true,
+    },
+    {
+      id: 'doc-incorporation',
+      label: 'Certificate of incorporation or partnership deed',
+      appliesTo: ['Company', 'Partnership Firm'],
+      mandatory: true,
+    },
+    {
+      id: 'doc-bank-certificate',
+      label: 'Bank certificate or cancelled cheque bearing the entity name',
+      appliesTo: ['Individual'],
+      mandatory: true,
+    },
+    {
+      id: 'doc-address',
+      label: 'Address proof of the business premises',
+      appliesTo: ['Individual'],
+      mandatory: true,
+    },
+    {
+      id: 'doc-products',
+      label: 'The list of products or services to be exported',
+      appliesTo: ['Individual'],
+      mandatory: true,
+    },
+    {
+      id: 'doc-dsc',
+      label: 'Digital signature certificate of the signatory',
+      appliesTo: ['Individual'],
+      mandatory: true,
+    },
+  ],
+
+  'ngo-trust-compliance': [
+    {
+      id: 'doc-deed',
+      label: 'Trust deed or society memorandum, rules and regulations',
+      appliesTo: ['Trust', 'Society'],
+      mandatory: true,
+    },
+    {
+      id: 'doc-registration',
+      label: 'Registration certificate of the trust or society',
+      appliesTo: ['Trust', 'Society'],
+      mandatory: true,
+    },
+    {
+      id: 'doc-pan',
+      label: 'PAN of the trust and of the trustees',
+      appliesTo: ['Trust', 'Society'],
+      mandatory: true,
+    },
+    {
+      id: 'doc-accounts',
+      label: 'Audited accounts where available',
+      appliesTo: ['Trust', 'Society'],
+      mandatory: false,
+      note: 'Required where the trust has already commenced activities.',
+    },
+    {
+      id: 'doc-objects',
+      label: 'Statement of objects and activities',
+      appliesTo: ['Trust', 'Society'],
+      mandatory: true,
+    },
+    {
+      id: 'doc-authorisation',
+      label: 'Authorisation from the trustees for the application',
+      appliesTo: ['Trust', 'Society'],
+      mandatory: true,
+    },
+  ],
+
+  'pre-notice-health-check': [
+    {
+      id: 'doc-returns',
+      label: 'Filed GST and income tax returns for the review period',
+      appliesTo: ['Individual'],
+      mandatory: true,
+    },
+    {
+      id: 'doc-gstr2b',
+      label: 'GSTR-2B statements for the review period',
+      appliesTo: ['Individual'],
+      mandatory: true,
+    },
+    {
+      id: 'doc-26as',
+      label: 'Form 26AS and AIS downloads',
+      appliesTo: ['Individual'],
+      mandatory: true,
+    },
+    {
+      id: 'doc-registers',
+      label: 'Sales and purchase registers',
+      appliesTo: ['Individual'],
+      mandatory: true,
+    },
+    {
+      id: 'doc-tds',
+      label: 'TDS ledger and challan records',
+      appliesTo: ['Individual'],
+      mandatory: true,
+    },
+    {
+      id: 'doc-portal',
+      label: 'GST and income tax portal access or exports',
+      appliesTo: ['Individual'],
+      mandatory: true,
+    },
+  ],
 };

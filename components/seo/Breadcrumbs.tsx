@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { BreadcrumbListSchema } from '@/components/seo/SchemaEmitters';
+import { SITE_URL } from '@/lib/seo';
 
 // We import the label map from navigation data. If a route isn't explicitly
 // mapped, we fallback to a formatted version of the URL segment.
@@ -32,7 +33,7 @@ export function Breadcrumbs() {
 
   return (
     <>
-      <BreadcrumbListSchema crumbs={schemaCrumbs} domain={process.env.NEXT_PUBLIC_SITE_URL ?? "https://amitmodi.com"} />
+      <BreadcrumbListSchema crumbs={schemaCrumbs} domain={SITE_URL} />
       <nav aria-label="Breadcrumb" className="my-6">
         <ol className="flex flex-wrap items-center space-x-2 text-sm font-label text-ink-soft">
         <li>

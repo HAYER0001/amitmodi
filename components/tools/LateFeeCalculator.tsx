@@ -71,6 +71,7 @@ export default function LateFeeCalculator({ initial }: { initial: LateFeeInitial
       breakdown={result?.breakdown ?? null}
       invalid={state.invalid}
       shareQuery={state.input ? lateFeeQueryString(state.input) : ""}
+      ctaHeadline="This penalty is still contestable in many cases. Have it reviewed."
     >
       <div className="space-y-6 rounded-md border border-rule bg-paper p-5 shadow-cut sm:p-6">
         <div className="grid gap-6 sm:grid-cols-2">

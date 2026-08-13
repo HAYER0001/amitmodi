@@ -7,6 +7,7 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { slugify } from "@/lib/utils";
 import { getImageDimensions } from "@/lib/mdx";
+import { AnswerBlock } from "@/components/content/AnswerBlock";
 
 /*
  * components/mdx/index.tsx — the MDX component map (Phase 14, Agent A).
@@ -340,4 +341,5 @@ export const mdxComponents: MDXComponents = {
   ComparisonTable,
   StatuteRef,
   Verify,
+  AnswerBlock,
 };

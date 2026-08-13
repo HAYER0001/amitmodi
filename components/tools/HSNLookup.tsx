@@ -34,6 +34,7 @@ export default function HSNLookup({ initial }: { initial: HSNInitial }) {
       breakdown={result.breakdown}
       invalid={null}
       shareQuery={query.trim() === "" ? "" : `q=${encodeURIComponent(query.trim())}`}
+      ctaHeadline="Wrong HSN is a classification dispute waiting to happen."
     >
       <div className="space-y-6 rounded-md border border-rule bg-paper p-5 shadow-cut sm:p-6">
         <TextInput

@@ -14,7 +14,7 @@ import { getContent, type PenaltyNote } from "../_content-bridge";
 import { getAllServices, verifiedOnly } from "@/lib/content";
 import { DOCUMENTS_BY_SERVICE } from "@/data/documents";
 import type { ProcessStep } from "@/types/content";
-import { buildMetadata, withSiteName, fitDescription } from "@/lib/seo";
+import { buildMetadata, withSiteName, fitDescription, SITE_URL } from "@/lib/seo";
 
 /*
  * app/services/[slug]/page.tsx — the dynamic service template.
@@ -42,6 +42,10 @@ const ANSWER_QUESTION: Record<string, string> = {
   "income-tax-appeals": "How does an income tax appeal work?",
   "gst-appeals": "How does a GST appeal work?",
   "import-export-licence": "What is an Importer Exporter Code (IEC)?",
+  "gst-notice-response": "What is a GST notice and do I really have to respond?",
+  "global-trader-onboarding": "What does exporting from India require before the first shipment?",
+  "ngo-trust-compliance": "What registrations and filings does a trust or NGO need?",
+  "pre-notice-health-check": "What is a pre-notice compliance health check?",
 };
 
 export function generateStaticParams() {
@@ -227,10 +231,10 @@ export default async function ServicePage({
 
   return (
     <>
-      <ServiceSchema service={service} content={content} domain={process.env.NEXT_PUBLIC_SITE_URL ?? "https://amitmodi.com"} />
+      <ServiceSchema service={service} content={content} domain={SITE_URL} />
       {service.faqs && <FAQPageSchema faqs={service.faqs} />}
       {service.process.length > 0 && <HowToSchema steps={service.process} title={`How ${service.name} works`} description={`The process for ${service.name}`} />}
-      <WebPageSchema domain={process.env.NEXT_PUBLIC_SITE_URL ?? "https://amitmodi.com"} url={`/services/${slug}`} speakableSelector="#direct-answer" />
+      <WebPageSchema domain={SITE_URL} url={`/services/${slug}`} speakableSelector="#direct-answer" />
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <Breadcrumbs />

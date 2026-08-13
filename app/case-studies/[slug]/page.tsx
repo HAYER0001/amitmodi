@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
+import { CaseStudySchema } from "@/components/seo/SchemaEmitters";
 import CaseStudyCard from "@/components/sections/CaseStudyCard";
 import ClosingCTA from "@/components/sections/ClosingCTA";
 import {
   getConsentedCaseStudies,
   getCaseStudy,
 } from "@/lib/case-studies";
-import { buildMetadata, withSiteName } from "@/lib/seo";
+import { buildMetadata, withSiteName, SITE_URL } from "@/lib/seo";
 
 /*
  * app/case-studies/[slug]/page.tsx — one STAR case study.
@@ -50,6 +51,12 @@ export default async function CaseStudyPage({
 
   return (
     <>
+      <CaseStudySchema
+        title={study.title}
+        statuteRef={study.statuteRef}
+        domain={SITE_URL}
+        path={`/case-studies/${study.slug}`}
+      />
       <div className="bg-paper-deep">
         <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
           <Breadcrumbs />

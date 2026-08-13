@@ -20,10 +20,12 @@ import type { Metadata } from "next";
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://amitmodi-one.vercel.app";
 /* The fallback is the CURRENT live host, not an aspirational one. It was
-   pointing at complianceincheck.com — the design codename — so every canonical,
-   every sitemap entry and every share card advertised a domain the practice does
-   not own. Set NEXT_PUBLIC_SITE_URL in Vercel to amitmodi.co.in the day the
-   domain resolves; until then this keeps the URLs honest. */
+   pointing at a design-codename domain, so every canonical, every sitemap
+   entry and every share card advertised a domain the practice does not own.
+   Set NEXT_PUBLIC_SITE_URL in Vercel to the real domain the day it resolves;
+   until then this keeps the URLs honest. Exactly one definition exists in
+   the repo — every other module imports this constant instead of declaring
+   its own fallback. */
 
 /* The generated share card. Without this, every link shared to WhatsApp —
    which is how an Indian small-business client actually forwards a

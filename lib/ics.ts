@@ -17,6 +17,7 @@
  */
 
 import { COMPLIANCE_CALENDAR } from "@/data/compliance-calendar";
+import { SITE_URL } from "@/lib/seo";
 
 /** The fields the .ics builder needs. The data file is `as const`, so the
     literal `verified: false` types are broadened here via `unknown`. */
@@ -33,8 +34,6 @@ type CalendarEntry = {
 };
 
 const ALLOWED_FREQUENCIES = new Set(["monthly", "quarterly", "annual"]);
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.complianceincheck.com";
 
 /** Escape a text value for the iCalendar line-oriented format. */
 function esc(text: string): string {
@@ -90,7 +89,7 @@ function eventFor(entry: CalendarEntry, anchorYear: number): string[] {
 
   return [
     "BEGIN:VEVENT",
-    `UID:${entry.id}@complianceincheck.com`,
+    `UID:${entry.id}@${new URL(SITE_URL).host}`,
     `DTSTAMP:${anchorYear}0101T000000Z`,
     `DTSTART;VALUE=DATE:${anchorYear}${startMonth}${startDay}`,
     `RRULE:${rrule}`,

@@ -5,13 +5,13 @@ import { compileMDX } from "next-mdx-remote/rsc";
 import { mdxComponents } from "@/components/mdx";
 import ReadingProgress from "@/components/mdx/ReadingProgress";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
-import { ArticleSchema } from "@/components/seo/SchemaEmitters";
+import { ArticleSchema, FAQPageSchema } from "@/components/seo/SchemaEmitters";
 import ClosingCTA from "@/components/sections/ClosingCTA";
 import { LeadMagnet } from "@/components/content/LeadMagnet";
 import { getPublishedPosts, getPostBySlug, type Post, type TocItem } from "@/lib/mdx";
 import { formatGuideDate, magnetForGuide } from "../_components";
 import { PrintGuideButton } from "../_PrintGuideButton";
-import { buildMetadata, withSiteName, fitDescription } from "@/lib/seo";
+import { buildMetadata, withSiteName, fitDescription, SITE_URL } from "@/lib/seo";
 
 /*
  * app/guides/[slug]/page.tsx — the guide template (Phase 15, Agent A).
@@ -131,6 +131,7 @@ export default async function GuidePage({
 
   const { content } = await compileMDX({
     source: guide.source,
+    options: { blockJS: false },
     components: mdxComponents,
   });
 
@@ -138,7 +139,8 @@ export default async function GuidePage({
 
   return (
     <>
-      <ArticleSchema post={guide} domain={process.env.NEXT_PUBLIC_SITE_URL ?? "https://amitmodi.com"} />
+      <ArticleSchema post={guide} domain={SITE_URL} />
+      {guide.faqs.length > 0 && <FAQPageSchema faqs={guide.faqs} />}
       <ReadingProgress />
 
       <article className="bg-paper-deep">

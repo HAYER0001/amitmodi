@@ -51,7 +51,7 @@ export default function GSTCalculator({ initial }: { initial: GSTInitial }) {
       breakdown={result?.breakdown ?? null}
       invalid={state.invalid}
       shareQuery={state.input ? gstQueryString(state.input) : ""}
-    >
+      ctaHeadline="Check whether this liability is correct before you file."    >
       <div className="space-y-6 rounded-md border border-rule bg-paper p-5 shadow-cut sm:p-6">
         <Field label="Amount" hint="The price of the supply — enter it with or without commas, e.g. 1,00,000.">
           <TextInput

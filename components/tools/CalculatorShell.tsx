@@ -2,6 +2,7 @@
 
 import { useState, type ReactNode } from "react";
 import type { BreakdownLine } from "@/lib/calc/types";
+import ToolCta from "./ToolCta";
 
 /*
  * CalculatorShell — shared chrome for every tool in /tools.
@@ -33,6 +34,8 @@ type CalculatorShellProps = {
   shareQuery: string;
   /** Override the result-panel heading, e.g. "Your total". */
   resultLabel?: string;
+  /** The plan's tool-specific contextual line for the CTA beneath the result. */
+  ctaHeadline?: string;
   /** The calculator's form controls. */
   children: ReactNode;
 };
@@ -71,6 +74,7 @@ export default function CalculatorShell({
   invalid,
   shareQuery,
   resultLabel = "Result",
+  ctaHeadline,
   children,
 }: CalculatorShellProps) {
   const [copied, setCopied] = useState<"result" | "link" | null>(null);
@@ -178,6 +182,10 @@ export default function CalculatorShell({
             </div>
           </div>
         </aside>
+      </div>
+
+      <div className="mt-8">
+        <ToolCta resultText={summary} headline={ctaHeadline} toolName={title} />
       </div>
     </section>
   );

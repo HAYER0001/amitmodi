@@ -51,6 +51,7 @@ export default function TDSRateFinder({ initial }: { initial: TDSInitial }) {
       breakdown={result?.breakdown ?? null}
       invalid={state.invalid}
       shareQuery={state.input ? tdsQueryString(state.input) : ""}
+      ctaHeadline="Mismatched TDS is the most common notice trigger."
     >
       <div className="space-y-6 rounded-md border border-rule bg-paper p-5 shadow-cut sm:p-6">
         <Field label="What are you paying for?">

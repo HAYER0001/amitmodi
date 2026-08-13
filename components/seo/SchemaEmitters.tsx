@@ -210,6 +210,45 @@ export function ArticleSchema({ post, domain }: { post: ArticleLike, domain: str
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />;
 }
 
+export function CaseStudySchema({
+  title,
+  statuteRef,
+  domain,
+  path,
+}: {
+  title: string;
+  statuteRef: string | null;
+  domain: string;
+  path: string;
+}) {
+  /* Self-suppressing: emits nothing when the statutory reference is absent. */
+  if (!statuteRef) return null;
+
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": title,
+    "about": {
+      "@type": "Thing",
+      "name": statuteRef,
+    },
+    "mentions": {
+      "@type": "Thing",
+      "name": statuteRef,
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": `${domain}${path}`,
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": BRAND.tradingName,
+    },
+  };
+
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />;
+}
+
 export function PersonSchema({ domain: _domain }: { domain?: string }) {
   const schema: Record<string, unknown> = {
     "@context": "https://schema.org",

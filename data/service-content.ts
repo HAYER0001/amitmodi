@@ -254,5 +254,125 @@ export const SERVICES = {
       verified: false
     },
     intro: 'Your legal gateway to international commerce.'
+  },
+  'gst-notice-response': {
+    h1: 'GST Notice Response',
+    metaTitle: 'GST Notice Response | Reply Before the Deadline',
+    metaDescription: 'A written, evidence-backed reply to a GST query or show-cause notice, filed before the deadline and represented through adjudication.',
+    directAnswer: 'A GST notice is a formal communication from the department flagging a discrepancy, a missing return, or a proposed demand. It is not a final order — it is an invitation to respond, and a written, evidence-backed reply filed within the statutory window is what separates a closed file from a confirmed demand.',
+    whoNeedsIt: [
+      'Businesses that received a DRC-01 show-cause notice',
+      'Owners facing an ITC mismatch notice from a GSTR-2B reconciliation',
+      'Businesses with a late or missing return query',
+      'Companies that need representation through adjudication'
+    ],
+    whatsIncluded: [
+      'Reading of the notice: section code, demand, and reply window',
+      'Collection and organisation of the evidence for the period',
+      'Drafting of the written reply against each allegation',
+      'Filing on the GST portal before the deadline',
+      'Follow-up through adjudication and further departmental queries'
+    ],
+    bodyHtml: `
+      <p>A GST notice arrives when the department's systems flag a difference between what you filed and what it expects — a missing return, a mismatch between GSTR-1 and GSTR-3B, or an ITC claim that GSTR-2B does not support. The notice is not the decision. It is the department asking you to explain the difference before it decides.</p>
+      <p>The reply is where the matter is won or lost. A response that maps each allegation to an invoice, a return, or a reconciliation closes the file cleanly. A vague or late response leaves the proposed demand standing, with interest running.</p>
+      <p>We read the notice first — the section code tells us whether the department is treating the matter as an honest error or as something more serious. The reply is then drafted to answer the specific framing, filed before the deadline, and the acknowledgment preserved.</p>
+    `,
+    penaltyNote: {
+      text: 'Failing to respond to a show-cause notice within the reply window lets the department confirm the proposed demand, with interest continuing to accrue on the unpaid tax.',
+      statuteRef: 'Sections 73 and 74, CGST Act',
+      verified: false
+    },
+    intro: 'The reply is where the matter is won.'
+  },
+  'global-trader-onboarding': {
+    h1: 'Global Trader Onboarding',
+    metaTitle: 'Global Trader Onboarding | IEC, LUT & RCMC in Sequence',
+    metaDescription: 'IEC, GST LUT, RCMC and the export compliance sequence, set up end to end for a business taking its first cross-border order.',
+    directAnswer: 'Global trader onboarding is the end-to-end setup of the approvals a business needs before its first export: the Importer Exporter Code (IEC) from the DGFT, the GST Letter of Undertaking (LUT) for zero-rated supplies, and the export promotion council registration (RCMC) where the product requires it. Each step depends on the one before it.',
+    whoNeedsIt: [
+      'Manufacturers taking their first cross-border order',
+      'Traders moving from domestic to export sales',
+      'Service providers exporting software or consultancy',
+      'Businesses that want the IEC, LUT and RCMC sequence right the first time'
+    ],
+    whatsIncluded: [
+      'An export readiness map of the approvals your product or service needs',
+      'IEC application and filing on the DGFT portal',
+      'GST LUT filing in Form GST RFD-11 for zero-rated supply',
+      'RCMC registration where the export promotion council requires it',
+      'Verification of the invoice, shipping bill and e-invoice wiring for the first shipment'
+    ],
+    bodyHtml: `
+      <p>Exporting from India is a sequence, not a single form. The Importer Exporter Code is the foundation — without it a shipment is held at customs. Once you are registered under GST, the Letter of Undertaking lets you export without paying IGST. Depending on your product, the relevant export promotion council registration (RCMC) adds the scheme benefits on top.</p>
+      <p>Getting the sequence wrong is expensive: an application filed in the wrong order, with the wrong supporting documents, means a rejection or a delayed shipment. We map the approvals your specific goods or services require, then file each step with the documentation that gets it through.</p>
+      <p>For services, the path runs through foreign remittance evidence and the GST return treatment rather than customs — the same rigour, a different checklist.</p>
+    `,
+    penaltyNote: {
+      text: 'A business that exports without the required approvals can face seized shipments at customs and ineligible zero-rated claims on the GST side.',
+      statuteRef: 'Foreign Trade (Development and Regulation) Act; Rule 96A CGST Rules',
+      verified: false
+    },
+    intro: 'Exporting is a sequence. We get it right the first time.'
+  },
+  'ngo-trust-compliance': {
+    h1: 'NGO & Trust Compliance',
+    metaTitle: 'NGO & Trust Compliance | 12A, 12AB & 80G',
+    metaDescription: 'Section 12A/12AB registration, 80G approval, and the standing compliance calendar for trusts, societies and non-profits.',
+    directAnswer: 'NGO and trust compliance is the set of registrations and filings that give a non-profit its tax identity: registration under Section 12A/12AB, which protects the trust\u2019s own income from tax, and approval under Section 80G, which lets donors claim a deduction. Both are separate orders of the department and each comes with ongoing filing obligations.',
+    whoNeedsIt: [
+      'Educational and charitable trusts seeking income-tax registration',
+      'Societies and non-profits that want donors to claim deductions',
+      'Trusts that have been operating without 12A/80G registration',
+      'Foundations that need a standing compliance calendar'
+    ],
+    whatsIncluded: [
+      'Review of the trust deed or society memorandum against the objects required',
+      'Application for Section 12A/12AB registration (Form 10A)',
+      'Application for Section 80G approval',
+      'Tracking of both orders to issue',
+      'Setup of the annual return, audit and income-utilisation obligations'
+    ],
+    bodyHtml: `
+      <p>A trust or society that depends on donations has two separate doors to open. Registration under Section 12A/12AB keeps the institution's own income outside the tax net. Approval under Section 80G extends a deduction to the person who donates. They are frequently assumed to be one thing — they are two orders, from two parts of the process, and each takes time.</p>
+      <p>The foundation is the deed. An object that does not fit the statutory description, or records that cannot evidence the activities, is the most common reason an application stalls. We review the deed and the accounts before anything is filed, then prepare the application and track it to issue.</p>
+      <p>Once registered, the obligations continue: annual returns, audit requirements, and proof that income and donations have been applied to the objects. A standing calendar keeps those obligations from turning into penalties.</p>
+    `,
+    penaltyNote: {
+      text: 'A trust that collects donations without 12A/80G registration risks its income being taxed as an association, and its donors lose the deduction they expected.',
+      statuteRef: 'Sections 12A, 12AB and 80G, Income-tax Act',
+      verified: false
+    },
+    intro: 'Two doors, one deed. We open both.'
+  },
+  'pre-notice-health-check': {
+    h1: 'Pre-Notice Compliance Health Check',
+    metaTitle: 'Pre-Notice Compliance Health Check | GST & TDS Review',
+    metaDescription: 'A structured review of your GST and TDS position against your returns and books, so mismatches are fixed before the department finds them.',
+    directAnswer: 'A pre-notice health check compares what you filed against what the department\u2019s systems already see — GSTR-2B against your purchase records, Form 26AS and AIS against your TDS ledger, and GSTR-1 against GSTR-3B. Every difference becomes an item on a report with a fix, so the mismatches that trigger notices are corrected before a notice exists.',
+    whoNeedsIt: [
+      'Businesses that want mismatches fixed before a notice arrives',
+      'Companies that reconcile their returns only at year-end',
+      'Exporters and traders with high ITC volumes',
+      'Businesses that have already had one notice and want to stop the pattern'
+    ],
+    whatsIncluded: [
+      'Collection of returns, GSTR-2B, Form 26AS/AIS and the registers',
+      'Reconciliation of 2B against the books and 26AS/AIS against TDS records',
+      'An exception report: every mismatch, its likely trigger, and its fix',
+      'Filing of corrections and answers to open queries',
+      'A standing monthly check going forward'
+    ],
+    bodyHtml: `
+      <p>The department's systems reconcile your returns against its own data continuously. A mismatch between what you claimed and what the system sees is usually visible in your own records months before a notice lands. The health check is simply the discipline of looking at those differences first.</p>
+      <p>We run the reconciliations the department would run: GSTR-2B against your purchase register, Form 26AS and AIS against your TDS ledger, GSTR-1 against GSTR-3B. Each difference is classified — timing, a supplier who has not filed, a wrong GSTIN, or a genuine short-claim — and given a fix.</p>
+      <p>Correcting a mismatch on your own terms costs a filing. Correcting it after a notice costs a reply, a possible demand, and months of correspondence. The report pays for itself the first time it finds an item the department would have found instead.</p>
+    `,
+    penaltyNote: {
+      text: 'The mismatches this check finds — ITC claimed against 2B, TDS short-deducted, or GSTR-1 exceeding GSTR-3B — are the same triggers the department uses to open show-cause proceedings.',
+      statuteRef: 'Sections 73 and 74, CGST Act; Section 201, Income-tax Act',
+      verified: false
+    },
+    intro: 'The notice you avoid is the one that costs nothing.'
   }
 };

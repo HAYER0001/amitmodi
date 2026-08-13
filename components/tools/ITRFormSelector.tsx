@@ -51,6 +51,7 @@ export default function ITRFormSelector({ initial }: { initial: ITRInitial }) {
       breakdown={result?.breakdown ?? null}
       invalid={state.invalid}
       shareQuery={state.input ? itrQueryString(state.input) : ""}
+      ctaHeadline="Confirm this is the right form before filing."
     >
       <div className="space-y-6 rounded-md border border-rule bg-paper p-5 shadow-cut sm:p-6">
         <Field label="1. Who is filing?">

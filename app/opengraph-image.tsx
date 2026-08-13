@@ -10,11 +10,14 @@
  */
 
 import { ImageResponse } from "next/og";
+import { SITE_URL } from "@/lib/seo";
 
 export const runtime = "edge";
 export const alt = "Amit Modi & Co. — tax, GST and compliance practice";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
+
+const DOMAIN_DISPLAY = SITE_URL.replace(/^https?:\/\//, "").replace(/\/$/, "");
 
 const LEDGER =
   "repeating-linear-gradient(to bottom, transparent 0, transparent 59px, #d9d6ce 59px, #d9d6ce 60px)," +
@@ -101,7 +104,7 @@ export default function Image() {
       <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
         <span style={{ width: 48, height: 3, backgroundColor: "#a8842c" }} />
         <span style={{ fontSize: 18, color: "#55534b" }}>
-          complianceincheck.com
+          {DOMAIN_DISPLAY}
         </span>
       </div>
     </div>,

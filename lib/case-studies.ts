@@ -23,6 +23,8 @@ export type CaseStudy = {
   title: string;
   status: string;
   consentObtained: boolean;
+  /** The statutory provision the matter turned on, e.g. "Section 148 Income-tax Act, 1961". */
+  statuteRef: string | null;
   /** The four STAR sections in document order (Situation, Task, Action, Result). */
   sections: CaseStudySection[];
 };
@@ -63,6 +65,7 @@ function readFile(file: string): CaseStudy | null {
     title,
     status,
     consentObtained: data.consentObtained === true,
+    statuteRef: typeof data.statuteRef === "string" ? data.statuteRef : null,
     sections: parseSections(content),
   };
 }
