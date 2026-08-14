@@ -28,6 +28,7 @@ that behaviour must be preserved.
 | Years in practice | `TBD` | 4.1 experience signals |
 | Cities genuinely serviced | `cities: []` | 3.2 location pages — **do not guess** |
 | Real client outcomes | 5 anonymised case studies exist | 4.3 outcome claims |
+| **WhatsApp number** | `whatsapp: 'TBD'` | **The entire paid funnel** — `ToolCta` hides the WhatsApp button until confirmed. Highest-value fact in this table |
 
 ---
 
@@ -381,11 +382,32 @@ them. One campaign, one ad set, one landing page.
 Do not forecast leads, cost per lead or ROI from this. Nobody can, and any
 number quoted before the test is invented.
 
-## HARD PREREQUISITE — do not spend a rupee before this
+## HARD PREREQUISITE — corrected 2026-08-14
 
-**The calculators currently have zero call-to-action** (Phase 1.1). Sending paid
-traffic to them today means paying for visitors who land on a dead end. Phase
-1.1 ships first. Non-negotiable.
+**Phase 1.1 is DONE.** Commit `627c15b` shipped `components/tools/ToolCta.tsx`,
+wired into `CalculatorShell.tsx`, with the tool-specific headlines this plan
+asked for. All five calculators now carry a result-contextual conversion card.
+
+The earlier claim in this file that the calculators had "zero call-to-action"
+was **measured wrong** — the audit grepped `app/tools/*/page.tsx`, which are thin
+SSR wrappers, when the CTA lives in the shared shell component. Recorded here so
+nobody re-does finished work.
+
+**The real remaining blocker is the WhatsApp number.**
+`data/brand.ts:52` still reads `whatsapp: 'TBD'`, and `ToolCta` deliberately
+renders the WhatsApp button only when that fact is confirmed. So today the
+funnel is:
+
+```
+ad  →  calculator  →  "Book a consultation"  →  form
+                      ^^^^^^^^^^^^^^^^^^^^
+                      WhatsApp button does not render
+```
+
+For an Indian local practice buying paid traffic, WhatsApp *is* the conversion
+step — a form is a far higher-friction ask from a phone. **Confirming the
+WhatsApp number is now the single highest-value item in Gate 0**, and it must be
+done before the campaign runs.
 
 ## C1. Meta Pixel — code
 
