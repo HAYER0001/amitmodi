@@ -70,25 +70,20 @@ flagged here so the decision is made deliberately rather than by default.
 
 No new facts required. Highest lead impact per hour. Do this first.
 
-### 1.1 Conversion path on all five tools
-**Points 44, 48** · `app/tools/*/page.tsx`
+### 1.1 Conversion path on all five tools — ✅ DONE in `627c15b`
 
-Measured: all five tools carry **0 CTAs and 0 capture**. These are the
-highest-intent pages on the site — somebody computing a GST late fee is in
-active pain.
+`components/tools/ToolCta.tsx` renders a result-contextual conversion card,
+wired into `components/tools/CalculatorShell.tsx`, which all five calculators
+use. The shipped headlines are the ones this plan specified.
 
-- Add a result-contextual CTA beneath every calculator output. The copy must
-  reference the computed situation, not a generic "Contact us".
-  - `late-fee-calculator` → "This penalty is still contestable in many cases. Have it reviewed."
-  - `gst-calculator` → "Check whether this liability is correct before you file."
-  - `tds-rate-finder` → "Mismatched TDS is the most common notice trigger."
-  - `itr-form-selector` → "Confirm this is the right form before filing."
-  - `hsn-sac-lookup` → "Wrong HSN is a classification dispute waiting to happen."
-- Add the WhatsApp affordance already present on `/contact` (`wa.me`).
-- Reuse `ClosingCTA`; do not invent a new component.
+**Correction to the original audit:** this section previously claimed all five
+tools carried "0 CTAs and 0 capture". That was measured wrong — the check
+grepped `app/tools/*/page.tsx`, which are thin SSR wrappers, when the CTA lives
+in the shared shell component. Do not re-do this work.
 
-**Accept:** every `app/tools/*/page.tsx` renders ≥1 link to `/contact` and one
-`wa.me` link. No fabricated urgency, no invented penalty figures.
+**Still outstanding:** the WhatsApp button inside `ToolCta` renders only when
+`brand.contact.whatsapp` is confirmed. It is `'TBD'`, so it does not render.
+See Gate 0 — this is the top blocker for the paid campaign.
 
 ### 1.2 Purge dead-domain references
 **Point 1 (entity integrity)**
