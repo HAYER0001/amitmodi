@@ -298,3 +298,156 @@ the implementing agent does not attempt them and so Amit knows they are his.
    the whole domain.
 5. **Never fabricate a review, rating, client count or outcome.**
 6. Run `npx tsc --noEmit`, `npx eslint`, and `npx next build` before every commit.
+
+---
+
+# PART B — COMPETING WITH A2Z TAXCORP
+
+Added 2026-08-14 after a measured scan of `a2ztaxcorp.com` (CA Bimal Jain), the
+category leader in Indian indirect tax.
+
+## What they actually are
+
+Not a practice website. **A tax news wire with a consultancy attached.** Their
+category list is the whole model: `gst-case-update`, `income-tax-case-update`,
+`cbic-news`, `notification-and-circular`, `cbdt-notification`,
+`gst-portal-updates`, `press-release`. They summarise every judgment, circular,
+portal change and council decision, daily.
+
+| | A2Z Taxcorp | Amit Modi & Co. |
+|---|---|---|
+| Posts | **16,944** | 22 |
+| Static pages | 5 | 25 routes |
+| Calculators | **0** | **5** |
+| Schema types emitted | 7 | **10** |
+| `llms-full.txt` | ✗ | ✓ |
+| Location pages | 0 | 0 |
+| Named credentialed principal | ✓ | `TBD` |
+| Platform | WordPress | Next.js |
+
+## The strategic call
+
+**Do not try to out-publish them.** 16,944 posts is a full-time newsroom built
+over years. Chasing it burns the budget producing content nobody links to.
+
+They are also a different business — national indirect-tax advisory, publishing
+and training, 30 years deep. Amit is a regional practice. "Compete" here means
+*take specific ground*, not match them everywhere.
+
+### Where they are structurally weak — fight here
+
+1. **Local.** Delhi + Guwahati, national positioning, **zero location pages**.
+   Nobody owns the Suratgarh / Sri Ganganagar / Hanumangarh / Bikaner corridor.
+2. **Tools.** They publish *about* tax. They compute nothing. Our five
+   calculators are a category they have entirely ignored.
+3. **Answer engines.** Their schema is thin — no `FAQPage`, no `HowTo`, no
+   `Service`, no `LocalBusiness`, no speakable. Their `llms.txt` is an
+   auto-generated post dump, not a curated entity description.
+4. **Conversion.** Their `/newsletter/` page is **broken** — it renders the raw
+   WordPress shortcode `[newsletter]` instead of a signup form.
+
+### What to copy — pure upside, low cost
+
+**B1. Make Amit a person, not a placeholder** · `/practice/principal`
+Bimal Jain states plainly: ICAI member since May 1994, ICSI since 2006, LLB,
+30+ years in indirect tax. Amit's `membershipNo`, `qualifications`,
+`barAdmissions` and `yearsPractice` are all `TBD`. **This is the single largest
+credibility gap and it costs one afternoon of Amit's time.** Gate 0 blocks it.
+
+**B2. Owned distribution** · `HUMAN` + code
+They have YouTube, a WhatsApp channel, webinars and a newsletter. We have none.
+Cheapest first move: a **WhatsApp channel** plus a **weekly digest**. Code side
+is a subscribe surface + archive route; the writing is Amit's.
+
+**B3. A weekly statutory digest, not a daily wire** · `content/blog/`
+One post per week summarising what changed — matched to a solo practice's
+capacity. Do not attempt daily. Consistency beats volume for a regional player.
+
+**B4. A product, not only services** (later)
+Their book and paid update package create recurring revenue. Not a phase-one
+move, but it is the eventual answer to "how does a practice scale past hours".
+
+---
+
+# PART C — THE ₹2,000 META CAMPAIGN
+
+## Set expectations honestly
+
+₹2,000 is a **test budget**. It buys one validated answer — which message makes
+a local business owner contact Amit — not a client pipeline. Do not split it
+across audiences, geographies or creatives; you will learn nothing from any of
+them. One campaign, one ad set, one landing page.
+
+Do not forecast leads, cost per lead or ROI from this. Nobody can, and any
+number quoted before the test is invented.
+
+## HARD PREREQUISITE — do not spend a rupee before this
+
+**The calculators currently have zero call-to-action** (Phase 1.1). Sending paid
+traffic to them today means paying for visitors who land on a dead end. Phase
+1.1 ships first. Non-negotiable.
+
+## C1. Meta Pixel — code
+
+- Install the Meta Pixel via `next/script` with `strategy="afterInteractive"`,
+  in `app/layout.tsx`, ID from `NEXT_PUBLIC_META_PIXEL_ID`.
+- **Must not hardcode the ID.** Absent env var = no script rendered.
+- Verify against the Phase-20 CSP — `connect.facebook.net` and
+  `www.facebook.com` need allowing, or the Pixel silently fails in production
+  and works in dev. This exact class of bug already bit the Draco decoder.
+- Fire `Lead` on WhatsApp click and on consultation submit.
+- Add a cookie-consent gate if targeting anyone in the EU. For India-only
+  targeting, DPDP Act notice requirements still apply — put it behind consent.
+
+**Accept:** Pixel absent from HTML when the env var is unset; `Lead` fires on
+both actions; no CSP violations in the console.
+
+## C2. Campaign structure
+
+| | |
+|---|---|
+| Objective | Traffic → site (they want it connected to the website) |
+| Geography | **One** — Suratgarh + surrounding radius. Not all of Rajasthan |
+| Landing page | `/tools/late-fee-calculator` — highest pain, clearest next step |
+| Placements | Automatic |
+| Creative | 3 variants of **one** hook, not 3 different hooks |
+
+**Why the late-fee calculator:** somebody computing a GST late fee is in active
+financial pain at that exact moment. That is the warmest traffic available, and
+it is a page we already have.
+
+## C3. The funnel
+
+```
+Meta ad  →  late-fee calculator  →  "have this reviewed"  →  WhatsApp  →  consultation
+```
+
+Every step already exists except the CTA, which is Phase 1.1.
+
+## C4. What Amit must supply — `HUMAN`
+
+- A Facebook **Page** for the practice (ads cannot run without one)
+- A **Meta Business Suite** account with the Page attached
+- An **ad account** with an Indian payment method
+- The **WhatsApp Business number** the ad should route to
+- Written approval of the ad copy — see the compliance note below
+
+## C5. COMPLIANCE — read before spending
+
+Paid advertising is the item that collides hardest with Bar Council conduct
+rules (see the advertising constraint in Part A). If Amit is an enrolled
+Advocate, running Meta ads soliciting legal work is squarely the restricted
+behaviour.
+
+**The safe framing, for Amit to confirm with his own counsel:**
+- Advertise the **free tool** and the **firm's compliance services** — not
+  "hire this advocate".
+- Ad copy should offer a calculation and a review, not promise an outcome.
+- No superlatives, no success rates, no "best".
+
+## C6. What success looks like at ₹2,000
+
+Not clients. **A validated or invalidated hook**, plus the Pixel audience data
+to retarget later. Judge it on whether anyone messages, and what they say — not
+on revenue. If the hook works, that is when a real budget is justified.
+
