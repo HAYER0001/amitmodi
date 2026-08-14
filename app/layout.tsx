@@ -16,6 +16,7 @@ import ChatLauncher from "@/components/ui/ChatLauncher";
 import LoadingScreen from "@/components/ui/LoadingScreen";
 import { WebSiteSchema, OrganizationSchema, LocalBusinessSchema } from "@/components/seo/SchemaEmitters";
 import { Analytics } from "@vercel/analytics/next";
+import MetaPixel from "@/components/analytics/MetaPixel";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://amitmodi-one.vercel.app";
 const display = Instrument_Serif({
@@ -128,6 +129,9 @@ export default function RootLayout({
             until real coordinates exist, and the hours/telephone fields are
             filtered through hasFact(). Nothing here can publish a detail the
             practice has not supplied. */}
+        {/* Renders nothing unless NEXT_PUBLIC_META_PIXEL_ID is set — no script,
+            no cookies, no request to Meta. Only on for a live campaign. */}
+        <MetaPixel />
         <WebSiteSchema domain={SITE_URL} />
         <OrganizationSchema domain={SITE_URL} />
         <LocalBusinessSchema domain={SITE_URL} />
