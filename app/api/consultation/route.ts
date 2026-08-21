@@ -236,6 +236,34 @@ export async function POST(request: NextRequest) {
   }
   const input = parsed.data;
 
+
+  /*
+   * CAPTURE FIRST, NOTIFY SECOND.
+   *
+   * This used to run AFTER the email send, with the reasoning that "the
+   * practice's inbox is the product, the spreadsheet is a convenience". That is
+   * true of the happy path and exactly backwards for durability: the email
+   * attempt returns early on failure, so the mirror below was never reached and
+   * the enquiry was lost outright. With RESEND_API_KEY unconfigured - which is
+   * the live state today - that meant every single lead was dropped and the
+   * visitor was shown an error.
+   *
+   * The capture is the thing that must not fail. Recording the lead first means
+   * a misconfigured or rate-limited mailbox costs a notification, never the
+   * enquiry itself. appendLeadToSheet never throws and no-ops when
+   * SHEETS_WEBHOOK_URL is unset.
+   */
+  await appendLeadToSheet({
+    name: input.name,
+    phone: input.phone,
+    email: input.email,
+    service: input.service,
+    situation: input.situation,
+    urgency: input.urgency,
+    message: input.message,
+    source: request.headers.get("referer") ?? "direct",
+  });
+
   /* 5 — send. The inbox notification is the critical path; the confirmation
      to the enquirer is a nice-to-have and failing it must not fail the request. */
   let resend: Resend;
@@ -287,24 +315,6 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  /*
-   * Mirror the lead into the Google Sheet.
-   *
-   * Deliberately AFTER the email and deliberately awaited-but-ignored: the
-   * practice's inbox is the product, the spreadsheet is a convenience. If the
-   * sheet is down the enquiry must still have been sent and the visitor must
-   * still see success. appendLeadToSheet never throws.
-   */
-  await appendLeadToSheet({
-    name: input.name,
-    phone: input.phone,
-    email: input.email,
-    service: input.service,
-    situation: input.situation,
-    urgency: input.urgency,
-    message: input.message,
-    source: request.headers.get("referer") ?? "direct",
-  });
 
   if (isForm) {
     return NextResponse.redirect(
