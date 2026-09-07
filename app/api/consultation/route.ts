@@ -31,8 +31,17 @@ const MAX_HITS = 5;
 const hits = new Map<string, { count: number; resetAt: number }>();
 
 const CONTACT_TO = process.env.CONTACT_TO_EMAIL;
+/*
+ * amitmodi.co.in is verified with Resend (SPF/DKIM confirmed 2026-08),
+ * so the default sender is the practice's own domain rather than Resend's
+ * shared onboarding@resend.dev sandbox address. Sending from a verified
+ * domain the practice owns lands in the inbox far more reliably than the
+ * shared sandbox sender, which many providers treat as bulk/transactional
+ * noise. RESEND_FROM in Vercel still overrides this if the address needs to
+ * change later — nothing here is hardcoded as final.
+ */
 const RESEND_FROM =
-  process.env.RESEND_FROM || "Amit Modi & Co. <onboarding@resend.dev>";
+  process.env.RESEND_FROM || "Amit Modi & Co. <notifications@amitmodi.co.in>";
 
 const GENERIC_ERROR = "Your request could not be sent. Please try again in a moment.";
 const RATE_LIMIT_ERROR = "Too many requests. Please try again in a little while.";
