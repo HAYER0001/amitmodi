@@ -32,7 +32,21 @@ import { join } from "node:path";
 export const runtime = "nodejs";
 
 const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
-const MODEL = process.env.GROQ_MODEL ?? "llama-3.3-70b-versatile";
+/*
+ * llama-3.3-70b-versatile — Groq's original default here — has been
+ * decommissioned; every request against it now 404s with model_not_found,
+ * which is why the assistant went silently dead in production (confirmed
+ * directly against Groq's API, not inferred).
+ *
+ * openai/gpt-oss-120b replaces it: the largest general-purpose instruction
+ * model currently active on Groq, 131k context. Deliberately not
+ * groq/compound — that is an agentic system with its own built-in tool use
+ * and browsing, which cuts against the whole point of this route: a
+ * restricted, text-only assistant that must never act outside answering a
+ * tax question. GROQ_MODEL still overrides this if Groq's catalog moves
+ * again — check https://console.groq.com/docs/models for what is active.
+ */
+const MODEL = process.env.GROQ_MODEL ?? "openai/gpt-oss-120b";
 
 const KNOWLEDGE_CAP = 6000;
 const KNOWLEDGE_PATH = join(process.cwd(), "lib", "knowledge", "tax-books.md");
@@ -87,8 +101,17 @@ const OFF_TOPIC = [
   /\byou are now\b|\bact as\b|\bpretend to be\b|\bsystem prompt\b/i,
 ];
 
+/*
+ * `\bgst\b` never matches "GSTR-1" or "GSTR-3B" — \b needs a boundary on
+ * BOTH sides, and "gst" run into "r" has none on the right. That silently
+ * refused the single most common phrasing of a tax question ("what is the
+ * difference between GSTR-1 and GSTR-3B") and, worse, "I got a DRC-01, what
+ * should I do" — the exact panicked-notice query this assistant exists to
+ * answer. Confirmed live before this fix: both were refused. Terms below are
+ * unambiguous Indian tax/GST jargon with no other common meaning, so adding
+ * them cannot widen the gate into off-topic territory. */
 const ON_TOPIC_HINT =
-  /\b(gst|tax|itr|tds|tcs|pan|tan|iec|invoice|return|filing|notice|appeal|audit|registration|compliance|deduction|refund|penalty|challan|assessment|partnership|llp|trust|society|turnover|hsn|sac|e-?way|composition)\b/i;
+  /\b(gst|gstr|cgst|sgst|igst|drc|scn|itat|cit|aar|tax|itr|tds|tcs|pan|tan|iec|invoice|return|filing|notice|appeal|audit|registration|compliance|deduction|refund|penalty|challan|assessment|partnership|llp|trust|society|turnover|hsn|sac|e-?way|composition)\b/i;
 
 /* ── rate limit (in-memory; per instance) ─────────────────────────────────── */
 const hits = new Map<string, { n: number; reset: number }>();
