@@ -95,6 +95,7 @@ const COPY = {
   sendingLabel: "Sending…",
   successToast: "Request sent. We will get back to you within one business day.",
   failureToast: "Something went wrong. Please try again in a moment.",
+  fixFieldsToast: "Please check the highlighted field before sending.",
   requiredNote: "Required fields are marked with an asterisk (*).",
 };
 
@@ -188,11 +189,38 @@ export default function ConsultationForm() {
     setStep((s) => Math.max(s - 1, 0));
   }
 
+  /* Which step each field lives on, so a failure at the final submit can send
+     the visitor back to the field that needs fixing. */
+  const FIELD_STEP: Record<string, number> = {
+    service: 0, situation: 0,
+    urgency: 1,
+    name: 2, phone: 2, email: 2,
+    message: 3, consent: 3, company: 3,
+  };
+
   async function onSubmit(values: FormValues) {
-    /* Every field was validated step-by-step already; this full check is
-       defence in depth before the payload leaves the client. */
+    /* useForm here has NO resolver, so handleSubmit validates nothing — this
+       safeParse is the only check between the visitor and the network. It used
+       to be `if (!parsed.success) return;` — a silent no-op. The final step is
+       the one step that never passes through validateStep (its button is
+       type="submit", not the Continue handler), so an unticked consent box, the
+       commonest case, produced exactly "I click and nothing happens": no error
+       text, because setError was never called; no toast; no request. Mirror
+       validateStep instead: surface every issue, jump to the earliest step that
+       owns one, and say so. */
     const parsed = consultationSchema.safeParse(values as ConsultationValues);
-    if (!parsed.success) return;
+    if (!parsed.success) {
+      clearErrors();
+      let firstStep = 3;
+      for (const issue of parsed.error.issues) {
+        const path = String(issue.path[0]) as FieldPath<FormValues>;
+        setError(path, { type: "manual", message: issue.message });
+        firstStep = Math.min(firstStep, FIELD_STEP[path] ?? step);
+      }
+      setStep(firstStep);
+      pushToast({ message: COPY.fixFieldsToast, tone: "error" });
+      return;
+    }
     setSubmitting(true);
     try {
       const resp = await fetch("/api/consultation", {
@@ -204,6 +232,11 @@ export default function ConsultationForm() {
       if (resp.ok && body?.ok) {
         pushToast({ message: COPY.successToast, tone: "success" });
         window.setTimeout(() => router.push("/contact/thank-you"), 1200);
+        /* `submitting` was only ever reset on the error path. If the redirect
+           stalls (blocked chunk, slow network) the form stayed mounted with a
+           permanently disabled button and no way to retry. Re-enable well after
+           a normal navigation would have unmounted us. */
+        window.setTimeout(() => setSubmitting(false), 4000);
       } else {
         pushToast({
           message: body && "error" in body ? body.error : COPY.failureToast,
