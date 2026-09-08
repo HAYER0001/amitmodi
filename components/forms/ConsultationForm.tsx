@@ -163,14 +163,35 @@ export default function ConsultationForm() {
     focusRefs[activeStep]?.current?.focus();
   }
 
+  /*
+   * react-hook-form reports a checked single checkbox that carries a `value`
+   * attribute as that attribute's STRING ("true"), not the boolean true — see
+   * getCheckboxValue in its source: `options[0].value` is returned whenever the
+   * attribute is set and non-empty. The consent box has value="true" because
+   * the no-JavaScript fallback POST needs it (the API coerces "true" from form
+   * data). So in the JS path the schema's `consent: z.literal(true)` was handed
+   * "true" and failed on EVERY submission, ticked or not. Before the visible
+   * error was added that failure was silent — this is what "I click and
+   * nothing happens" actually was, underneath. Normalise in the one place the
+   * client hands values to the schema rather than loosening a schema the API
+   * relies on too.
+   */
+  function normalize(values: FormValues): ConsultationValues {
+    const raw = values.consent as unknown;
+    return {
+      ...values,
+      consent: raw === true || raw === "true",
+    } as ConsultationValues;
+  }
+
   /** Validate only the current step with the shared schema before advancing. */
   function validateStep(activeStep: number): boolean {
     clearErrors();
     /* getValues() returns the widened FormValues; the runtime values are
        whatever the visitor typed and safeParse validates them against the
-       strict enum — the cast only widens for TypeScript. */
+       strict enum — normalize() widens for TypeScript and fixes the checkbox. */
     const result = stepSchemas[(activeStep + 1) as 1 | 2 | 3 | 4].safeParse(
-      getValues() as ConsultationValues,
+      normalize(getValues()),
     );
     if (result.success) return true;
     for (const issue of result.error.issues) {
@@ -208,7 +229,7 @@ export default function ConsultationForm() {
        text, because setError was never called; no toast; no request. Mirror
        validateStep instead: surface every issue, jump to the earliest step that
        owns one, and say so. */
-    const parsed = consultationSchema.safeParse(values as ConsultationValues);
+    const parsed = consultationSchema.safeParse(normalize(values));
     if (!parsed.success) {
       clearErrors();
       let firstStep = 3;
