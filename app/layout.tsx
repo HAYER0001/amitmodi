@@ -135,16 +135,7 @@ export default function RootLayout({
         <WebSiteSchema domain={SITE_URL} />
         <OrganizationSchema domain={SITE_URL} />
         <LocalBusinessSchema domain={SITE_URL} />
-        {/* Script + beacon come from /ledger/insights/*, which next.config.ts
-            rewrites to /_vercel/insights/*. The default path is on blocker
-            filter lists and was invisible to Brave — see the rewrites() note in
-            next.config.ts. scriptSrc/endpoint rather than basePath: the Next
-            wrapper's Props type omits basePath even though the runtime accepts
-            it, and these two are what basePath sets internally anyway. */}
-        <Analytics
-          scriptSrc="/ledger/insights/script.js"
-          endpoint="/ledger/insights"
-        />
+        <Analytics />
       </body>
     </html>
   );

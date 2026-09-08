@@ -53,30 +53,6 @@ const nextConfig: NextConfig = {
   async headers() {
     return [];
   },
-  /*
-   * rewrites() — serve Vercel Web Analytics from a first-party path that
-   * content blockers do not recognise.
-   *
-   * The analytics script and its page-view beacon live at /_vercel/insights/*.
-   * That prefix is on the common blocker filter lists, so Brave Shields, uBlock
-   * and similar refuse to load it — and the practice owner uses Brave, which
-   * is why the Analytics dashboard showed nothing for their own visits. The
-   * <Analytics basePath="/ledger" /> in app/layout.tsx makes the component load
-   * the script from /ledger/insights/script.js and post views to
-   * /ledger/insights/view; this rule proxies that whole family back to the real
-   * endpoint. Nothing about what is collected changes — Vercel Analytics is
-   * cookieless and this is the site owner measuring their own site — only the
-   * path a blocker sees. `basePath` is the package's documented mechanism for
-   * exactly this.
-   */
-  async rewrites() {
-    return [
-      {
-        source: "/ledger/insights/:path*",
-        destination: "/_vercel/insights/:path*",
-      },
-    ];
-  },
 };
 
 const withBundleAnalyzer =
